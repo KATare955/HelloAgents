@@ -160,5 +160,5 @@ cython_debug/
 .DS_Store
 .obsidian
 .pytest_cache
-.venveval/eval_data/results/
+.venv
 *.safetensors
