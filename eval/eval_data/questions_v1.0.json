@@ -1,0 +1,748 @@
+{
+  "metadata": {
+    "total_questions": 68,
+    "scenarios": 6,
+    "questions_per_scenario": 10,
+    "question_types": [
+      "单跳",
+      "双跳",
+      "多跳",
+      "失败恢复"
+    ],
+    "created_at": "2026-10-29",
+    "purpose": "Baseline评测，探测模型薄弱领域",
+    "version": "v1.0"
+  },
+  "questions": [
+    {
+      "id": "car_config_001",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款先锋型的价格是多少？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "car_config_002",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款旗舰quattro型的电池容量是多少？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "car_config_003",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "帕萨特2024款280TSI商务版的发动机排量是多少？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "car_config_004",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款先锋型和先锋quattro型的价格差多少？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "car_config_005",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "小米SU7 2025款四驱Max版的续航里程是多少？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "car_config_006",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款所有车型配置中，哪款续航里程最长？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "car_config_007",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "对比E5 Sportback和小米SU7的电池容量，哪个更大？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "car_config_008",
+      "scenario": "车型参数查询",
+      "type": "失败恢复",
+      "question": "查询一款不存在的车型'Model X 2025款'的配置",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "hard",
+      "note": "测试模型处理不存在数据的能力"
+    },
+    {
+      "id": "car_config_009",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款先锋型的驱动类型是什么？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "car_config_010",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "帕萨特2024款330TSI精英版的变速箱类型是什么？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "discount_001",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "E5 Sportback现在有什么优惠？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "discount_002",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "上海地区E5 Sportback的厂商补贴是多少？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "discount_003",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "E5 Sportback的置换补贴需要满足什么条件？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "discount_004",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "北京地区帕萨特2024款有什么优惠政策？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "discount_005",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "E5 Sportback在上海和北京的优惠政策有什么区别？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "discount_006",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "现在购买E5 Sportback，最多能优惠多少钱？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "discount_007",
+      "scenario": "优惠政策查询",
+      "type": "失败恢复",
+      "question": "查询一款不存在的车型'Model X 2025款'的优惠政策",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "hard",
+      "note": "测试模型处理不存在数据的能力"
+    },
+    {
+      "id": "discount_008",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "E5 Sportback的金融贴息政策是什么？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "discount_009",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "小米SU7 2025款现在有什么限时活动？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "discount_010",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "E5 Sportback的优惠政策有效期到什么时候？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "compare_001",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "E5 Sportback和小米SU7哪个好？",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "compare_002",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "对比E5 Sportback 2025款旗舰quattro型和小米SU7 2025款四驱Max版",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "compare_003",
+      "scenario": "竞品对比",
+      "type": "双跳",
+      "question": "E5 Sportback和帕萨特2024款哪个更划算？",
+      "expected_tools": [
+        "competitor_compare",
+        "query_discount_policy"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "compare_004",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "从续航里程角度对比E5 Sportback和小米SU7",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "compare_005",
+      "scenario": "竞品对比",
+      "type": "双跳",
+      "question": "E5 Sportback和小米SU7在价格、续航、配置三个方面哪个更有优势？",
+      "expected_tools": [
+        "competitor_compare",
+        "text_search"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "compare_006",
+      "scenario": "竞品对比",
+      "type": "双跳",
+      "question": "如果预算30万，E5 Sportback和小米SU7应该选哪个？",
+      "expected_tools": [
+        "competitor_compare",
+        "calculate_finance"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "compare_007",
+      "scenario": "竞品对比",
+      "type": "失败恢复",
+      "question": "对比E5 Sportback和一款不存在的车型'Model X 2025款'",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "hard",
+      "note": "测试模型处理不存在数据的能力"
+    },
+    {
+      "id": "compare_008",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款先锋型和小米SU7 2025款Pro版哪个更便宜？",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "compare_009",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "从品牌、价格、配置三个维度对比E5 Sportback和帕萨特",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "compare_010",
+      "scenario": "竞品对比",
+      "type": "双跳",
+      "question": "E5 Sportback和小米SU7的充电速度哪个更快？",
+      "expected_tools": [
+        "competitor_compare",
+        "text_search"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "finance_001",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "E5 Sportback首付30%，5年贷款月供多少？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "finance_002",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "计算E5 Sportback 2025款先锋型的贷款月供",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "finance_003",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "E5 Sportback首付50%，3年贷款总利息多少？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "finance_004",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "小米SU7 2025款四驱Max版首付20%，5年贷款月供多少？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "finance_005",
+      "scenario": "金融方案测算",
+      "type": "双跳",
+      "question": "E5 Sportback 2025款旗舰quattro型现在有什么优惠？首付30%，5年贷款月供多少？",
+      "expected_tools": [
+        "query_discount_policy",
+        "calculate_finance"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "finance_006",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "如果选择E5 Sportback，首付30%和首付50%哪个更划算？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "finance_007",
+      "scenario": "金融方案测算",
+      "type": "失败恢复",
+      "question": "计算一款不存在的车型'Model X 2025款'的贷款月供",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "hard",
+      "note": "测试模型处理不存在数据的能力"
+    },
+    {
+      "id": "finance_008",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "帕萨特2024款280TSI商务版首付40%，3年贷款月供多少？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "finance_009",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "E5 Sportback 5年贷款和3年贷款哪个总利息更少？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "finance_010",
+      "scenario": "金融方案测算",
+      "type": "双跳",
+      "question": "考虑优惠政策后，E5 Sportback首付30%，5年贷款月供多少？",
+      "expected_tools": [
+        "query_discount_policy",
+        "calculate_finance"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "price_001",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款旗舰quattro型近90天的平均成交价是多少？",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "price_002",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "查询E5 Sportback 2025款先锋型的价格趋势",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "price_003",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "E5 Sportback近30天和近90天的成交价有什么变化？",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "price_004",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "小米SU7 2025款四驱Max版的历史成交价是多少？",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "price_005",
+      "scenario": "历史成交价查询",
+      "type": "双跳",
+      "question": "E5 Sportback现在值得买吗？结合历史成交价和当前优惠分析",
+      "expected_tools": [
+        "query_transaction_price",
+        "query_discount_policy"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "price_006",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "对比E5 Sportback和小米SU7的历史成交价趋势",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "price_007",
+      "scenario": "历史成交价查询",
+      "type": "失败恢复",
+      "question": "查询一款不存在的车型'Model X 2025款'的历史成交价",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "hard",
+      "note": "测试模型处理不存在数据的能力"
+    },
+    {
+      "id": "price_008",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "帕萨特2024款280TSI商务版的历史成交价是多少？",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "price_009",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "E5 Sportback的价格趋势是上涨还是下跌？",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "price_010",
+      "scenario": "历史成交价查询",
+      "type": "双跳",
+      "question": "结合历史成交价和当前优惠，E5 Sportback现在的性价比如何？",
+      "expected_tools": [
+        "query_transaction_price",
+        "query_discount_policy"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "test_drive_001",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "我想预约E5 Sportback的试驾",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "test_drive_002",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "预约明天下午3点在上海浦东店试驾E5 Sportback",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "test_drive_003",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "帮我预约周末在北京朝阳店试驾帕萨特",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "test_drive_004",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "我想试驾小米SU7，有什么时间可选？",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "test_drive_005",
+      "scenario": "试驾预约",
+      "type": "双跳",
+      "question": "先查询E5 Sportback的优惠政策，然后预约试驾",
+      "expected_tools": [
+        "query_discount_policy",
+        "book_test_drive"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "test_drive_006",
+      "scenario": "试驾预约",
+      "type": "双跳",
+      "question": "对比E5 Sportback和小米SU7后，预约试驾E5 Sportback",
+      "expected_tools": [
+        "competitor_compare",
+        "book_test_drive"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "test_drive_007",
+      "scenario": "试驾预约",
+      "type": "失败恢复",
+      "question": "预约一款不存在的车型'Model X 2025款'的试驾",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "hard",
+      "note": "测试模型处理不存在数据的能力"
+    },
+    {
+      "id": "test_drive_008",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "预约E5 Sportback 2025款旗舰quattro型的试驾",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "test_drive_009",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "我想在上海预约E5 Sportback的试驾，有什么门店可选？",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "test_drive_010",
+      "scenario": "试驾预约",
+      "type": "双跳",
+      "question": "查询E5 Sportback的金融方案后，预约试驾",
+      "expected_tools": [
+        "calculate_finance",
+        "book_test_drive"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi_hop_001",
+      "scenario": "金融方案测算",
+      "type": "多跳",
+      "question": "E5 Sportback 2025款旗舰quattro型现在有什么优惠？首付30%，5年贷款月供多少？近90天的平均成交价是多少？",
+      "expected_tools": [
+        "query_discount_policy",
+        "calculate_finance",
+        "query_transaction_price"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi_hop_002",
+      "scenario": "竞品对比",
+      "type": "多跳",
+      "question": "对比E5 Sportback和小米SU7的价格、续航、优惠政策，哪个更值得买？",
+      "expected_tools": [
+        "competitor_compare",
+        "text_search",
+        "query_discount_policy"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi_hop_003",
+      "scenario": "车型参数查询",
+      "type": "多跳",
+      "question": "E5 Sportback 2025款所有车型配置中，哪款续航里程最长？这款车的优惠政策是什么？首付30%贷款月供多少？",
+      "expected_tools": [
+        "text_search",
+        "query_discount_policy",
+        "calculate_finance"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi_hop_004",
+      "scenario": "历史成交价查询",
+      "type": "多跳",
+      "question": "E5 Sportback近90天的平均成交价是多少？现在有什么优惠？优惠后的价格比历史成交价低多少？",
+      "expected_tools": [
+        "query_transaction_price",
+        "query_discount_policy",
+        "calculate_finance"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi_hop_005",
+      "scenario": "试驾预约",
+      "type": "多跳",
+      "question": "我想预约E5 Sportback的试驾，先帮我查询一下这款车的配置、优惠政策和金融方案",
+      "expected_tools": [
+        "text_search",
+        "query_discount_policy",
+        "calculate_finance",
+        "book_test_drive"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi_hop_006",
+      "scenario": "竞品对比",
+      "type": "多跳",
+      "question": "对比E5 Sportback和小米SU7的价格、续航、优惠政策、金融方案，然后帮我预约试驾E5 Sportback",
+      "expected_tools": [
+        "competitor_compare",
+        "text_search",
+        "query_discount_policy",
+        "calculate_finance",
+        "book_test_drive"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi_hop_007",
+      "scenario": "金融方案测算",
+      "type": "多跳",
+      "question": "E5 Sportback 2025款旗舰quattro型的配置是什么？现在有什么优惠？首付30%，5年贷款月供多少？近90天的平均成交价是多少？",
+      "expected_tools": [
+        "text_search",
+        "query_discount_policy",
+        "calculate_finance",
+        "query_transaction_price"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi_hop_008",
+      "scenario": "优惠政策查询",
+      "type": "双跳",
+      "question": "E5 Sportback在上海和北京的优惠政策有什么区别？哪个地区的优惠力度更大？优惠后的价格首付30%贷款月供多少？",
+      "expected_tools": [
+        "query_discount_policy",
+        "calculate_finance"
+      ],
+      "difficulty": "hard"
+    }
+  ],
+  "scenario_distribution": {
+    "车型参数查询": 11,
+    "优惠政策查询": 11,
+    "竞品对比": 12,
+    "金融方案测算": 12,
+    "历史成交价查询": 11,
+    "试驾预约": 11
+  },
+  "type_distribution": {
+    "单跳": 43,
+    "双跳": 12,
+    "多跳": 7,
+    "失败恢复": 6
+  }
+}

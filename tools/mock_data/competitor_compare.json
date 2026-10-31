@@ -1,0 +1,135 @@
+{
+  "E5 Sportback 2025款 旗舰quattro型": {
+    "小米SU7 2025款 四驱Max版": {
+      "car_model_a": "E5 Sportback 2025款 旗舰quattro型",
+      "car_model_b": "小米SU7 2025款 四驱Max版",
+      "comparison": {
+        "价格": {
+          "car_a_value": 289900,
+          "car_b_value": 303900,
+          "advantage": "A",
+          "note": "E5 Sportback便宜14000元"
+        },
+        "配置": {
+          "car_a_value": "标配全景天窗、电动座椅按摩通风加热、27英寸中控屏、循迹倒车",
+          "car_b_value": "分段式不可开启天窗、电动座椅按摩通风加热、16.1英寸中控屏",
+          "advantage": "A",
+          "note": "E5 Sportback配置略高，多循迹倒车功能"
+        },
+        "空间": {
+          "car_a_value": "轴距2950mm，车长4881mm",
+          "car_b_value": "轴距3000mm，车长4997mm",
+          "advantage": "B",
+          "note": "小米SU7轴距更长，后排空间更大"
+        },
+        "动力": {
+          "car_a_value": "电机最大功率579kW",
+          "car_b_value": "电机最大功率495kW",
+          "advantage": "A",
+          "note": "E5 Sportback功率更大"
+        },
+        "电池容量": {
+          "car_a_value": "100kWh",
+          "car_b_value": "101kWh",
+          "advantage": "相当",
+          "note": "两者电池容量相当，小米SU7略高一些"
+        }
+      },
+      "summary": {
+        "car_a_advantages": 3,
+        "car_b_advantages": 1,
+        "equal_count": 1,
+        "overall_winner": "E5 Sportback"
+      },
+      "recommendation": "E5 Sportback在价格、配置、动力方面更有优势，小米SU7在空间方面略胜一筹。综合考虑性价比，建议优先选择E5 Sportback。"
+    },
+    "帕萨特2024款 330TSI 精英版": {
+      "car_model_a": "E5 Sportback 2025款 旗舰quattro型",
+      "car_model_b": "帕萨特2024款 330TSI 精英版",
+      "comparison": {
+        "价格": {
+          "car_a_value": 289900,
+          "car_b_value": 195000,
+          "advantage": "B",
+          "note": "帕萨特便宜94900元"
+        },
+        "配置": {
+          "car_a_value": "标配全景天窗、电动座椅按摩通风加热、27英寸中控屏、循迹倒车",
+          "car_b_value": "标配全景天窗、电动座椅加热、12英寸中控屏",
+          "advantage": "A",
+          "note": "E5 Sportback配置更高"
+        },
+        "空间": {
+          "car_a_value": "轴距2950mm，车长4881mm",
+          "car_b_value": "轴距2871mm，车长4948mm",
+          "advantage": "A",
+          "note": "E5 Sportback轴距更长，后排空间更大"
+        },
+        "动力": {
+          "car_a_value": "电机最大功率579kW，纯电续航647km",
+          "car_b_value": "2.0T 186马力，油耗6.5L/100km",
+          "advantage": "A",
+          "note": "E5 Sportback动力更强，使用成本更低"
+        },
+        "使用成本": {
+          "car_a_value": "电费约0.1元/km",
+          "car_b_value": "油费约0.5元/km",
+          "advantage": "A",
+          "note": "E5 Sportback使用成本更低"
+        }
+      },
+      "summary": {
+        "car_a_advantages": 4,
+        "car_b_advantages": 1,
+        "equal_count": 0,
+        "overall_winner": "E5 Sportback"
+      },
+      "recommendation": "E5 Sportback在配置、空间、动力、使用成本方面都有优势，但价格较高。如果预算充足且注重长期使用成本，建议选择E5 Sportback；如果预算有限，帕萨特是更经济的选择。"
+    }
+  },
+  "小米SU7 2025款 四驱Max版": {
+    "E5 Sportback 2025款 旗舰quattro型": {
+      "car_model_a": "小米SU7 2025款 四驱Max版",
+      "car_model_b": "E5 Sportback 2025款 旗舰quattro型",
+      "comparison": {
+        "价格": {
+          "car_a_value": 303900,
+          "car_b_value": 289900,
+          "advantage": "B",
+          "note": "E5 Sportback便宜14000元"
+        },
+        "配置": {
+          "car_a_value": "分段式不可开启天窗、电动座椅按摩通风加热、16.1英寸中控屏",
+          "car_b_value": "标配全景天窗、电动座椅按摩通风加热、27英寸中控屏、循迹倒车",
+          "advantage": "B",
+          "note": "E5 Sportback配置略高"
+        },
+        "空间": {
+          "car_a_value": "轴距3000mm，车长4997mm",
+          "car_b_value": "轴距2950mm，车长4881mm",
+          "advantage": "A",
+          "note": "小米SU7轴距更长，后排空间更大"
+        },
+        "动力": {
+          "car_a_value": "电机最大功率495kW",
+          "car_b_value": "电机最大功率579kW",
+          "advantage": "B",
+          "note": "E5 Sportback功率更大"
+        },
+        "电池容量": {
+          "car_a_value": "101kWh",
+          "car_b_value": "100kWh",
+          "advantage": "相当",
+          "note": "两者电池容量相当"
+        }
+      },
+      "summary": {
+        "car_a_advantages": 1,
+        "car_b_advantages": 3,
+        "equal_count": 1,
+        "overall_winner": "E5 Sportback"
+      },
+      "recommendation": "小米SU7在空间方面有优势，但E5 Sportback在价格、配置、动力方面更胜一筹。综合考虑，建议优先选择E5 Sportback。"
+    }
+  }
+}

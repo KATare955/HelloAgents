@@ -1,0 +1,115 @@
+{
+  "E5 Sportback 2025款 旗舰quattro型": {
+    "90": {
+      "car_model": "E5 Sportback 2025款 旗舰quattro型",
+      "period": "近90天",
+      "avg_price": 289500,
+      "min_price": 287400,
+      "max_price": 319900,
+      "median_price": 288000,
+      "trend": "稳定",
+      "sample_count": 175,
+      "recommendation": "当前价格处于历史低位，建议入手",
+      "price_history": [
+        {"week": "2026-W35", "avg_price": 319900},
+        {"week": "2026-W36", "avg_price": 319900},
+        {"week": "2026-W37", "avg_price": 319900},
+        {"week": "2026-W38", "avg_price": 319900},
+        {"week": "2026-W39", "avg_price": 309500},
+        {"week": "2026-W40", "avg_price": 309700},
+        {"week": "2026-W41", "avg_price": 297400},
+        {"week": "2026-W42", "avg_price": 289500},
+        {"week": "2026-W43", "avg_price": 289500}
+      ]
+    },
+    "30": {
+      "car_model": "E5 Sportback 2025款 旗舰quattro型",
+      "period": "近30天",
+      "avg_price": 289500,
+      "min_price": 287400,
+      "max_price": 295000,
+      "median_price": 289000,
+      "trend": "稳定",
+      "sample_count": 58,
+      "recommendation": "价格稳定，可以入手",
+      "price_history": [
+        {"week": "2026-W40", "avg_price": 295000},
+        {"week": "2026-W41", "avg_price": 291000},
+        {"week": "2026-W42", "avg_price": 289500},
+        {"week": "2026-W43", "avg_price": 289500}
+      ]
+    }
+  },
+  "E5 Sportback 2025款 先锋型": {
+    "90": {
+      "car_model": "E5 Sportback 2025款 先锋型",
+      "period": "近90天",
+      "avg_price": 225000,
+      "min_price": 220000,
+      "max_price": 235900,
+      "median_price": 224500,
+      "trend": "下跌",
+      "sample_count": 120,
+      "recommendation": "价格处于下跌趋势，建议再观望",
+      "price_history": [
+        {"week": "2026-W35", "avg_price": 235900},
+        {"week": "2026-W36", "avg_price": 233000},
+        {"week": "2026-W37", "avg_price": 230000},
+        {"week": "2026-W38", "avg_price": 228000},
+        {"week": "2026-W39", "avg_price": 226000},
+        {"week": "2026-W40", "avg_price": 225500},
+        {"week": "2026-W41", "avg_price": 225000},
+        {"week": "2026-W42", "avg_price": 225000},
+        {"week": "2026-W43", "avg_price": 225000}
+      ]
+    }
+  },
+  "帕萨特2024款 330TSI 精英版": {
+    "90": {
+      "car_model": "帕萨特2024款 330TSI 精英版",
+      "period": "近90天",
+      "avg_price": 195000,
+      "min_price": 190000,
+      "max_price": 205900,
+      "median_price": 194500,
+      "trend": "稳定",
+      "sample_count": 200,
+      "recommendation": "价格稳定，可以入手",
+      "price_history": [
+        {"week": "2026-W35", "avg_price": 200000},
+        {"week": "2026-W36", "avg_price": 198000},
+        {"week": "2026-W37", "avg_price": 196000},
+        {"week": "2026-W38", "avg_price": 195500},
+        {"week": "2026-W39", "avg_price": 195000},
+        {"week": "2026-W40", "avg_price": 195000},
+        {"week": "2026-W41", "avg_price": 195000},
+        {"week": "2026-W42", "avg_price": 195000},
+        {"week": "2026-W43", "avg_price": 195000}
+      ]
+    }
+  },
+  "小米SU7 2025款 四驱Max版": {
+    "90": {
+      "car_model": "小米SU7 2025款 四驱Max版",
+      "period": "近90天",
+      "avg_price": 303900,
+      "min_price": 303900,
+      "max_price": 303900,
+      "median_price": 303900,
+      "trend": "稳定",
+      "sample_count": 85,
+      "recommendation": "新车上市，价格稳定",
+      "price_history": [
+        {"week": "2026-W35", "avg_price": 303900},
+        {"week": "2026-W36", "avg_price": 303900},
+        {"week": "2026-W37", "avg_price": 303900},
+        {"week": "2026-W38", "avg_price": 303900},
+        {"week": "2026-W39", "avg_price": 303900},
+        {"week": "2026-W40", "avg_price": 303900},
+        {"week": "2026-W41", "avg_price": 303900},
+        {"week": "2026-W42", "avg_price": 303900},
+        {"week": "2026-W43", "avg_price": 303900}
+      ]
+    }
+  }
+}

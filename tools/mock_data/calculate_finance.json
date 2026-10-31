@@ -1,0 +1,87 @@
+{
+  "289900_30_5_4.5": {
+    "car_price": 289900,
+    "down_payment": 86970,
+    "loan_amount": 202930,
+    "loan_years": 5,
+    "interest_rate": 4.5,
+    "monthly_payment": 3783.23,
+    "total_interest": 24063.67,
+    "total_cost": 313963.67,
+    "payment_schedule": [
+      {"month": 1, "principal": 3022.24, "interest": 760.99, "total": 3783.23},
+      {"month": 2, "principal": 3033.58, "interest": 749.65, "total": 3783.23},
+      {"month": 3, "principal": 3044.95, "interest": 738.28, "total": 3783.23},
+      {"month": 4, "principal": 3056.37, "interest": 726.86, "total": 3783.23},
+      {"month": 5, "principal": 3067.83, "interest": 715.40, "total": 3783.23}
+    ]
+  },
+  "289900_30_3_4.5": {
+    "car_price": 289900,
+    "down_payment": 86970,
+    "loan_amount": 202930,
+    "loan_years": 3,
+    "interest_rate": 4.5,
+    "monthly_payment": 6037.45,
+    "total_interest": 14418.20,
+    "total_cost": 304318.20,
+    "payment_schedule": [
+      {"month": 1, "principal": 5283.45, "interest": 754.00, "total": 6037.45},
+      {"month": 2, "principal": 5303.18, "interest": 734.27, "total": 6037.45},
+      {"month": 3, "principal": 5322.98, "interest": 714.47, "total": 6037.45},
+      {"month": 4, "principal": 5342.85, "interest": 694.60, "total": 6037.45},
+      {"month": 5, "principal": 5362.80, "interest": 674.65, "total": 6037.45}
+    ]
+  },
+  "289900_50_5_4.5": {
+    "car_price": 289900,
+    "down_payment": 144950,
+    "loan_amount": 144950,
+    "loan_years": 5,
+    "interest_rate": 4.5,
+    "monthly_payment": 2702.31,
+    "total_interest": 17188.60,
+    "total_cost": 307088.60,
+    "payment_schedule": [
+      {"month": 1, "principal": 2158.74, "interest": 543.57, "total": 2702.31},
+      {"month": 2, "principal": 2166.83, "interest": 535.48, "total": 2702.31},
+      {"month": 3, "principal": 2174.95, "interest": 527.36, "total": 2702.31},
+      {"month": 4, "principal": 2183.10, "interest": 519.21, "total": 2702.31},
+      {"month": 5, "principal": 2191.28, "interest": 511.03, "total": 2702.31}
+    ]
+  },
+  "235900_30_5_4.5": {
+    "car_price": 235900,
+    "down_payment": 70770,
+    "loan_amount": 165130,
+    "loan_years": 5,
+    "interest_rate": 4.5,
+    "monthly_payment": 3078.45,
+    "total_interest": 19577.00,
+    "total_cost": 255477.00,
+    "payment_schedule": [
+      {"month": 1, "principal": 2459.45, "interest": 619.00, "total": 3078.45},
+      {"month": 2, "principal": 2468.67, "interest": 609.78, "total": 3078.45},
+      {"month": 3, "principal": 2477.92, "interest": 600.53, "total": 3078.45},
+      {"month": 4, "principal": 2487.21, "interest": 591.24, "total": 3078.45},
+      {"month": 5, "principal": 2496.53, "interest": 581.92, "total": 3078.45}
+    ]
+  },
+  "319900_30_5_3.5": {
+    "car_price": 319900,
+    "down_payment": 95970,
+    "loan_amount": 223930,
+    "loan_years": 5,
+    "interest_rate": 3.5,
+    "monthly_payment": 4076.23,
+    "total_interest": 20643.80,
+    "total_cost": 340543.80,
+    "payment_schedule": [
+      {"month": 1, "principal": 3424.23, "interest": 652.00, "total": 4076.23},
+      {"month": 2, "principal": 3434.21, "interest": 642.02, "total": 4076.23},
+      {"month": 3, "principal": 3444.22, "interest": 632.01, "total": 4076.23},
+      {"month": 4, "principal": 3454.26, "interest": 621.97, "total": 4076.23},
+      {"month": 5, "principal": 3464.33, "interest": 611.90, "total": 4076.23}
+    ]
+  }
+}

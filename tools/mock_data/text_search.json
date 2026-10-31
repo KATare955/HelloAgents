@@ -1,0 +1,157 @@
+{
+  "E5 Sportback 2025款": {
+    "results": [
+      {
+        "id": "E5_Sportback_2025_pioneer",
+        "title": "E5 Sportback 2025款 先锋型",
+        "content": {
+          "price": 235900,
+          "motor": "单电机 电机最大功率220kW",
+          "battery_capacity": "76kWh",
+          "range_cltc": "618km",
+          "transmission": "单速变速箱",
+          "drive_type": "后驱",
+          "dimensions": "4881x1960x1479mm",
+          "wheelbase": "2950mm",
+          "seats": 5,
+          "trunk_volume": "347-1233L"
+        },
+        "category": "车型配置",
+        "source": "销售知识库"
+      },
+      {
+        "id": "E5_Sportback_2025_pioneer_quattro",
+        "title": "E5 Sportback 2025款 先锋quattro型",
+        "content": {
+          "price": 269900,
+          "motor": "单电机 电机最大功率386kW",
+          "battery_capacity": "83kWh",
+          "range_cltc": "623km",
+          "transmission": "单速变速箱",
+          "drive_type": "quattro智能四驱",
+          "dimensions": "4881x1960x1479mm",
+          "wheelbase": "2950mm",
+          "seats": 5,
+          "trunk_volume": "347-1233L"
+        },
+        "category": "车型配置",
+        "source": "销售知识库"
+      },
+      {
+        "id": "E5_Sportback_2025_pioneer_plus",
+        "title": "E5 Sportback 2025款 先锋Plus型",
+        "content": {
+          "price": 269900,
+          "motor": "单电机 电机最大功率300kW",
+          "battery_capacity": "100kWh",
+          "range_cltc": "773km",
+          "transmission": "单速变速箱",
+          "drive_type": "后驱",
+          "dimensions": "4881x1960x1479mm",
+          "wheelbase": "2950mm",
+          "seats": 5,
+          "trunk_volume": "347-1233L"
+        },
+        "category": "车型配置",
+        "source": "销售知识库"
+      },
+      {
+        "id": "E5_Sportback_2025_flagship_quattro",
+        "title": "E5 Sportback 2025款 旗舰quattro型",
+        "content": {
+          "price": 319900,
+          "motor": "单电机 电机最大功率579kW",
+          "battery_capacity": "100kWh",
+          "range_cltc": "647km",
+          "transmission": "单速变速箱",
+          "drive_type": "quattro智能四驱",
+          "dimensions": "4881x1960x1479mm",
+          "wheelbase": "2950mm",
+          "seats": 5,
+          "trunk_volume": "347-1233L"
+        },
+        "category": "车型配置",
+        "source": "销售知识库"
+      }
+    ],
+    "total": 4
+  },
+  "帕萨特2024款": {
+    "results": [
+      {
+        "id": "passat_2024_280tsi",
+        "title": "帕萨特2024款 280TSI 商务版",
+        "content": {
+          "price": 185900,
+          "engine": "1.4T 150马力 L4",
+          "transmission": "7挡双离合",
+          "dimensions": "4948×1836×1469mm",
+          "wheelbase": "2871mm",
+          "fuel_consumption": "6.1L/100km",
+          "seats": 5,
+          "trunk_volume": "521L"
+        },
+        "category": "车型配置",
+        "source": "销售知识库"
+      },
+      {
+        "id": "passat_2024_330tsi",
+        "title": "帕萨特2024款 330TSI 精英版",
+        "content": {
+          "price": 205900,
+          "engine": "2.0T 186马力 L4",
+          "transmission": "7挡双离合",
+          "dimensions": "4948×1836×1469mm",
+          "wheelbase": "2871mm",
+          "fuel_consumption": "6.5L/100km",
+          "seats": 5,
+          "trunk_volume": "521L"
+        },
+        "category": "车型配置",
+        "source": "销售知识库"
+      }
+    ],
+    "total": 2
+  },
+  "小米SU7 2025款": {
+    "results": [
+      {
+        "id": "xiaomi_su7_2025_max",
+        "title": "小米SU7 2025款 四驱Max版",
+        "content": {
+          "price": 303900,
+          "motor": "双电机 电机最大功率495kW",
+          "battery_capacity": "101kWh",
+          "range_cltc": "800km",
+          "transmission": "单速变速箱",
+          "drive_type": "四驱",
+          "dimensions": "4997x1963x1455mm",
+          "wheelbase": "3000mm",
+          "seats": 5,
+          "trunk_volume": "517L"
+        },
+        "category": "车型配置",
+        "source": "销售知识库"
+      },
+      {
+        "id": "xiaomi_su7_2025_pro",
+        "title": "小米SU7 2025款 Pro版",
+        "content": {
+          "price": 245900,
+          "motor": "单电机 电机最大功率220kW",
+          "battery_capacity": "94.3kWh",
+          "range_cltc": "830km",
+          "transmission": "单速变速箱",
+          "drive_type": "后驱",
+          "dimensions": "4997x1963x1455mm",
+          "wheelbase": "3000mm",
+          "seats": 5,
+          "trunk_volume": "517L"
+        },
+        "category": "车型配置",
+        "source": "销售知识库"
+      }
+    ],
+    "total": 2
+  }
+}
