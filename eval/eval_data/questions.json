@@ -544,7 +544,11 @@
       "expected_tools": [
         "book_test_drive"
       ],
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "accept_clarification": {
+        "target_tool": "book_test_drive",
+        "reason": "故意缺 customer_name/customer_phone；正确行为=反问补全，而非编造参数硬调"
+      }
     },
     {
       "id": "test_drive_003",
@@ -554,7 +558,11 @@
       "expected_tools": [
         "book_test_drive"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "accept_clarification": {
+        "target_tool": "book_test_drive",
+        "reason": "故意缺 customer_name/customer_phone/具体时间；正确行为=反问补全"
+      }
     },
     {
       "id": "test_drive_004",
@@ -597,7 +605,11 @@
         "book_test_drive"
       ],
       "difficulty": "hard",
-      "note": "测试模型处理不存在数据的能力"
+      "note": "测试模型处理不存在数据的能力",
+      "accept_clarification": {
+        "target_tool": "book_test_drive",
+        "reason": "车型不存在（目标不可达）；正确行为=告知不存在并推荐替代，而非强行预约"
+      }
     },
     {
       "id": "test_drive_008",
@@ -694,7 +706,11 @@
         "book_test_drive"
       ],
       "difficulty": "hard",
-      "note": "需要调用4个工具：查询配置、查询优惠、计算金融、预约试驾"
+      "note": "需要调用4个工具：查询配置、查询优惠、计算金融、预约试驾",
+      "accept_clarification": {
+        "target_tool": "book_test_drive",
+        "reason": "查完配置/优惠/金融后仍缺 dealer/time/name/phone；正确行为=汇总信息后反问预约细节"
+      }
     },
     {
       "id": "multi_hop_006",

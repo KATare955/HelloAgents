@@ -49,6 +49,12 @@ from tools import (
     BookTestDriveTool,
 )
 
+# 判分逻辑 v2（单一来源，含 accept_clarification 澄清规则）
+try:
+    from .scoring import judge_tool_correct
+except ImportError:  # 直接运行脚本时
+    from scoring import judge_tool_correct
+
 # 加载环境变量
 load_dotenv()
 
@@ -238,17 +244,17 @@ def evaluate_single_question(agent, question: Dict[str, Any]) -> Dict[str, Any]:
         result["actual_tools"] = actual_tools
         result["tool_calls_count"] = len(actual_tools)
         
-        # 判断工具调用是否正确（简化版：只检查是否调用了预期工具）
-        expected_set = set(question["expected_tools"])
-        actual_set = set(actual_tools)
-        
-        # 如果实际调用的工具包含所有预期工具，则认为正确
-        if expected_set.issubset(actual_set):
-            result["tool_correct"] = True
-        else:
-            result["tool_correct"] = False
-            result["missing_tools"] = list(expected_set - actual_set)
-            result["extra_tools"] = list(actual_set - expected_set)
+        # 判断工具调用是否正确（判分逻辑 v2：见 eval/scoring.py，含 accept_clarification 澄清/降级规则）
+        correct, missing, extra = judge_tool_correct(
+            question["expected_tools"],
+            actual_tools,
+            response=response,
+            accept_clarification=question.get("accept_clarification"),
+        )
+        result["tool_correct"] = correct
+        if not correct:
+            result["missing_tools"] = missing
+            result["extra_tools"] = extra
         
     except Exception as e:
         result["status"] = "error"
