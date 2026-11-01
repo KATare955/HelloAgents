@@ -262,7 +262,7 @@ def run_baseline_eval():
     """运行 baseline 评测"""
     
     print("=" * 80)
-    print("Baseline评测：使用 Ollama + Qwen3-8B")
+    print(f"Baseline评测：使用 {MODEL_NAME}（后端: {os.getenv('LLM_BASE_URL', 'http://localhost:11434/v1')}）")
     print("=" * 80)
     
     # 加载问题集
