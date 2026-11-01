@@ -40,3 +40,13 @@
 - **模型**: qwen3-14b
 - **阶段**: baseline
 - **结果文件**: `results/baseline/qwen3-14b/v1.1/baseline_qwen3-14b_v1.1_20261101.json`
+
+## 2026-11-01 20:05:26 - sft (qwen3-14b-sft, v1.1)
+
+- **准确率**: 75.0%
+- **总问题数**: 68
+- **Bad case数量**: 17
+- **评测集版本**: v1.1
+- **模型**: qwen3-14b-sft
+- **阶段**: sft
+- **结果文件**: `results/sft/qwen3-14b-sft/v1.1/sft_qwen3-14b-sft_v1.1_20261101.json`
