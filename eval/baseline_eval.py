@@ -3,6 +3,7 @@
 支持通过环境变量配置模型后端，兼容 Ollama（本地）和 vLLM（AutoDL）。
 
 环境变量：
+    EVAL_STAGE       - 评测阶段，用于结果目录/文件命名（默认: baseline；SFT 阶段设 sft，RL 阶段设 rl）
     EVAL_MODEL_NAME  - 模型名称，用于结果目录命名（默认: qwen3-8b）
     LLM_MODEL_ID     - LLM API 的 model 参数（默认: qwen3:8b）
     LLM_API_KEY      - API Key（默认: ollama）
@@ -14,10 +15,18 @@
     cd /Users/kay/Desktop/hello-agents-family/HelloAgents
     uv run python eval/baseline_eval.py
 
-    # AutoDL vLLM + Qwen3-14B
+    # AutoDL vLLM + Qwen3-14B（Base 阶段）
     export EVAL_MODEL_NAME=qwen3-14b
     export LLM_MODEL_ID=Qwen3-14B
     export LLM_API_KEY=token-abc123
+    export LLM_BASE_URL=http://localhost:8000/v1
+    python eval/baseline_eval.py
+
+    # SFT 阶段：同一 harness + 同一 v1.1 冻结评测集，仅换阶段名与模型后端
+    # 保证 Base/SFT/RL 三行结果严格可比（评测集、判分、工具 schema 完全不变）
+    export EVAL_STAGE=sft
+    export EVAL_MODEL_NAME=qwen3-14b-sft
+    export LLM_MODEL_ID=qwen3-14b-sales-sft
     export LLM_BASE_URL=http://localhost:8000/v1
     python eval/baseline_eval.py
 
@@ -62,9 +71,9 @@ load_dotenv()
 # 版本管理配置
 # ============================================================
 
-EVAL_VERSION = "v1.1"  # 评测集版本
+EVAL_VERSION = "v1.1"  # 评测集版本（三阶段共用，冻结不变）
 MODEL_NAME = os.getenv("EVAL_MODEL_NAME", "qwen3-8b")  # 模型名称（环境变量可覆盖）
-STAGE = "baseline"  # 评测阶段
+STAGE = os.getenv("EVAL_STAGE", "baseline")  # 评测阶段：baseline / sft / rl（环境变量可覆盖，同一 harness 跑三阶段）
 
 
 def get_output_dir() -> Path:

@@ -1,0 +1,30 @@
+{"bucket": "finance_compare", "question": "买小米SU7四驱Max版，全款和首付两成贷五年，算下来哪种更省钱？", "reason": "calculate_finance 返回空(接地失败)"}
+{"bucket": "competitor_double", "question": "E5旗舰quattro和小米SU7四驱Max，配置参数帮我查一下，顺便算下首付五成贷两年各自月供多少", "reason": "步数超限(1+5+1>5)"}
+{"bucket": "multi_hop", "question": "小米SU7四驱Max版现在市面上实际卖多少钱？全国范围内有没有优惠活动？按优惠后价格20%首付分5年还贷月供大概是多少？", "reason": "query_discount_policy 返回空(接地失败)"}
+{"bucket": "direct_single", "question": "帕萨特2024款330TSI精英版现在有啥优惠活动吗？", "reason": "query_discount_policy 返回空(接地失败)"}
+{"bucket": "direct_single", "question": "E5旗舰quattro和小米SU7四驱Max比，电池续航谁更占优？", "reason": "competitor_compare 返回空(接地失败)"}
+{"bucket": "direct_single", "question": "帕萨特2024款330TSI精英版现在市场上实际成交价大概是多少？", "reason": "重复/与评测集重叠"}
+{"bucket": "clarify", "question": "李梅，手机13800138000，想预约帕萨特试驾，能帮我查一下现在有什么优惠吗，顺便安排一下", "reason": "澄清样本 query_discount_policy 返回空(接地失败)"}
+{"bucket": "clarify", "question": "我想试驾一下帕萨特330TSI，听说最近有优惠，能帮我约一下吗？", "reason": "澄清样本 query_discount_policy 返回空(接地失败)"}
+{"bucket": "degrade_refuse", "question": "宝马i3 2025款的贷款月供怎么算，首付三成贷三年", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "我想预约一下Model X 2025款的试驾，这周末方便吗", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "我想了解一下宝马i3 2025款跟小米SU7哪个更值得买，帮我对比一下", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "Model X 2025款可以贷款买吗？三成首付五年还清大概月供多少？", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "宝马i3 2025款跟你们家车比哪个更值得入手？", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "Model X 2025款能不能帮我算一下贷款方案，首付三成贷三年？", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "宝马i3 2025款首付三成贷3年月供大概多少", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "奥迪A7L现在有什么优惠活动吗？", "reason": "重复/与评测集重叠"}
+{"bucket": "degrade_refuse", "question": "我想买宝马i3 2025款，帮我看看成交价大概多少？", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "特斯拉Model 3跟小米SU7比哪个更值得买？", "reason": "重复/与评测集重叠"}
+{"bucket": "degrade_refuse", "question": "2025款Model X在上海有没有置换补贴？", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "宝马i3 2025款在上海有没有现车？想这周末去试驾", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "帮我查一下Model X 2025款的续航和电池容量，打算入手一台", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "宝马i3 2025款的续航怎么样，能跑多远？", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "帮我把Model X 2025款和小米SU7对比一下，看看哪个更值得买", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "帮我查一下宝马i3 2025款的成交价大概是多少，想看看值不值得买", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "Model X 2025款能贷款买吗？首付三成贷三年月供多少？", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "宝马i3 2025款落地大概多少钱？我想贷款三年分期", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "Model X 2025款跟你们E5 Sportback比起来哪个更值？", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "宝马i3 2025款和小米SU7比哪个更值得买？", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "我想贷款买特斯拉Model X 2025款，首付三成贷三年月供多少钱？", "reason": "降级样本探测却返回了数据(车型其实存在?)"}
+{"bucket": "degrade_refuse", "question": "宝马i3 2025款上市了吗，能帮我查一下配置和指导价吗？", "reason": "降级样本探测却返回了数据(车型其实存在?)"}

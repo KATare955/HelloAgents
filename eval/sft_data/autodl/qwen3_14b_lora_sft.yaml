@@ -1,0 +1,67 @@
+# =============================================================================
+# Qwen3-14B 汽车销售 Agent — LoRA SFT 训练配置（LLaMA-Factory）
+# 对应计划 s5：LoRA SFT Qwen3-14B（3 epochs, batch8, 2×A800-80GB）
+#
+# 启动（AutoDL，2 卡 NVLink）：
+#   cd /root/autodl-tmp/LLaMA-Factory
+#   FORCE_TORCHRUN=1 NNODES=1 NPROC_PER_NODE=2 \
+#     llamafactory-cli train /root/autodl-tmp/HelloAgents/eval/sft_data/autodl/qwen3_14b_lora_sft.yaml
+#
+# 单卡也能跑（14B LoRA + gradient_checkpointing，占用 < 40GB）：
+#   llamafactory-cli train /root/autodl-tmp/HelloAgents/eval/sft_data/autodl/qwen3_14b_lora_sft.yaml
+# ⚠️ 所有路径均在数据盘 /root/autodl-tmp（系统盘 /root 仅 30GB）
+# =============================================================================
+
+### model
+# 必须与 Base 评测用的是同一个底座，SFT = Base + LoRA，三阶段才严格可比
+# ✅ 已确认：ModelScope 下载于数据盘 /root/autodl-tmp/models/Qwen3-14B（非系统盘 /root/models）
+model_name_or_path: /root/autodl-tmp/models/Qwen3-14B
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target: all              # 对所有线性层加 LoRA（Qwen3 推荐）
+
+### dataset
+# dataset_dir 指向上传的转换产物目录（含 dataset_info.json + sft_train.json + sft_val.json）
+dataset_dir: /root/autodl-tmp/HelloAgents/eval/sft_data/llamafactory
+dataset: sales_agent_sft_train
+eval_dataset: sales_agent_sft_val
+template: qwen3
+# 关键排雷点：我们的数据用 ReActAgent 的 Thought 工具（function_call）承载推理，
+# 不含 Qwen3 原生 <think> CoT，故关闭思考模式；训练/推理/评测三处必须一致！
+enable_thinking: false
+cutoff_len: 8192              # 实测240条token max~4532/p99~4306，8192零截断且留足够余量（防tokenizer估计误差切掉末尾Finish答案）
+max_samples: 100000
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+output_dir: saves/qwen3-14b-sales/lora/sft
+logging_steps: 5
+save_steps: 50
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 4   # 2 卡 × 1 × 4 = 全局 batch 8（对齐计划）
+learning_rate: 1.0e-4
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+gradient_checkpointing: true     # 省显存，14B 长序列必备
+# 排雷：默认 sdpa（零编译，A800 上足够）。若已装 flash-attn 且要提速，改成 fa2。
+flash_attn: sdpa
+
+### eval
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 50
