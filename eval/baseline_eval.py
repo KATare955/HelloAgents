@@ -7,6 +7,7 @@
     LLM_MODEL_ID     - LLM API 的 model 参数（默认: qwen3:8b）
     LLM_API_KEY      - API Key（默认: ollama）
     LLM_BASE_URL     - API Base URL（默认: http://localhost:11434/v1）
+    EVAL_TEMPERATURE - 采样温度（默认: 0，贪婪解码确保可复现；如需模拟真实波动可设0.7并多次取平均）
 
 用法：
     # 本地 Ollama（默认，无需设置环境变量）
@@ -140,7 +141,8 @@ def create_sales_agent():
         model=os.getenv("LLM_MODEL_ID", "qwen3:8b"),
         api_key=os.getenv("LLM_API_KEY", "ollama"),
         base_url=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1"),
-        temperature=0.7,
+        # 评测默认 temperature=0（贪婪解码，确保三阶段可复现对比）；可用 EVAL_TEMPERATURE 覆盖
+        temperature=float(os.getenv("EVAL_TEMPERATURE", "0")),
     )
     
     # 2. 创建工具注册表
