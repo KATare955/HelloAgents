@@ -219,6 +219,7 @@ serve)
   echo "   等就绪: tail -f /root/vllm_sft.log 看到 'Application startup complete' 再跑 eval"
   echo "   验证: curl -s localhost:${VLLM_PORT}/v1/models | python -m json.tool"
   echo "⚠️ 公平性:Base(83.8%)当时serve未加enable_thinking=false。为严格可比,建议Base也用同配置重跑一次(纯推理~30min,零训练成本)"
+  echo "   → 已脚本化: bash run_base_nothink_autodl.sh {template|serve|verify|eval}（非破坏性关思考,结果落 qwen3-14b-nothink/,不覆盖83.8%）"
   ;;
 
 # -----------------------------------------------------------------------------
