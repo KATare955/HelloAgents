@@ -1,14 +1,24 @@
 """Baseline评测脚本（带版本管理）
 
-使用 Ollama + Qwen3-8B 运行 Agent，评测 baseline 模型的性能。
+支持通过环境变量配置模型后端，兼容 Ollama（本地）和 vLLM（AutoDL）。
 
-前置条件：
-1. Ollama 已启动（ollama serve）
-2. Qwen3-8B 模型已下载（ollama pull qwen3:8b）
+环境变量：
+    EVAL_MODEL_NAME  - 模型名称，用于结果目录命名（默认: qwen3-8b）
+    LLM_MODEL_ID     - LLM API 的 model 参数（默认: qwen3:8b）
+    LLM_API_KEY      - API Key（默认: ollama）
+    LLM_BASE_URL     - API Base URL（默认: http://localhost:11434/v1）
 
 用法：
+    # 本地 Ollama（默认，无需设置环境变量）
     cd /Users/kay/Desktop/hello-agents-family/HelloAgents
     uv run python eval/baseline_eval.py
+
+    # AutoDL vLLM + Qwen3-14B
+    export EVAL_MODEL_NAME=qwen3-14b
+    export LLM_MODEL_ID=Qwen3-14B
+    export LLM_API_KEY=token-abc123
+    export LLM_BASE_URL=http://localhost:8000/v1
+    python eval/baseline_eval.py
 
 版本管理：
 - 评测集版本：v1.1（68题）
@@ -17,6 +27,7 @@
 """
 
 import json
+import os
 import sys
 from pathlib import Path
 from datetime import datetime
@@ -45,7 +56,7 @@ load_dotenv()
 # ============================================================
 
 EVAL_VERSION = "v1.1"  # 评测集版本
-MODEL_NAME = "qwen3-8b"  # 模型名称
+MODEL_NAME = os.getenv("EVAL_MODEL_NAME", "qwen3-8b")  # 模型名称（环境变量可覆盖）
 STAGE = "baseline"  # 评测阶段
 
 
@@ -124,11 +135,11 @@ def log_evaluation(accuracy: float, total_questions: int, bad_cases_count: int):
 def create_sales_agent():
     """创建汽车销售 Agent"""
     
-    # 1. 创建 LLM 实例（使用 Ollama + Qwen3-8B）
+    # 1. 创建 LLM 实例（通过环境变量配置，兼容 Ollama / vLLM）
     llm = HelloAgentsLLM(
-        model="qwen3:8b",
-        api_key="ollama",
-        base_url="http://localhost:11434/v1",
+        model=os.getenv("LLM_MODEL_ID", "qwen3:8b"),
+        api_key=os.getenv("LLM_API_KEY", "ollama"),
+        base_url=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1"),
         temperature=0.7,
     )
     
