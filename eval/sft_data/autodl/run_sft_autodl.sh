@@ -38,6 +38,41 @@ VLLM_PORT=8000
 
 STAGE="${1:-help}"
 
+# ---- 归档函数：训练产物拷到带版本+时间戳目录，防 LF 固定 output_dir 被下次训练覆盖 ----
+do_archive() {
+  local VER="${VERSION:-v1.0}"
+  local TS=$(date +%Y%m%d_%H%M%S)
+  local ARC=${DATA_ROOT}/archive/sft_qwen3-14b-sales_${VER}_${TS}
+  if [ ! -d "$ADAPTER_DIR" ]; then echo "❌ adapter 未找到($ADAPTER_DIR)，请先跑 train"; return 1; fi
+  mkdir -p "$ARC/adapter"
+  # 拷 final adapter(246M)+loss图+trainer_state+results，不拷中间 checkpoint-*(留AutoDL)
+  cp "$ADAPTER_DIR"/adapter_model.safetensors "$ADAPTER_DIR"/adapter_config.json "$ARC/adapter/" 2>/dev/null || true
+  cp "$ADAPTER_DIR"/trainer_state.json "$ADAPTER_DIR"/training_loss.png "$ADAPTER_DIR"/training_eval_loss.png \
+     "$ADAPTER_DIR"/all_results.json "$ADAPTER_DIR"/eval_results.json "$ARC/" 2>/dev/null || true
+  cp "$TRAIN_YAML" "$ARC/train_config.yaml"
+  local GC=$(cd "$REPO_DIR" && git rev-parse --short HEAD 2>/dev/null || echo unknown)
+  local NT=$(python -c "import json;print(len(json.load(open('${DATA_DIR}/sft_train.json'))))" 2>/dev/null || echo 0)
+  local NV=$(python -c "import json;print(len(json.load(open('${DATA_DIR}/sft_val.json'))))" 2>/dev/null || echo 0)
+  cat > "$ARC/MANIFEST.json" <<EOF
+{
+  "model": "qwen3-14b-sales-sft",
+  "base_model": "${BASE_MODEL}",
+  "stage": "sft",
+  "version": "${VER}",
+  "archived_at": "${TS}",
+  "git_commit": "${GC}",
+  "data": {"train": ${NT}, "val": ${NV}},
+  "merged_model_on_autodl": "${MERGED_MODEL}",
+  "note": "28GB完整模型留AutoDL数据盘；本归档含246M adapter+轻量产物，rsync回本地分析"
+}
+EOF
+  echo "✅ 归档完成(带版本时间戳,不会被下次训练覆盖)：$ARC"
+  ls -lhR "$ARC" | head -30
+  echo ""
+  echo "拉回本地(MacBook跑，端口/主机见AutoDL控制台SSH信息)："
+  echo "  rsync -avz -e 'ssh -p <端口>' root@<AutoDL主机>:${ARC}/ ./实验记录/训练归档/$(basename "$ARC")/"
+}
+
 case "$STAGE" in
 
 # -----------------------------------------------------------------------------
@@ -48,12 +83,19 @@ install)
   if [ ! -d "$LF_DIR" ]; then
     git clone --depth 1 https://github.com/hiyouga/LLaMA-Factory.git "$LF_DIR"
   fi
+  # ⚠️⚠️ clone 完立即关加速！下面 pip 走环境默认的 aliyun 国内镜像，代理开着会绕国际出口访问国内源，
+  #   导致 build 依赖 hatchling 报 "Could not find a version that satisfies ... (from versions: none)"。
+  unset http_proxy https_proxy
   cd "$LF_DIR"
   # ⚠️⚠️ 关键排雷：本机 torch 已 force-reinstall 到 2.13.0 + sed patch 过 inductor，vLLM 依赖它。
   #   装 LLaMA-Factory 【不要】用 [torch] extra，否则会把 torch 拉回别的版本→重新触发 inductor 损坏。
   #   用 [metrics] + 装前后校验 torch 版本，被改动则按 11-01 日记5.3 恢复。
   TORCH_BEFORE=$(python -c "import torch;print(torch.__version__)")
-  pip install -e ".[metrics]"         # 不用 [torch] extra，减少对 torch 的改动
+  # 注:LF 0.9.6.dev0 无 'metrics' extra(会 warn "does not provide the extra"),装核心即可;
+  #   评测走我们自己的 baseline_eval.py,不依赖 LF 的 metrics。
+  # ⚠️⚠️ 已知副作用:LF 会把 transformers 5.19→5.8、tokenizers/starlette/pillow/datasets 一起降级,
+  #   破坏 vLLM(0.32 要 transformers>=5.16)。故 train/merge 用本环境,serve 前由 serve 段自动恢复。
+  pip install -e "."                  # 不用 [torch] extra，减少对 torch 的改动
   # 若报依赖冲突： pip install --no-deps -e .  然后手动补 transformers/datasets/accelerate/peft/trl
   TORCH_AFTER=$(python -c "import torch;print(torch.__version__)")
   echo "--- 校验现场未被破坏 ---"
@@ -79,11 +121,24 @@ install)
 # -----------------------------------------------------------------------------
 train)
   echo "【train】LoRA SFT（3 epochs, 全局 batch 8, template=qwen3, enable_thinking=false）"
+  # ⚠️ 训练前确认 GPU 空闲：若之前 serve 起的 vLLM 还在后台(单卡占~71GB=gpu-mem-util0.9×80GB)，
+  #   加载 14B(需~28GB)会 OOM（报 "Process XXXXX has 71.XX GiB in use"）。先关残留服务再训。
+  USED=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits 2>/dev/null | head -1 | tr -d ' ')
+  if [ -n "$USED" ] && [ "$USED" -gt 5000 ]; then
+    echo "❌ GPU0 已占用 ${USED}MiB，疑似残留 vLLM 服务。占用进程："
+    nvidia-smi --query-compute-apps=pid,used_memory,process_name --format=csv 2>/dev/null
+    echo "   关闭: pkill -f vllm.entrypoints.openai.api_server  （或 kill <上面的PID>）"
+    echo "   等 nvidia-smi 显存释放后重跑 train。本次中止。"
+    exit 1
+  fi
   cd "$LF_DIR"
   # 2 卡 NVLink 并行；单卡直接去掉 FORCE_TORCHRUN/NPROC_PER_NODE 也能跑
   FORCE_TORCHRUN=1 NNODES=1 NPROC_PER_NODE=2 \
     llamafactory-cli train "$TRAIN_YAML"
   echo "✅ 训练完成，LoRA 适配器在 ${ADAPTER_DIR}"
+  # ⚠️ LF output_dir 固定(saves/qwen3-14b-sales/lora/sft)+overwrite_output_dir=true，再训练会覆盖！
+  #   故训练完自动归档到带时间戳目录防丢（VERSION=v1.0 可指定；多次训练各自归档，永不覆盖）
+  do_archive
   ;;
 
 # -----------------------------------------------------------------------------
@@ -108,12 +163,29 @@ EOF
   ;;
 
 # -----------------------------------------------------------------------------
+archive)
+  echo "【archive】手动归档（train 完成时已自动归档一次；此处用于补归档或指定 VERSION）"
+  cd "$LF_DIR"
+  do_archive
+  ;;
+
+# -----------------------------------------------------------------------------
 serve)
   echo "【serve】vLLM 起 SFT 模型服务 —— 完全对齐 11-01 已跑通的 Base 启动方案(含全部排雷patch)"
+  unset http_proxy https_proxy
+  # ⚠️⚠️ 先恢复被 LLaMA-Factory 降级的 vLLM 依赖：LF 要 transformers<=5.8、vLLM 0.32 要 >=5.16.1，
+  #   装 LF 时 transformers 被降到 5.8（连 tokenizers/starlette/pillow/datasets 一起降），不恢复 vLLM 必崩。
+  #   下面版本 = 11-01 跑通 Base 评测时的版本；只升上层包，torch 2.13.0 不动（升完立即断言校验）。
+  TRANS_VER=$(python -c "import transformers;print(transformers.__version__)" 2>/dev/null || echo none)
+  if [ "$TRANS_VER" != "5.19.0" ]; then
+    echo "检测到 transformers=$TRANS_VER（被 LF 降级），恢复 vLLM 依赖..."
+    pip install --upgrade "transformers==5.19.0" "tokenizers==0.23.3" "starlette==1.10.0" "pillow==13.0.0" "datasets==5.1.0" \
+      -i https://mirrors.aliyun.com/pypi/simple
+    python -c "import torch;assert torch.__version__.startswith('2.13.0'),'torch被改动:'+torch.__version__;print('torch OK',torch.__version__)"
+  fi
   # ⚠️ 这套 patch 是踩了2小时坑验证出来的，SFT 模型服务同样需要，一条都别省：
   #   1)unset代理(国内直连) 2)inductor lowering.py:9111 sed patch 3)TORCHDYNAMO_DISABLE=1
   #   4)VLLM_USE_FLASHINFER_SAMPLER=0(否则首请求JIT崩溃→评测全Connection error) 5)--enforce-eager
-  unset http_proxy https_proxy
   sed -i '9111s/import_submodule(kernel)/pass  # PATCHED: skip broken kernel imports/' \
     /root/miniconda3/lib/python3.12/site-packages/torch/_inductor/lowering.py 2>/dev/null || true
   python -c "import torch._inductor.lowering; print('inductor OK')"
@@ -157,13 +229,14 @@ eval)
 
 # -----------------------------------------------------------------------------
 *)
-  echo "用法: bash run_sft_autodl.sh {install|train|merge|serve|eval}"
+  echo "用法: bash run_sft_autodl.sh {install|train|merge|archive|serve|eval}"
   echo "  install  装 LLaMA-Factory（补齐环境缺口）"
   echo "  train    LoRA SFT 训练"
   echo "  merge    合并 LoRA → 完整模型"
+  echo "  archive  归档训练产物(adapter+配置+loss+MANIFEST)；VERSION=v1.0 可指定版本"
   echo "  serve    vLLM 后台起服务（nohup，脚本立即返回；等日志 'Application startup complete' 再跑 eval）"
   echo "  eval     跑 SFT 评测（EVAL_STAGE=sft）"
   echo ""
-  echo "标准顺序: install → train → merge → serve(后台起,等就绪) → eval(同终端即可)"
+  echo "标准顺序: install → train → merge → archive → serve(后台起,等就绪) → eval(同终端即可)"
   ;;
 esac
