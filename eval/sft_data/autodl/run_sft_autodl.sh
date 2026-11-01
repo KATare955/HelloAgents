@@ -192,7 +192,17 @@ serve)
   export TORCHDYNAMO_DISABLE=1
   export VLLM_USE_FLASHINFER_SAMPLER=0
   # --enable-auto-tool-choice + --tool-call-parser hermes : Qwen3 工具调用必需
-  # --chat-template-kwargs enable_thinking=false : 与 SFT 训练一致(若本 vLLM 版本不支持此参数则删掉该行)
+  # ⚠️ 本 vLLM(0.32.0)不支持 --chat-template-kwargs 服务端参数(报 unrecognized arguments 后进程直接退出)。
+  #   enable_thinking=false 改为写进模型目录的 chat_template.jinja：模板末尾逻辑是
+  #   "if enable_thinking is defined and is false → 插入空的 <think></think> 块"，空块即"思考已完成"信号→模型直接作答不思考。
+  #   模板中 enable_thinking 只被读取、从未被 set，故在顶部注入 set enable_thinking=false（幂等：已注入则跳过），与 SFT 训练一致。
+  TPL="$MERGED_MODEL/chat_template.jinja"
+  if [ -f "$TPL" ] && ! head -1 "$TPL" | grep -q "set enable_thinking"; then
+    sed -i '1i {%- set enable_thinking = false -%}' "$TPL"
+    echo "✅ 已注入 enable_thinking=false 到 $TPL（顶部）"
+  else
+    echo "ℹ️  $TPL 已含 enable_thinking 设置或不存在，跳过注入"
+  fi
   nohup python -m vllm.entrypoints.openai.api_server \
     --model "$MERGED_MODEL" \
     --served-model-name "$SERVED_NAME" \
@@ -203,18 +213,17 @@ serve)
     --host 0.0.0.0 --port "$VLLM_PORT" \
     --enable-auto-tool-choice \
     --tool-call-parser hermes \
-    --chat-template-kwargs '{"enable_thinking": false}' \
     --enforce-eager \
     > /root/vllm_sft.log 2>&1 &
   echo "✅ vLLM 后台启动(PID $!)，日志 /root/vllm_sft.log"
   echo "   等就绪: tail -f /root/vllm_sft.log 看到 'Application startup complete' 再跑 eval"
   echo "   验证: curl -s localhost:${VLLM_PORT}/v1/models | python -m json.tool"
-  echo "⚠️ 公平性:Base(89.7%)当时serve未加enable_thinking=false。为严格可比,建议Base也用同配置重跑一次(纯推理~30min,零训练成本)"
+  echo "⚠️ 公平性:Base(83.8%)当时serve未加enable_thinking=false。为严格可比,建议Base也用同配置重跑一次(纯推理~30min,零训练成本)"
   ;;
 
 # -----------------------------------------------------------------------------
 eval)
-  echo "【eval】同一 harness + 同一 v1.1 冻结评测集 → SFT 结果（与 Base 89.7% 严格可比）"
+  echo "【eval】同一 harness + 同一 v1.1 冻结评测集 → SFT 结果（与 Base 83.8% 严格可比）"
   cd "$REPO_DIR"
   export EVAL_STAGE=sft
   export EVAL_MODEL_NAME=qwen3-14b-sft
@@ -224,7 +233,7 @@ eval)
   export EVAL_TEMPERATURE=0            # 贪婪解码，与 Base 评测一致，保证可复现
   python eval/baseline_eval.py
   echo "✅ SFT 评测完成，结果在 eval/eval_data/results/sft/qwen3-14b-sft/v1.1/"
-  echo "   对比 Base（89.7%）看总体准确率 + 7 坏例场景是否修复"
+  echo "   对比 Base（83.8%）看总体准确率 + 7 坏例场景是否修复"
   ;;
 
 # -----------------------------------------------------------------------------
