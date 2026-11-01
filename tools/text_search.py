@@ -5,6 +5,11 @@ from pathlib import Path
 from typing import Dict, Any, List
 from hello_agents.tools import Tool, ToolParameter, ToolResponse
 
+try:
+    from ._matching import is_match
+except ImportError:  # 直接运行脚本时
+    from _matching import is_match
+
 
 class TextSearchTool(Tool):
     """销售知识库检索工具
@@ -65,11 +70,10 @@ class TextSearchTool(Tool):
                 message="query参数不能为空"
             )
         
-        # 3. 查找匹配的结果
-        # 提示：遍历mock_data，查找包含query关键词的条目
+        # 3. 查找匹配的结果（健壮匹配：精确/双向子串/token重叠，兼容带配置后缀或意图词的查询）
         results = []
         for key, data in self.mock_data.items():
-            if query.lower() in key.lower():
+            if is_match(query, key):
                 results.extend(data.get("results", []))
         
         # 4. 根据category过滤

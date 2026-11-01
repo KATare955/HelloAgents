@@ -6,6 +6,11 @@ from typing import Dict, Any, List
 from datetime import datetime
 from hello_agents.tools import Tool, ToolParameter, ToolResponse
 
+try:
+    from ._matching import match_key
+except ImportError:  # 直接运行脚本时
+    from _matching import match_key
+
 
 class QueryDiscountPolicyTool(Tool):
     """优惠政策查询工具
@@ -67,27 +72,16 @@ class QueryDiscountPolicyTool(Tool):
                 message="car_model参数不能为空"
             )
         
-        # 3. 查找匹配的优惠政策
-        # 先尝试精确匹配，再尝试模糊匹配
+        # 3. 查找匹配的优惠政策（健壮匹配：精确/双向子串/token重叠）
         discount_data = None
         
-        # 精确匹配
-        if car_model in self.mock_data:
-            car_data = self.mock_data[car_model]
+        matched_key = match_key(car_model, self.mock_data.keys())
+        if matched_key:
+            car_data = self.mock_data[matched_key]
             if region in car_data:
                 discount_data = car_data[region]
             elif "全国" in car_data:
                 discount_data = car_data["全国"]
-        else:
-            # 模糊匹配
-            for key in self.mock_data.keys():
-                if car_model.lower() in key.lower() or key.lower() in car_model.lower():
-                    car_data = self.mock_data[key]
-                    if region in car_data:
-                        discount_data = car_data[region]
-                    elif "全国" in car_data:
-                        discount_data = car_data["全国"]
-                    break
         
         # 4. 处理未找到的情况
         if not discount_data:

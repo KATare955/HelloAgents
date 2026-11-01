@@ -5,6 +5,11 @@ from pathlib import Path
 from typing import Dict, Any, List
 from hello_agents.tools import Tool, ToolParameter, ToolResponse
 
+try:
+    from ._matching import match_key
+except ImportError:  # 直接运行脚本时
+    from _matching import match_key
+
 
 class QueryTransactionPriceTool(Tool):
     """历史成交价查询工具
@@ -78,23 +83,15 @@ class QueryTransactionPriceTool(Tool):
                 message="days参数必须是30、90、180或365"
             )
         
-        # 3. 查找匹配的历史成交价数据
+        # 3. 查找匹配的历史成交价数据（健壮匹配：精确/双向子串/token重叠）
         price_data = None
         days_key = str(days)
         
-        # 精确匹配
-        if car_model in self.mock_data:
-            car_data = self.mock_data[car_model]
+        matched_key = match_key(car_model, self.mock_data.keys())
+        if matched_key:
+            car_data = self.mock_data[matched_key]
             if days_key in car_data:
                 price_data = car_data[days_key]
-        else:
-            # 模糊匹配
-            for key in self.mock_data.keys():
-                if car_model.lower() in key.lower() or key.lower() in car_model.lower():
-                    car_data = self.mock_data[key]
-                    if days_key in car_data:
-                        price_data = car_data[days_key]
-                    break
         
         # 4. 处理未找到的情况
         if not price_data:

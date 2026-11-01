@@ -5,6 +5,11 @@ from pathlib import Path
 from typing import Dict, Any, List
 from hello_agents.tools import Tool, ToolParameter, ToolResponse
 
+try:
+    from ._matching import match_key
+except ImportError:  # 直接运行脚本时
+    from _matching import match_key
+
 
 class CompetitorCompareTool(Tool):
     """竞品对比工具
@@ -71,20 +76,24 @@ class CompetitorCompareTool(Tool):
                 message="car_model_b参数不能为空"
             )
         
-        # 3. 查找匹配的对比数据
+        # 3. 查找匹配的对比数据（健壮匹配，两级：车系A -> 竞品B）
         comparison_data = None
         
-        # 精确匹配：先查A->B，再查B->A
-        if car_model_a in self.mock_data:
-            if car_model_b in self.mock_data[car_model_a]:
-                comparison_data = self.mock_data[car_model_a][car_model_b]
+        # 正向：先匹配一级 key(A)，再匹配二级 key(B)
+        key_a = match_key(car_model_a, self.mock_data.keys())
+        if key_a:
+            key_b = match_key(car_model_b, self.mock_data[key_a].keys())
+            if key_b:
+                comparison_data = self.mock_data[key_a][key_b]
         
-        # 如果没找到，尝试反向查找
-        if not comparison_data and car_model_b in self.mock_data:
-            if car_model_a in self.mock_data[car_model_b]:
-                # 反转对比结果
-                reverse_data = self.mock_data[car_model_b][car_model_a]
-                comparison_data = self._reverse_comparison(reverse_data, car_model_a, car_model_b)
+        # 反向：先匹配 B，再在 B 的竞品中匹配 A，最后反转结果
+        if not comparison_data:
+            key_b = match_key(car_model_b, self.mock_data.keys())
+            if key_b:
+                key_a = match_key(car_model_a, self.mock_data[key_b].keys())
+                if key_a:
+                    reverse_data = self.mock_data[key_b][key_a]
+                    comparison_data = self._reverse_comparison(reverse_data, car_model_a, car_model_b)
         
         # 4. 处理未找到的情况
         if not comparison_data:
