@@ -530,7 +530,7 @@
       "id": "test_drive_001",
       "scenario": "试驾预约",
       "type": "单跳",
-      "question": "我想预约E5 Sportback的试驾，我叫张三，电话13800138000，明天下午3点在上海浦东店",
+      "question": "我想预约E5 Sportback的试驾，我叫张三，电话13800138000，明天下午3点在上汽奥迪上海冠澳用户中心",
       "expected_tools": [
         "book_test_drive"
       ],
@@ -540,7 +540,7 @@
       "id": "test_drive_002",
       "scenario": "试驾预约",
       "type": "单跳",
-      "question": "预约明天下午3点在上海浦东店试驾E5 Sportback",
+      "question": "预约明天下午3点在上汽奥迪上海冠澳用户中心试驾E5 Sportback",
       "expected_tools": [
         "book_test_drive"
       ],
@@ -554,7 +554,7 @@
       "id": "test_drive_003",
       "scenario": "试驾预约",
       "type": "单跳",
-      "question": "帮我预约周末在北京朝阳店试驾帕萨特",
+      "question": "帮我预约周末在上汽奥迪上海冠松用户中心试驾E5 Sportback",
       "expected_tools": [
         "book_test_drive"
       ],
@@ -568,7 +568,7 @@
       "id": "test_drive_004",
       "scenario": "试驾预约",
       "type": "单跳",
-      "question": "我想试驾小米SU7，我叫李四，电话13900139000，周末在北京朝阳店，有什么时间可选？",
+      "question": "我想试驾E5 Sportback，我叫李四，电话13900139000，周末在上汽奥迪上海冠松用户中心，有什么时间可选？",
       "expected_tools": [
         "book_test_drive"
       ],
@@ -615,7 +615,7 @@
       "id": "test_drive_008",
       "scenario": "试驾预约",
       "type": "单跳",
-      "question": "预约E5 Sportback 2025款旗舰quattro型的试驾，我叫王五，电话13700137000，后天上午10点在上海徐汇店",
+      "question": "预约E5 Sportback 2025款旗舰quattro型的试驾，我叫王五，电话13700137000，后天上午10点在上汽奥迪奥迪之城旗舰店",
       "expected_tools": [
         "book_test_drive"
       ],
