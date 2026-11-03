@@ -1,18 +1,18 @@
 {
   "E5 Sportback": {
-    "上海郑隆奥翟": {
+    "上汽奥迪上海郑隆奥翟": {
       "2026-10-29T14:00:00": {
         "booking_id": "TD20261029001",
         "status": "confirmed",
         "car_series": "E5 Sportback",
-        "dealer": "上海郑隆奥翟",
+        "dealer": "上汽奥迪上海郑隆奥翟",
         "appointment_time": "2026-10-29T14:00:00",
         "customer_name": "张先生",
         "customer_phone": "13800138000",
         "confirmation": {
           "message": "预约成功，请准时到达",
           "reminder": "请携带驾驶证原件，提前15分钟到店",
-          "contact": "021-12345678"
+          "contact": "021-87653321"
         },
         "created_at": "2026-10-28T16:00:00Z"
       },
@@ -20,24 +20,24 @@
         "booking_id": "TD20261030001",
         "status": "confirmed",
         "car_series": "E5 Sportback",
-        "dealer": "上海郑隆奥翟",
+        "dealer": "上汽奥迪上海郑隆奥翟",
         "appointment_time": "2026-10-30T10:00:00",
         "customer_name": "李女士",
         "customer_phone": "13900139000",
         "confirmation": {
           "message": "预约成功，请准时到达",
           "reminder": "请携带驾驶证原件，提前15分钟到店",
-          "contact": "021-12345678"
+          "contact": "021-87653321"
         },
         "created_at": "2026-10-28T17:00:00Z"
       }
     },
-    "上海大宁音乐广场": {
+    "上汽奥迪上海大宁音乐广场": {
       "2026-10-29T15:00:00": {
         "booking_id": "TD20261029002",
         "status": "confirmed",
         "car_series": "E5 Sportback",
-        "dealer": "上海大宁音乐广场",
+        "dealer": "上汽奥迪上海大宁音乐广场",
         "appointment_time": "2026-10-29T15:00:00",
         "customer_name": "王先生",
         "customer_phone": "13700137000",

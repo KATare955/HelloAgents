@@ -8,6 +8,11 @@ import random
 import string
 from hello_agents.tools import Tool, ToolParameter, ToolResponse
 
+try:
+    from ._matching import match_key, match_candidates
+except ImportError:  # 直接运行脚本时
+    from _matching import match_key, match_candidates
+
 
 class BookTestDriveTool(Tool):
     """试驾预约工具
@@ -15,6 +20,19 @@ class BookTestDriveTool(Tool):
     预约附近经销商试驾时间。
     创建试驾预约记录，返回预约编号和确认信息。
     """
+
+    # 可预约车系白名单（与知识库 text_search.json 的车型体系一致）
+    _SERIES_WHITELIST = ["E5 Sportback"]
+    # 经销商白名单：mock 预约数据 + _get_dealer_phone 名录 + 评测题面门店
+    _DEALER_WHITELIST = [
+        "上汽奥迪上海郑隆奥翟",       # mock 预约数据
+        "上汽奥迪上海大宁音乐广场",   # mock 预约数据
+        "上汽奥迪西上海用户中心",       # _get_dealer_phone 名录
+        "上汽奥迪上海东昌用户中心",     # _get_dealer_phone 名录
+        "上汽奥迪上海冠澳用户中心",         # 评测题 test_drive_001/002
+        "上汽奥迪上海冠松用户中心",         # 评测题 test_drive_003/004
+        "上汽奥迪奥迪之城旗舰店"          # 评测题 test_drive_008
+    ]
     
     def __init__(self):
         super().__init__(
@@ -119,6 +137,38 @@ class BookTestDriveTool(Tool):
                 code="INVALID_PARAM",
                 message="customer_phone必须是11位数字"
             )
+
+        # 车型/经销商存在性校验（幻觉预约拦截：不存在的车型/经销商必须报错而非成功）
+        series_key = match_key(car_series, self._SERIES_WHITELIST)
+        if not series_key:
+            return ToolResponse.error(
+                code="NOT_FOUND",
+                message=(
+                    f"未找到车系'{car_series}'，无法预约试驾。"
+                    f"可预约车系：{'、'.join(self._SERIES_WHITELIST)}"
+                )
+            )
+
+        # 经销商唯一性校验：简称/前缀命中多于一店时拒绝，要求提供完整店名（避免歧义误预约）
+        dealer_hits = match_candidates(dealer, self._DEALER_WHITELIST)
+        if len(dealer_hits) > 1:
+            return ToolResponse.error(
+                code="AMBIGUOUS",
+                message=(
+                    f"经销商'{dealer}'匹配到多家门店：{'、'.join(dealer_hits)}。"
+                    f"请提供完整店名后再预约。"
+                )
+            )
+
+        dealer_key = match_key(dealer, self._DEALER_WHITELIST)
+        if not dealer_key:
+            return ToolResponse.error(
+                code="NOT_FOUND",
+                message=(
+                    f"未找到经销商'{dealer}'，无法预约试驾。"
+                    f"可选经销商：{'、'.join(self._DEALER_WHITELIST)}"
+                )
+            )
         
         # 验证时间格式
         try:
@@ -135,12 +185,12 @@ class BookTestDriveTool(Tool):
                 message="appointment_time格式错误，请使用ISO 8601格式：YYYY-MM-DDTHH:MM:SS"
             )
         
-        # 3. 检查是否已有预约（Mock数据中查找）
-        if car_series in self.mock_data:
-            if dealer in self.mock_data[car_series]:
-                if appointment_time in self.mock_data[car_series][dealer]:
+        # 3. 检查是否已有预约（Mock数据中查找，用白名单匹配后的规范名）
+        if series_key in self.mock_data:
+            if dealer_key in self.mock_data[series_key]:
+                if appointment_time in self.mock_data[series_key][dealer_key]:
                     # 返回已有的预约信息
-                    existing_booking = self.mock_data[car_series][dealer][appointment_time]
+                    existing_booking = self.mock_data[series_key][dealer_key][appointment_time]
                     return ToolResponse.success(
                         text=f"预约成功！预约编号：{existing_booking['booking_id']}",
                         data=existing_booking
@@ -152,8 +202,8 @@ class BookTestDriveTool(Tool):
         booking_data = {
             "booking_id": booking_id,
             "status": "confirmed",
-            "car_series": car_series,
-            "dealer": dealer,
+            "car_series": series_key,
+            "dealer": dealer_key,
             "appointment_time": appointment_time,
             "customer_name": customer_name,
             "customer_phone": customer_phone,
@@ -161,14 +211,14 @@ class BookTestDriveTool(Tool):
             "confirmation": {
                 "message": "预约成功，请准时到达",
                 "reminder": "请携带驾驶证原件，提前15分钟到店",
-                "contact": self._get_dealer_phone(dealer)
+                "contact": self._get_dealer_phone(dealer_key)
             },
             "created_at": datetime.now().isoformat() + "Z"
         }
         
         # 5. 返回结果
         return ToolResponse.success(
-            text=f"预约成功！{customer_name}，您已预约{car_series}试驾，时间：{appointment_time}，地点：{dealer}",
+            text=f"预约成功！{customer_name}，您已预约{series_key}试驾，时间：{appointment_time}，地点：{dealer_key}",
             data=booking_data
         )
     
@@ -182,9 +232,13 @@ class BookTestDriveTool(Tool):
     def _get_dealer_phone(self, dealer: str) -> str:
         """获取经销商电话（Mock）"""
         dealer_phones = {
-            "上海郑隆奥翟": "021-12345678",
-            "上海浦东奥迪": "021-87654321",
-            "上海小米汽车体验中心": "021-11112222"
+            "上汽奥迪上海郑隆奥翟": "021-87653321",         # mock 预约数据
+            "上汽奥迪上海大宁音乐广场": "021-87654321",      # mock 预约数据
+            "上汽奥迪西上海用户中心": "021-87655321",       # 名录
+            "上汽奥迪上海东昌用户中心": "021-87656321",     # 名录
+            "上汽奥迪上海冠澳用户中心": "021-87657321",         # 评测题 test_drive_001/002
+            "上汽奥迪上海冠松用户中心": "021-87658321",         # 评测题 test_drive_003/004
+            "上汽奥迪奥迪之城旗舰店": "021-87659321"            # 评测题 test_drive_008
         }
         return dealer_phones.get(dealer, "400-000-0000")
 
@@ -196,7 +250,7 @@ if __name__ == "__main__":
     # 测试1: 预约E5 Sportback试驾（Mock数据中已有）
     result = tool.run({
         "car_series": "E5 Sportback",
-        "dealer": "上海郑隆奥翟",
+        "dealer": "上汽奥迪上海郑隆奥翟",
         "appointment_time": "2026-10-29T14:00:00",
         "customer_name": "张先生",
         "customer_phone": "13800138000"
@@ -206,7 +260,7 @@ if __name__ == "__main__":
     # 测试2: 预约新的试驾时间
     result = tool.run({
         "car_series": "E5 Sportback",
-        "dealer": "上海郑隆奥翟",
+        "dealer": "上汽奥迪上海郑隆奥翟",
         "appointment_time": "2026-11-01T10:00:00",
         "customer_name": "李女士",
         "customer_phone": "13900139000",
@@ -217,7 +271,7 @@ if __name__ == "__main__":
     # 测试3: 参数错误（手机号格式错误）
     result = tool.run({
         "car_series": "E5 Sportback",
-        "dealer": "上海郑隆奥翟",
+        "dealer": "上汽奥迪上海郑隆奥翟",
         "appointment_time": "2026-10-29T14:00:00",
         "customer_name": "王先生",
         "customer_phone": "123"  # 错误的手机号

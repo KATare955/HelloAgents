@@ -6,9 +6,9 @@ from typing import Dict, Any, List
 from hello_agents.tools import Tool, ToolParameter, ToolResponse
 
 try:
-    from ._matching import is_match
+    from ._matching import score_match
 except ImportError:  # 直接运行脚本时
-    from _matching import is_match
+    from _matching import score_match
 
 
 class TextSearchTool(Tool):
@@ -70,20 +70,38 @@ class TextSearchTool(Tool):
                 message="query参数不能为空"
             )
         
-        # 3. 查找匹配的结果（健壮匹配：精确/双向子串/token重叠，兼容带配置后缀或意图词的查询）
-        results = []
+        # 3. 对全部条目按 title 与 query 的匹配度打分（条目粒度检索，兼容车系词/配置词/意图词组合）
+        scored = []  # (score, result)
         for key, data in self.mock_data.items():
-            if is_match(query, key):
-                results.extend(data.get("results", []))
-        
-        # 4. 根据category过滤
+            for result in data.get("results", []):
+                scored.append((score_match(query, result.get("title", "")), result))
+
+        # 4. 相关度过滤（两级）：优先保留与 query 强相关的条目（精确/子串），
+        #    无强相关时退到 token 级相关，再兜底取得分靠前条目
+        scored.sort(key=lambda x: x[0], reverse=True)
+        results = [r for s, r in scored if s >= 2.5]
+        if not results:
+            results = [r for s, r in scored if s > 0]
+        if not results:
+            available_models = "、".join(self.mock_data.keys())
+            return ToolResponse.partial(
+                text=f"未找到与'{query}'相关的结果。知识库可用车型：{available_models}",
+                data={
+                    "results": [],
+                    "total": 0,
+                    "query": query,
+                    "available_models": list(self.mock_data.keys())
+                }
+            )
+
+        # 5. 根据category过滤
         if category != "all":
             results = [r for r in results if r.get("category") == category]
-        
-        # 5. 限制返回数量
+
+        # 6. 限制返回数量（在相关度排序后截断）
         results = results[:limit]
-        
-        # 6. 返回结果
+
+        # 7. 返回结果
         if not results:
             return ToolResponse.success(
                 text=f"未找到与'{query}'相关的结果",

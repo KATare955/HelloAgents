@@ -114,3 +114,50 @@ def match_keys(query: str, keys: Iterable[str], min_overlap: int = 2) -> List[st
     if not query:
         return []
     return [k for k in keys if is_match(query, k, min_overlap)]
+
+
+def match_candidates(query: str, keys: Iterable[str]) -> List[str]:
+    """收集 query 在 keys 中的精确/子串级命中候选（用于歧义检测）
+
+    只统计前两级命中（精确相等、双向子串），不含 token 重叠。
+    用途：经销商等「实体选择」场景——候选多于一说明 query 有歧义（如只给品牌前缀），
+    调用方应要求提供更完整的名称而非任选其一。
+
+    Args:
+        query: 用户/模型查询词
+        keys: 候选键集合
+
+    Returns:
+        所有精确/子串命中的 key 列表（可能为空、唯一或多个）
+    """
+    if not query:
+        return []
+    qn = _norm(query)
+    return [k for k in keys if _norm(k) == qn or qn in _norm(k) or _norm(k) in qn]
+
+
+def score_match(query: str, key: str) -> float:
+    """计算 query 与 key 的匹配得分（用于相关度排序，不用于匹配判定）
+
+    得分区间 [0, 3]：
+    - 3.0：归一化后完全相等
+    - 2.5：双向子串
+    - 0~2.0：token 重叠覆盖率（overlap / len(key_tokens) * 2）
+    - 0.0：无重叠
+
+    Note:
+        与 is_match 不同，本函数永远返回得分而非布尔，
+        供 text_search 等聚合类工具对多条结果做相关度排序。
+    """
+    qn, kn = _norm(query), _norm(key)
+    if not qn or not kn:
+        return 0.0
+    if qn == kn:
+        return 3.0
+    if qn in kn or kn in qn:
+        return 2.5
+    qt, kt = _tokens(query), _tokens(key)
+    if not kt:
+        return 0.0
+    overlap = len(qt & kt)
+    return min(overlap / len(kt) * 2.0, 2.0)

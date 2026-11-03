@@ -50,9 +50,9 @@ class CompetitorCompareTool(Tool):
             ToolParameter(
                 name="compare_aspects",
                 type="array",
-                description="对比维度列表。可选值：价格、配置、空间、动力、电池续航、口碑。默认对比所有维度。",
+                description="对比维度列表。可选值：价格、配置、空间、动力、电池容量、充电速度、使用成本。默认对比所有可用维度。",
                 required=False,
-                default=["价格", "配置", "空间", "动力", "电池续航"]
+                default=["价格", "配置", "空间", "动力", "电池容量", "充电速度"]
             )
         ]
     
@@ -61,7 +61,7 @@ class CompetitorCompareTool(Tool):
         # 1. 获取参数
         car_model_a = parameters.get("car_model_a", "")
         car_model_b = parameters.get("car_model_b", "")
-        compare_aspects = parameters.get("compare_aspects", ["价格", "配置", "空间", "动力", "电池续航"])
+        compare_aspects = parameters.get("compare_aspects", ["价格", "配置", "空间", "动力", "电池容量", "充电速度"])
         
         # 2. 参数验证
         if not car_model_a:
