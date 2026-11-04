@@ -13,6 +13,9 @@
 
 from typing import Any, Dict, List, Optional, Tuple
 
+# 判分版本号（env_snapshot 追溯用，判分逻辑变更时必须递增并双文档同步）
+JUDGE_VERSION = "v2"
+
 
 def judge_tool_correct(
     expected_tools: List[str],

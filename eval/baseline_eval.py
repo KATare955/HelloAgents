@@ -31,14 +31,17 @@
     python eval/baseline_eval.py
 
 版本管理：
-- 评测集版本：v1.1（68题）
+- 评测集版本：v1.2（68题，含 answer_spec GT schema）
 - 结果文件命名：{阶段}_{模型}_{评测集版本}_{日期}.json
 - 不覆盖原则：历史结果必须保留
+- 轨迹落盘：每题一个 {case_id}.jsonl 存于 results/{stage}/{model}/{version}/trajectories/（重构计划书第 4 章）
 """
 
 import json
 import os
+import subprocess
 import sys
+import time
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Any
@@ -49,6 +52,7 @@ sys.path.insert(0, str(project_root))
 
 from dotenv import load_dotenv
 from hello_agents import HelloAgentsLLM, ReActAgent, ToolRegistry
+from hello_agents.core.runtime import RunResult, sync_events, turn_events
 from tools import (
     TextSearchTool,
     QueryDiscountPolicyTool,
@@ -60,9 +64,9 @@ from tools import (
 
 # 判分逻辑 v2（单一来源，含 accept_clarification 澄清规则）
 try:
-    from .scoring import judge_tool_correct
+    from .scoring import judge_tool_correct, JUDGE_VERSION
 except ImportError:  # 直接运行脚本时
-    from scoring import judge_tool_correct
+    from scoring import judge_tool_correct, JUDGE_VERSION
 
 # 加载环境变量
 load_dotenv()
@@ -71,7 +75,7 @@ load_dotenv()
 # 版本管理配置
 # ============================================================
 
-EVAL_VERSION = "v1.1"  # 评测集版本（三阶段共用，冻结不变）
+EVAL_VERSION = "v1.2"  # 评测集版本（三阶段共用，冻结不变）
 MODEL_NAME = os.getenv("EVAL_MODEL_NAME", "qwen3-8b")  # 模型名称（环境变量可覆盖）
 STAGE = os.getenv("EVAL_STAGE", "baseline")  # 评测阶段：baseline / sft / rl（环境变量可覆盖，同一 harness 跑三阶段）
 
@@ -212,8 +216,71 @@ def load_questions() -> Dict[str, Any]:
         return json.load(f)
 
 
-def evaluate_single_question(agent, question: Dict[str, Any]) -> Dict[str, Any]:
-    """评测单个问题"""
+# ============================================================
+# A4: trajectory 落盘辅助（重构计划书第 4 章字段清单）
+# ============================================================
+
+def _get_git_hash() -> str:
+    """获取当前代码 git hash（env_snapshot 追溯工具版本，避免“+1 修复”归因存疑）"""
+    try:
+        out = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True, text=True, cwd=str(project_root), timeout=5,
+        )
+        return out.stdout.strip() or "unknown"
+    except Exception:
+        return "unknown"
+
+
+def _parse_tool_status(tool_name: str, raw: str) -> str:
+    """解析工具返回状态；内置工具（Thought/Finish）无失败语义，恒为 success"""
+    if tool_name in ("Thought", "Finish"):
+        return "success"
+    try:
+        data = json.loads(raw)
+        return str(data.get("status", "unknown"))
+    except (ValueError, TypeError):
+        return "unknown"
+
+
+def _trace_args_source(tool_name: str, args: Dict[str, Any], question_text: str, prior_obs: List[str]) -> Dict[str, str]:
+    """参数值溯源（v1 粗粒度，供 verify 规则层 hallucinated_args_cap 细化）
+
+    取值：question（值来自题面）/ prior_observation（值来自此前工具返回）/
+    fabricated（两个来源都没有，疑似编造）。Thought/Finish 参数不溯源。
+    """
+    if tool_name in ("Thought", "Finish"):
+        return {}
+    sources = {}
+    for key, value in (args or {}).items():
+        text = str(value)
+        if text and text in question_text:
+            sources[key] = "question"
+        elif text and any(text in obs for obs in prior_obs):
+            sources[key] = "prior_observation"
+        else:
+            sources[key] = "fabricated"
+    return sources
+
+
+def _extract_step_reasoning(agent) -> Dict[int, str]:
+    """从 history 提取每步 reasoning_content（think 模式下的思考链）"""
+    reasoning = {}
+    step = 0
+    for msg in getattr(agent, "_history", []):
+        model_message = (msg.metadata or {}).get("model_message") or {}
+        if model_message.get("role") == "assistant":
+            step += 1
+            rc = model_message.get("reasoning_content")
+            if isinstance(rc, str) and rc.strip():
+                reasoning[step] = rc
+    return reasoning
+
+
+def evaluate_single_question(
+    agent, question: Dict[str, Any], trajectories_dir: Path, env_snapshot: Dict[str, Any]
+) -> Dict[str, Any]:
+    """评测单个问题（消费事件流，逐工具调用落盘轨迹 jsonl）"""
     
     # 清空消息历史
     if hasattr(agent, 'history_manager'):
@@ -228,13 +295,99 @@ def evaluate_single_question(agent, question: Dict[str, Any]) -> Dict[str, Any]:
         "difficulty": question["difficulty"],
     }
     
+    traj_rows = []      # 轨迹行（工具调用行 + 最终回复行）
+    pending = {}        # tool_call_id -> {"row": 行骨架, "started": 起始时间}
+    step_usage = {}     # step -> 该步 LLM 调用 usage
+    prior_obs = []      # 已完成工具返回文本（供参数溯源）
+    response = ""
+    case_errors = []
+    
     try:
-        # 运行 Agent
-        response = agent.run(question["question"])
+        # 消费事件流（直接使用框架 turn_events 事件源，与 agent.run 同源；
+        # 可捕获 model 事件的 usage、tool_start/tool_finish 完整字段）
+        agent.last_run = RunResult()
+        messages = agent._build_messages(question["question"])
+        packets = agent._context_packets({})
+        start_index = len(messages) - 1
+        for event in sync_events(
+            turn_events(agent, messages, packets, stream=False, kwargs={})
+        ):
+            kind = event["kind"]
+            if kind == "model":
+                step_usage[event.get("step", 0)] = event.get("usage") or {}
+            elif kind == "tool_start":
+                try:
+                    args = json.loads(event.get("arguments") or "{}")
+                    if not isinstance(args, dict):
+                        args = {}
+                except (ValueError, TypeError):
+                    args = {}
+                pending[event["id"]] = {
+                    "row": {
+                        "case_id": question["id"],
+                        "turn_index": event.get("step", 0),
+                        "thought": "",
+                        "tool_name": event.get("name", ""),
+                        "tool_args": args,
+                        "tool_response_raw": "",
+                        "tool_status": "",
+                        "observation": "",
+                        "tool_args_source": {},
+                        "latency_ms": 0,
+                        "tokens": step_usage.get(event.get("step", 0), {}),
+                        "is_final_answer": False,
+                    },
+                    "started": time.time(),
+                }
+            elif kind == "tool_finish":
+                info = pending.pop(event.get("id"), None)
+                if info is None:
+                    continue
+                row = info["row"]
+                raw = event.get("result", "")
+                # raw 截断 ≤2KB（4.1 要求；当前框架默认 50KB 上限不触发）
+                row["tool_response_raw"] = raw[:2048]
+                row["observation"] = raw[:2048]
+                row["tool_status"] = _parse_tool_status(row["tool_name"], raw)
+                row["tool_args_source"] = _trace_args_source(
+                    row["tool_name"], row["tool_args"], question["question"], prior_obs
+                )
+                row["latency_ms"] = int((time.time() - info["started"]) * 1000)
+                if row["tool_name"] == "Finish":
+                    row["is_final_answer"] = True
+                    row["final_answer"] = (row["tool_args"] or {}).get("answer", "")
+                traj_rows.append(row)
+                prior_obs.append(raw)
+        # 按 _events 收尾逻辑提交消息历史（供 actual_tools/reasoning 提取）
+        agent._commit_messages(messages[start_index:])
         
-        # 记录响应
+        response = agent.last_run.answer if agent.last_run else ""
         result["response"] = response
         result["status"] = "success"
+        
+        # think 模式思考链回填
+        step_reasoning = _extract_step_reasoning(agent)
+        for row in traj_rows:
+            if not row["thought"]:
+                row["thought"] = step_reasoning.get(row["turn_index"], "")
+        
+        # 无 Finish 工具的最终回复补行（模型直接文本回复/超步数）
+        if not any(r["is_final_answer"] for r in traj_rows) and response.strip():
+            traj_rows.append({
+                "case_id": question["id"],
+                "turn_index": max((r["turn_index"] for r in traj_rows), default=0),
+                "thought": "",
+                "tool_name": "",
+                "tool_args": {},
+                "tool_response_raw": "",
+                "tool_status": "",
+                "observation": "",
+                "tool_args_source": {},
+                "latency_ms": 0,
+                "tokens": {},
+                "is_final_answer": True,
+                "final_answer": response,
+            })
         
         # 提取实际调用的工具
         actual_tools = []
@@ -271,6 +424,28 @@ def evaluate_single_question(agent, question: Dict[str, Any]) -> Dict[str, Any]:
         result["actual_tools"] = []
         result["tool_calls_count"] = 0
         result["tool_correct"] = False
+        case_errors.append(str(e))
+    
+    # case 汇总行 + 落盘（异常时保留部分轨迹，有诊断价值）
+    last_run = agent.last_run if agent.last_run else None
+    stop_reason = result["status"] if result["status"] == "error" else (last_run.status if last_run else "unknown")
+    snapshot = dict(env_snapshot)
+    snapshot["thinking_observed"] = "on" if any(r["thought"] for r in traj_rows) else "off"
+    traj_rows.append({
+        "case_id": question["id"],
+        "kind": "case_summary",
+        "stop_reason": stop_reason,
+        "final_response": response,
+        "env_snapshot": snapshot,
+        "agent_loop_events": [],
+        "errors": case_errors,
+    })
+    
+    traj_file = trajectories_dir / f"{question['id']}.jsonl"
+    with open(traj_file, "w", encoding="utf-8") as f:
+        for row in traj_rows:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+    result["trajectory_ref"] = f"trajectories/{question['id']}.jsonl"
     
     return result
 
@@ -302,6 +477,20 @@ def run_baseline_eval():
     print("\n【步骤3】运行评测")
     print("-" * 80)
     
+    # A4: 轨迹目录与 env_snapshot（case 级元数据，重构计划书 4.1）
+    trajectories_dir = get_output_dir() / "trajectories"
+    trajectories_dir.mkdir(parents=True, exist_ok=True)
+    env_snapshot = {
+        "tools_git_hash": _get_git_hash(),
+        "judge_version": JUDGE_VERSION,
+        "model": MODEL_NAME,
+        "llm_model_id": os.getenv("LLM_MODEL_ID", "qwen3:8b"),
+        "thinking_observed": "unknown",  # 由 evaluate 按实际轨迹观测覆盖
+        "temperature": float(os.getenv("EVAL_TEMPERATURE", "0")),
+        "eval_version": EVAL_VERSION,
+    }
+    print(f"   轨迹落盘目录: {trajectories_dir}")
+    
     results = []
     for i, question in enumerate(questions, 1):
         print(f"\n[{i}/{len(questions)}] 评测问题: {question['id']}")
@@ -309,7 +498,7 @@ def run_baseline_eval():
         print(f"   类型: {question['type']}")
         print(f"   问题: {question['question'][:50]}...")
         
-        result = evaluate_single_question(agent, question)
+        result = evaluate_single_question(agent, question, trajectories_dir, env_snapshot)
         results.append(result)
         
         # 打印结果
