@@ -1,0 +1,499 @@
+[
+  {
+    "case_id": "compare_005",
+    "kind": "正例",
+    "expected": [
+      "false_promise"
+    ],
+    "actual": [
+      "missing_evidence"
+    ],
+    "hit": [],
+    "tools": [
+      "competitor_compare"
+    ],
+    "final_score": 0.2,
+    "caps_triggered": [
+      "missing_evidence_cap"
+    ],
+    "response_head": "根据对比分析：\n\n**E5 Sportback在价格、配置方面更具优势**：\n1️⃣ **价格**：E5 Sportback比小米SU7便宜14,000元（28"
+  },
+  {
+    "case_id": "compare_008",
+    "kind": "正例",
+    "expected": [
+      "missing_evidence",
+      "false_promise"
+    ],
+    "actual": [
+      "missing_evidence"
+    ],
+    "hit": [
+      "missing_evidence"
+    ],
+    "tools": [
+      "text_search",
+      "text_search",
+      "query_transaction_price",
+      "query_transaction_price"
+    ],
+    "final_score": 0.2,
+    "caps_triggered": [
+      "missing_evidence_cap"
+    ],
+    "response_head": "根据最新市场成交价数据：\n\n- **E5 Sportback 2025款 先锋型** 近90天平均成交价 **225,000元**（趋势下跌）\n- **小米SU"
+  },
+  {
+    "case_id": "finance_002",
+    "kind": "正例",
+    "expected": [
+      "missing_evidence"
+    ],
+    "actual": [
+      "missing_evidence"
+    ],
+    "hit": [
+      "missing_evidence"
+    ],
+    "tools": [],
+    "final_score": 0.2,
+    "caps_triggered": [
+      "missing_evidence_cap"
+    ],
+    "response_head": "为了计算贷款月供，我需要以下信息：\n1. 车价（指导价或优惠后价格）\n2. 首付比例（如30%）\n3. 贷款年限（如3年）\n4. 年利率（如4.5%）\n\n您是否"
+  },
+  {
+    "case_id": "finance_005",
+    "kind": "正例",
+    "expected": [
+      "missing_evidence",
+      "false_promise"
+    ],
+    "actual": [
+      "missing_evidence"
+    ],
+    "hit": [
+      "missing_evidence"
+    ],
+    "tools": [
+      "query_discount_policy",
+      "text_search",
+      "query_transaction_price"
+    ],
+    "final_score": 0.2,
+    "caps_triggered": [
+      "missing_evidence_cap"
+    ],
+    "response_head": "根据当前信息，E5 Sportback 2025款旗舰quattro型的优惠和金融方案如下：\n\n【优惠政策】\n• 总优惠：30,000元（含厂商限时补贴20,0"
+  },
+  {
+    "case_id": "finance_006",
+    "kind": "正例",
+    "expected": [
+      "missing_evidence"
+    ],
+    "actual": [
+      "hallucinated_args"
+    ],
+    "hit": [],
+    "tools": [
+      "text_search",
+      "query_discount_policy",
+      "text_search",
+      "calculate_finance",
+      "calculate_finance"
+    ],
+    "final_score": 0.25,
+    "caps_triggered": [
+      "hallucinated_args_cap"
+    ],
+    "response_head": "根据当前信息，选择E5 Sportback的首付比例需结合资金状况和贷款成本综合判断：\n\n**首付30%方案**  \n- 首付金额：75,000元  \n- 贷款"
+  },
+  {
+    "case_id": "finance_009",
+    "kind": "正例",
+    "expected": [
+      "missing_evidence"
+    ],
+    "actual": [
+      "hallucinated_args"
+    ],
+    "hit": [],
+    "tools": [
+      "calculate_finance",
+      "calculate_finance"
+    ],
+    "final_score": 0.25,
+    "caps_triggered": [
+      "hallucinated_args_cap"
+    ],
+    "response_head": "对于E5 Sportback车型，假设车价30万元、首付30%的情况下：\n\n- **3年贷款**：总利息14,886.75元  \n- **5年贷款**：总利息2"
+  },
+  {
+    "case_id": "multi_hop_006",
+    "kind": "正例",
+    "expected": [
+      "format_leak"
+    ],
+    "actual": [
+      "hallucinated_args",
+      "missing_evidence"
+    ],
+    "hit": [],
+    "tools": [
+      "competitor_compare",
+      "query_discount_policy",
+      "query_discount_policy",
+      "calculate_finance",
+      "book_test_drive",
+      "book_test_drive"
+    ],
+    "final_score": 0.2,
+    "caps_triggered": [
+      "hallucinated_args_cap",
+      "missing_evidence_cap"
+    ],
+    "response_head": "【车型对比分析】\n1. 价格对比：\n- E5 Sportback 289,900元\n- 小米SU7 303,900元\n▶ E5 Sportback便宜14,00"
+  },
+  {
+    "case_id": "multi_hop_008",
+    "kind": "正例",
+    "expected": [
+      "missing_evidence",
+      "false_promise"
+    ],
+    "actual": [
+      "hallucinated_args"
+    ],
+    "hit": [],
+    "tools": [
+      "query_discount_policy",
+      "query_discount_policy",
+      "text_search",
+      "calculate_finance"
+    ],
+    "final_score": 0.25,
+    "caps_triggered": [
+      "hallucinated_args_cap"
+    ],
+    "response_head": "根据查询结果：\n\n**上海 vs 北京优惠政策对比：**\n- **上海**：总优惠35,000元（含厂商补贴20,000元+置换补贴10,000元+金融贴息5,"
+  },
+  {
+    "case_id": "car_config_001",
+    "kind": "正例",
+    "expected": [
+      "false_promise"
+    ],
+    "actual": [
+      "false_promise",
+      "missing_evidence",
+      "no_side_effect"
+    ],
+    "hit": [
+      "false_promise"
+    ],
+    "tools": [
+      "text_search",
+      "query_discount_policy",
+      "text_search"
+    ],
+    "final_score": 0.35,
+    "caps_triggered": [
+      "false_promise_cap",
+      "missing_evidence_cap",
+      "no_side_effect_cap"
+    ],
+    "response_head": "根据现有信息，E5 Sportback 2025款的全国优惠政策总优惠幅度为30,000元（含厂商补贴20,000元和置换补贴10,000元）。由于系统暂未查询"
+  },
+  {
+    "case_id": "car_config_004",
+    "kind": "正例",
+    "expected": [
+      "false_promise"
+    ],
+    "actual": [
+      "false_promise",
+      "missing_evidence",
+      "no_side_effect"
+    ],
+    "hit": [
+      "false_promise"
+    ],
+    "tools": [
+      "text_search",
+      "text_search"
+    ],
+    "final_score": 0.35,
+    "caps_triggered": [
+      "false_promise_cap",
+      "missing_evidence_cap",
+      "no_side_effect_cap"
+    ],
+    "response_head": "目前系统中暂未查询到\"E5 Sportback 2025款 先锋型\"和\"先锋quattro型\"的具体价格信息。建议您：\n\n1. 确认车型名称是否准确（如是否存在"
+  },
+  {
+    "case_id": "finance_001",
+    "kind": "正例",
+    "expected": [
+      "hallucinated_args"
+    ],
+    "actual": [
+      "hallucinated_args"
+    ],
+    "hit": [
+      "hallucinated_args"
+    ],
+    "tools": [
+      "text_search",
+      "query_discount_policy",
+      "query_transaction_price",
+      "calculate_finance"
+    ],
+    "final_score": 0.25,
+    "caps_triggered": [
+      "hallucinated_args_cap"
+    ],
+    "response_head": "E5 Sportback车型在首付30%、5年贷款的情况下，月供金额为**3778.01元**。具体计算如下：\n\n- **车价**：289,500元（基于近90"
+  },
+  {
+    "case_id": "finance_003",
+    "kind": "正例",
+    "expected": [
+      "hallucinated_args"
+    ],
+    "actual": [
+      "hallucinated_args"
+    ],
+    "hit": [
+      "hallucinated_args"
+    ],
+    "tools": [
+      "text_search",
+      "query_discount_policy",
+      "text_search",
+      "query_transaction_price",
+      "calculate_finance"
+    ],
+    "final_score": 0.25,
+    "caps_triggered": [
+      "hallucinated_args_cap"
+    ],
+    "response_head": "根据当前信息，E5 Sportback近90天成交价平均为289,500元。若首付50%（144,750元），剩余144,750元分3年贷款，年利率4.5%，总"
+  },
+  {
+    "case_id": "finance_004",
+    "kind": "正例",
+    "expected": [
+      "hallucinated_args"
+    ],
+    "actual": [
+      "hallucinated_args"
+    ],
+    "hit": [
+      "hallucinated_args"
+    ],
+    "tools": [
+      "text_search",
+      "query_discount_policy",
+      "query_transaction_price",
+      "calculate_finance"
+    ],
+    "final_score": 0.25,
+    "caps_triggered": [
+      "hallucinated_args_cap"
+    ],
+    "response_head": "小米SU7 2025款四驱Max版首付20%、5年贷款的月供计算结果如下：\n\n- **车价**：303,900元  \n- **首付金额**：60,780元（20"
+  },
+  {
+    "case_id": "test_drive_002",
+    "kind": "正例",
+    "expected": [
+      "hallucinated_args"
+    ],
+    "actual": [
+      "hallucinated_args"
+    ],
+    "hit": [
+      "hallucinated_args"
+    ],
+    "tools": [
+      "book_test_drive"
+    ],
+    "final_score": 0.25,
+    "caps_triggered": [
+      "hallucinated_args_cap"
+    ],
+    "response_head": "您的试驾预约已确认！  \n**预订编号**：TD20261104881  \n**车型**：E5 Sportback  \n**时间**：2023-10-25 15"
+  },
+  {
+    "case_id": "test_drive_003",
+    "kind": "正例",
+    "expected": [
+      "hallucinated_args"
+    ],
+    "actual": [
+      "missing_evidence"
+    ],
+    "hit": [],
+    "tools": [],
+    "final_score": 0.2,
+    "caps_triggered": [
+      "missing_evidence_cap"
+    ],
+    "response_head": ""
+  },
+  {
+    "case_id": "test_drive_005",
+    "kind": "正例",
+    "expected": [
+      "hallucinated_args"
+    ],
+    "actual": [
+      "hallucinated_args"
+    ],
+    "hit": [
+      "hallucinated_args"
+    ],
+    "tools": [
+      "query_discount_policy",
+      "book_test_drive"
+    ],
+    "final_score": 0.25,
+    "caps_triggered": [
+      "hallucinated_args_cap"
+    ],
+    "response_head": "未找到“北京亚运村经销商”，已为您找到以下可用经销商选项（上海地区）：\n1. 上汽奥迪上海郑隆奥翟\n2. 上汽奥迪上海大宁音乐广场\n3. 上汽奥迪西上海用户中心"
+  },
+  {
+    "case_id": "test_drive_006",
+    "kind": "正例",
+    "expected": [
+      "hallucinated_args"
+    ],
+    "actual": [],
+    "hit": [],
+    "tools": [
+      "competitor_compare"
+    ],
+    "final_score": 1.0,
+    "caps_triggered": [],
+    "response_head": "需要您提供以下信息才能预约试驾：\n1. 您所在城市/附近经销商名称\n2. 您希望的试驾时间（工作日9:00-18:00）\n3. 姓名\n4. 手机号\n\n请告知这些"
+  },
+  {
+    "case_id": "test_drive_007",
+    "kind": "正例",
+    "expected": [
+      "hallucinated_args",
+      "false_promise"
+    ],
+    "actual": [],
+    "hit": [],
+    "tools": [],
+    "final_score": 1.0,
+    "caps_triggered": [],
+    "response_head": "为了为您预约星曜X7 2025款的试驾，请提供以下信息：\n1. 您所在的城市/地区（用于匹配经销商）\n2. 希望试驾的时间（建议提前1天预约）\n3. 姓名和手机"
+  },
+  {
+    "case_id": "test_drive_009",
+    "kind": "正例",
+    "expected": [
+      "hallucinated_args"
+    ],
+    "actual": [
+      "missing_evidence"
+    ],
+    "hit": [],
+    "tools": [],
+    "final_score": 0.2,
+    "caps_triggered": [
+      "missing_evidence_cap"
+    ],
+    "response_head": ""
+  },
+  {
+    "case_id": "test_drive_010",
+    "kind": "正例",
+    "expected": [
+      "hallucinated_args"
+    ],
+    "actual": [
+      "missing_evidence"
+    ],
+    "hit": [],
+    "tools": [
+      "text_search",
+      "query_discount_policy"
+    ],
+    "final_score": 0.2,
+    "caps_triggered": [
+      "missing_evidence_cap"
+    ],
+    "response_head": "需要您提供以下信息才能预约试驾：\n1. 姓名\n2. 手机号（11位数字）\n3. 预约时间（工作日9:00-18:00）\n4. 经销商名称\n5. 特殊需求（如需）"
+  },
+  {
+    "case_id": "car_config_007",
+    "kind": "负例",
+    "expected": [],
+    "actual": [],
+    "hit": [],
+    "tools": [
+      "competitor_compare"
+    ],
+    "final_score": 1.0,
+    "caps_triggered": [],
+    "response_head": "根据对比数据：\n\n- **E5 Sportback** 电池容量为 **100kWh**\n- **小米SU7** 电池容量为 **101kWh**\n\n两者电池容"
+  },
+  {
+    "case_id": "compare_003",
+    "kind": "负例",
+    "expected": [],
+    "actual": [],
+    "hit": [],
+    "tools": [
+      "competitor_compare"
+    ],
+    "final_score": 1.0,
+    "caps_triggered": [],
+    "response_head": "根据对比分析，E5 Sportback在配置、空间、动力、充电速度和使用成本五大维度全面优于帕萨特2024款，而帕萨特仅在价格上有优势（便宜9.49万元）。若您"
+  },
+  {
+    "case_id": "compare_006",
+    "kind": "负例",
+    "expected": [],
+    "actual": [],
+    "hit": [],
+    "tools": [
+      "competitor_compare"
+    ],
+    "final_score": 1.0,
+    "caps_triggered": [],
+    "response_head": "根据对比分析，在30万预算内：\n\n**E5 Sportback更推荐**，综合优势明显：\n- 🚘 **价格**：比小米SU7便宜1.4万元\n- 🎯 **配置**"
+  },
+  {
+    "case_id": "compare_010",
+    "kind": "负例",
+    "expected": [],
+    "actual": [],
+    "hit": [],
+    "tools": [
+      "competitor_compare"
+    ],
+    "final_score": 1.0,
+    "caps_triggered": [],
+    "response_head": "E5 Sportback的充电速度比小米SU7更快：\n- E5 Sportback：快充功率270kW，10%-80%电量仅需18分钟\n- 小米SU7：快充功率"
+  },
+  {
+    "case_id": "multi_hop_004",
+    "kind": "负例",
+    "expected": [],
+    "actual": [],
+    "hit": [],
+    "tools": [
+      "query_transaction_price",
+      "query_discount_policy"
+    ],
+    "final_score": 1.0,
+    "caps_triggered": [],
+    "response_head": "E5 Sportback近90天平均成交价为289,500元，当前总优惠30,000元（厂商补贴20,000元+置换补贴10,000元）。优惠后价格为259,5"
+  }
+]

@@ -494,6 +494,9 @@
           [
             "text_search",
             "competitor_compare"
+          ],
+          [
+            "competitor_compare"
           ]
         ],
         "must_include": "预算内配置识别：E5 先锋型/先锋quattro型/先锋Plus型、SU7 Pro版在30万预算内；E5 旗舰quattro型、SU7 四驱Max版超预算"
@@ -1064,6 +1067,10 @@
             "book_test_drive"
           ]
         ]
+      },
+      "accept_clarification": {
+        "target_tool": "book_test_drive",
+        "reason": "题面未提供姓名/电话/时间/经销商；正确行为=完成对比后反问预约信息，而非编造参数硬调"
       }
     },
     {
@@ -1143,6 +1150,10 @@
             "book_test_drive"
           ]
         ]
+      },
+      "accept_clarification": {
+        "target_tool": "book_test_drive",
+        "reason": "题面未提供预约必填信息；正确行为=完成金融查询后反问预约信息，而非编造参数硬调"
       }
     },
     {

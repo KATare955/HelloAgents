@@ -1,0 +1,1 @@
+{"case_id": "test_drive_009", "kind": "case_summary", "stop_reason": "error", "final_response": "", "env_snapshot": {"eval_version": "v1.2", "judge_version": "v3", "note": "A3 校准回放", "thinking_observed": "off"}, "agent_loop_events": [], "errors": ["执行超过配置时限"]}
