@@ -15,6 +15,13 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 import json
 import re
 
+# 澄清意图判定单一来源在 scoring.py（clarification_policy 消费）；
+# 规则层豁免与之对齐，避免两条判分路径口径漂移。
+try:
+    from scoring import _has_clarification_intent
+except ImportError:  # eval 作为包导入时（HelloAgents/ 在 sys.path）
+    from eval.scoring import _has_clarification_intent
+
 # ---------------------------------------------------------------------------
 # 常量
 # ---------------------------------------------------------------------------
@@ -234,12 +241,12 @@ def _cap_missing_evidence(
 
     calls = _iter_business_calls(traj_rows)
 
-    # 豁免：澄清/降级（accept_clarification：未调目标工具 + 有回应）。
+    # 豁免：澄清/降级（accept_clarification：未调目标工具 + 回应含澄清意图）。
     # 粒度：只豁免 target_tool 本身，移除后剩余链路仍未命中 → 仍触发。
     accept = question.get("accept_clarification")
     if accept and not path_hit:
         target = accept.get("target_tool")
-        if target and target not in actual and response.strip():
+        if target and target not in actual and _has_clarification_intent(response):
             remaining = [{t for t in path if t != target} for path in acceptable_sets]
             if any(set(path) <= actual for path in remaining):
                 return False, "", "clarification 豁免"
@@ -330,7 +337,7 @@ def _score_tool_call(
         return 0.8 if redundant else 1.0
 
     accept = question.get("accept_clarification")
-    if accept and accept.get("target_tool") not in actual and response.strip():
+    if accept and accept.get("target_tool") not in actual and _has_clarification_intent(response):
         # 精确豁免：移除 target_tool 后剩余链路命中 → 满分；否则仍判缺失
         remaining = [{t for t in path if t != accept["target_tool"]} for path in acceptable_sets]
         if any(set(path) <= actual for path in remaining):

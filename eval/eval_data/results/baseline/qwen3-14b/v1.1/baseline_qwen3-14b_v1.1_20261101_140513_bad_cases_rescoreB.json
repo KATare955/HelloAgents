@@ -19,7 +19,22 @@
     "missing_tools": [
       "text_search"
     ],
-    "extra_tools": []
+    "extra_tools": [],
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "missing_evidence"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "missing_evidence_cap"
+      ]
+    }
   },
   {
     "id": "compare_006",
@@ -47,7 +62,18 @@
     "extra_tools": [
       "query_discount_policy",
       "text_search"
-    ]
+    ],
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 1.0,
+      "violation_tags": [],
+      "sub_scores": {
+        "tool_call": 1.0,
+        "evidence": 1.0,
+        "communication": 1.0
+      },
+      "caps_triggered": []
+    }
   },
   {
     "id": "compare_010",
@@ -70,7 +96,18 @@
     "missing_tools": [
       "competitor_compare"
     ],
-    "extra_tools": []
+    "extra_tools": [],
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 1.0,
+      "violation_tags": [],
+      "sub_scores": {
+        "tool_call": 1.0,
+        "evidence": 1.0,
+        "communication": 1.0
+      },
+      "caps_triggered": []
+    }
   },
   {
     "id": "finance_002",
@@ -95,7 +132,22 @@
     ],
     "extra_tools": [
       "text_search"
-    ]
+    ],
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "missing_evidence"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "missing_evidence_cap"
+      ]
+    }
   },
   {
     "id": "finance_006",
@@ -122,7 +174,22 @@
     "extra_tools": [
       "query_discount_policy",
       "text_search"
-    ]
+    ],
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.25,
+      "violation_tags": [
+        "hallucinated_args"
+      ],
+      "sub_scores": {
+        "tool_call": 1.0,
+        "evidence": 1.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "hallucinated_args_cap"
+      ]
+    }
   },
   {
     "id": "finance_009",
@@ -146,7 +213,22 @@
     ],
     "extra_tools": [
       "text_search"
-    ]
+    ],
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.25,
+      "violation_tags": [
+        "hallucinated_args"
+      ],
+      "sub_scores": {
+        "tool_call": 1.0,
+        "evidence": 1.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "hallucinated_args_cap"
+      ]
+    }
   },
   {
     "id": "multi_hop_004",
@@ -170,6 +252,17 @@
     "missing_tools": [
       "calculate_finance"
     ],
-    "extra_tools": []
+    "extra_tools": [],
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 1.0,
+      "violation_tags": [],
+      "sub_scores": {
+        "tool_call": 1.0,
+        "evidence": 1.0,
+        "communication": 1.0
+      },
+      "caps_triggered": []
+    }
   }
 ]
