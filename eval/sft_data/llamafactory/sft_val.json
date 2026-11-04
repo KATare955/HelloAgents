@@ -25,19 +25,19 @@
     "conversations": [
       {
         "from": "human",
-        "value": "Model X 2025款跟小米SU7四驱Max版比起来怎么样"
+        "value": "星曜X7 2025款跟小米SU7四驱Max版比起来怎么样"
       },
       {
         "from": "function_call",
-        "value": "{\"name\": \"competitor_compare\", \"arguments\": {\"car_model_a\": \"Model X 2025款\", \"car_model_b\": \"小米SU7 2025款 四驱Max版\"}}"
+        "value": "{\"name\": \"competitor_compare\", \"arguments\": {\"car_model_a\": \"星曜X7 2025款\", \"car_model_b\": \"小米SU7 2025款 四驱Max版\"}}"
       },
       {
         "from": "observation",
-        "value": "{\n  \"status\": \"success\",\n  \"text\": \"未找到Model X 2025款与小米SU7 2025款 四驱Max版的对比数据\",\n  \"data\": {\n    \"car_model_a\": \"Model X 2025款\",\n    \"car_model_b\": \"小米SU7 2025款 四驱Max版\",\n    \"comparison\": {},\n    \"summary\": {\n      \"car_a_advantages\": 0,\n      \"car_b_advantages\": 0,\n      \"equal_count\": 0,\n      \"overall_winner\": \"无数据\"\n    },\n    \"recommendation\": \"暂无对比数据，建议分别查询两个车型的详细信息\"\n  }\n}"
+        "value": "{\n  \"status\": \"success\",\n  \"text\": \"未找到星曜X7 2025款与小米SU7 2025款 四驱Max版的对比数据\",\n  \"data\": {\n    \"car_model_a\": \"星曜X7 2025款\",\n    \"car_model_b\": \"小米SU7 2025款 四驱Max版\",\n    \"comparison\": {},\n    \"summary\": {\n      \"car_a_advantages\": 0,\n      \"car_b_advantages\": 0,\n      \"equal_count\": 0,\n      \"overall_winner\": \"无数据\"\n    },\n    \"recommendation\": \"暂无对比数据，建议分别查询两个车型的详细信息\"\n  }\n}"
       },
       {
         "from": "gpt",
-        "value": "非常抱歉，我们目前没有找到 Model X 2025款与小米SU7 2025款四驱Max版的对比数据，无法为您提供详细的两车比较。\n\n如果您对这两个方向感兴趣，我可以为您推荐以下替代选择供参考：\n\n1. **小米SU7 2024款 Max版** —— 如果您对小米SU7高性能版本感兴趣，可以先了解现有版本的配置与表现，再决定是否等待2025款。\n\n2. **特斯拉Model S 2025款** —— 如果您对Model X所在的特斯拉高端纯电系列感兴趣，Model S同样是豪华纯电轿车的代表，与小米SU7定位更为接近，对比参考价值更高。\n\n建议您可以分别查询这两款车型的详细参数，或联系我们的销售顾问获取最新资料。如需了解其他车型信息，欢迎继续咨询！"
+        "value": "非常抱歉，我们目前没有找到 星曜X7 2025款与小米SU7 2025款四驱Max版的对比数据，无法为您提供详细的两车比较。\n\n如果您对这两个方向感兴趣，我可以为您推荐以下替代选择供参考：\n\n1. **小米SU7 2024款 Max版** —— 如果您对小米SU7高性能版本感兴趣，可以先了解现有版本的配置与表现，再决定是否等待2025款。\n\n2. **特斯拉Model S 2025款** —— 如果您对高性能纯电车型感兴趣，Model S同样是豪华纯电轿车的代表，与小米SU7定位更为接近，对比参考价值更高。\n\n建议您可以分别查询这两款车型的详细参数，或联系我们的销售顾问获取最新资料。如需了解其他车型信息，欢迎继续咨询！"
       }
     ],
     "system": "你是一个专业的汽车销售顾问助手。\n你的任务是帮助用户了解车型信息、查询优惠政策、对比竞品、计算金融方案、预约试驾等。\n\n可用工具：\n- text_search: 查询车型配置、价格、参数等信息\n- query_discount_policy: 查询当前可用的优惠政策\n- query_transaction_price: 查询历史成交价和价格趋势\n- competitor_compare: 对比同级别车型\n- calculate_finance: 计算贷款月供和总利息\n- book_test_drive: 预约试驾\n\n使用规则：\n1. 根据用户问题选择合适的工具\n2. 如果需要多个信息，可以多次调用工具\n3. 用简洁清晰的语言回复用户\n4. 提供具体的数字和信息",

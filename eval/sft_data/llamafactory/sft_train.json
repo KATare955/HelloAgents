@@ -3773,19 +3773,19 @@
     "conversations": [
       {
         "from": "human",
-        "value": "Model X 2025款最近三个月实际成交价大概多少？买的人多不多？"
+        "value": "星曜X7 2025款最近三个月实际成交价大概多少？买的人多不多？"
       },
       {
         "from": "function_call",
-        "value": "{\"name\": \"query_transaction_price\", \"arguments\": {\"car_model\": \"Model X 2025款\", \"days\": 90}}"
+        "value": "{\"name\": \"query_transaction_price\", \"arguments\": {\"car_model\": \"星曜X7 2025款\", \"days\": 90}}"
       },
       {
         "from": "observation",
-        "value": "{\n  \"status\": \"success\",\n  \"text\": \"未找到Model X 2025款近90天的历史成交价数据\",\n  \"data\": {\n    \"car_model\": \"Model X 2025款\",\n    \"period\": \"近90天\",\n    \"avg_price\": 0,\n    \"min_price\": 0,\n    \"max_price\": 0,\n    \"median_price\": 0,\n    \"trend\": \"无数据\",\n    \"sample_count\": 0,\n    \"recommendation\": \"暂无历史成交数据，建议关注官方指导价\",\n    \"price_history\": []\n  }\n}"
+        "value": "{\n  \"status\": \"success\",\n  \"text\": \"未找到星曜X7 2025款近90天的历史成交价数据\",\n  \"data\": {\n    \"car_model\": \"星曜X7 2025款\",\n    \"period\": \"近90天\",\n    \"avg_price\": 0,\n    \"min_price\": 0,\n    \"max_price\": 0,\n    \"median_price\": 0,\n    \"trend\": \"无数据\",\n    \"sample_count\": 0,\n    \"recommendation\": \"暂无历史成交数据，建议关注官方指导价\",\n    \"price_history\": []\n  }\n}"
       },
       {
         "from": "gpt",
-        "value": "您好，感谢咨询。经查询系统，目前未找到Model X 2025款近90天的历史成交价数据，因此无法为您提供该车型的实际成交价区间及销量热度情况。由于当前没有可参考的替代车型数据表，暂时无法为您推荐具体替代车型。建议您关注官方指导价或前往当地经销商了解最新行情，如有其他车型需求欢迎继续咨询。"
+        "value": "您好，感谢咨询。经查询系统，目前未找到星曜X7 2025款近90天的历史成交价数据，因此无法为您提供该车型的实际成交价区间及销量热度情况。由于当前没有可参考的替代车型数据表，暂时无法为您推荐具体替代车型。建议您关注官方指导价或前往当地经销商了解最新行情，如有其他车型需求欢迎继续咨询。"
       }
     ],
     "system": "你是一个专业的汽车销售顾问助手。\n你的任务是帮助用户了解车型信息、查询优惠政策、对比竞品、计算金融方案、预约试驾等。\n\n可用工具：\n- text_search: 查询车型配置、价格、参数等信息\n- query_discount_policy: 查询当前可用的优惠政策\n- query_transaction_price: 查询历史成交价和价格趋势\n- competitor_compare: 对比同级别车型\n- calculate_finance: 计算贷款月供和总利息\n- book_test_drive: 预约试驾\n\n使用规则：\n1. 根据用户问题选择合适的工具\n2. 如果需要多个信息，可以多次调用工具\n3. 用简洁清晰的语言回复用户\n4. 提供具体的数字和信息",
