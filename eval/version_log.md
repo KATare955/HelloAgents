@@ -60,3 +60,23 @@
 - **模型**: qwen3-14b-nothink
 - **阶段**: baseline
 - **结果文件**: `results/baseline/qwen3-14b-nothink/v1.1/baseline_qwen3-14b-nothink_v1.1_20261101.json`
+
+## 2026-11-04 15:52:50 - baseline (qwen3-14b-think, v1.2)
+
+- **准确率**: 83.8%
+- **总问题数**: 68
+- **Bad case数量**: 11
+- **评测集版本**: v1.2
+- **模型**: qwen3-14b-think
+- **阶段**: baseline
+- **结果文件**: `results/baseline/qwen3-14b-think/v1.2/baseline_qwen3-14b-think_v1.2_20261104.json`
+
+## 2026-11-04 16:02:14 - baseline (qwen3-14b-nothink, v1.2)
+
+- **准确率**: 83.8%
+- **总问题数**: 68
+- **Bad case数量**: 11
+- **评测集版本**: v1.2
+- **模型**: qwen3-14b-nothink
+- **阶段**: baseline
+- **结果文件**: `results/baseline/qwen3-14b-nothink/v1.2/baseline_qwen3-14b-nothink_v1.2_20261104.json`
