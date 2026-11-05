@@ -315,6 +315,20 @@ def evaluate_single_question(
             kind = event["kind"]
             if kind == "model":
                 step_usage[event.get("step", 0)] = event.get("usage") or {}
+                # A4.1 增强（2026-11-05）：模型每步文本输出落盘——
+                # 补齐"中间纯文本回合（反问/说明）不落盘"的可观测性缺口；
+                # think 模式下 content 含 <think> 块（泄漏形态如实记录，供 C1 分析）
+                model_text = (event.get("content") or "").strip()
+                if model_text:
+                    traj_rows.append({
+                        "case_id": question["id"],
+                        "kind": "model_output",
+                        "turn_index": event.get("step", 0),
+                        "content": model_text,
+                        "finish_reason": event.get("finish_reason", ""),
+                        "tool_count": event.get("tool_count", 0),
+                        "usage": event.get("usage") or {},
+                    })
             elif kind == "tool_start":
                 try:
                     args = json.loads(event.get("arguments") or "{}")
@@ -368,11 +382,11 @@ def evaluate_single_question(
         # think 模式思考链回填
         step_reasoning = _extract_step_reasoning(agent)
         for row in traj_rows:
-            if not row["thought"]:
+            if not row.get("thought"):
                 row["thought"] = step_reasoning.get(row["turn_index"], "")
         
         # 无 Finish 工具的最终回复补行（模型直接文本回复/超步数）
-        if not any(r["is_final_answer"] for r in traj_rows) and response.strip():
+        if not any(r.get("is_final_answer") for r in traj_rows) and response.strip():
             traj_rows.append({
                 "case_id": question["id"],
                 "turn_index": max((r["turn_index"] for r in traj_rows), default=0),
@@ -430,7 +444,7 @@ def evaluate_single_question(
     last_run = agent.last_run if agent.last_run else None
     stop_reason = result["status"] if result["status"] == "error" else (last_run.status if last_run else "unknown")
     snapshot = dict(env_snapshot)
-    snapshot["thinking_observed"] = "on" if any(r["thought"] for r in traj_rows) else "off"
+    snapshot["thinking_observed"] = "on" if any(r.get("thought") for r in traj_rows) else "off"
     traj_rows.append({
         "case_id": question["id"],
         "kind": "case_summary",
