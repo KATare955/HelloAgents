@@ -130,19 +130,21 @@
       "calculate_finance"
     ],
     "difficulty": "hard",
-    "response": "目前无法获取到E5 Sportback 2025款旗舰quattro型的指导价信息。建议您联系当地经销商或访问官方网站以获取最新的价格信息。如果您有其他问题，欢迎随时咨询！",
+    "response": "根据查询结果，E5 Sportback 2025款旗舰quattro型近90天的平均成交价为 **289,500元**，价格趋势稳定。\n\n结合之前查询到的优惠政策，总优惠为 **30,000元**，因此优惠后的价格为：\n\n$$\n289,500 - 30,000 = 259,500元\n$$\n\n接下来，我们计算首付30%、5年贷款的月供。首付金额为：\n\n$$\n259,500 \\times 30\\% = 77,850元\n$$\n\n贷款金额为：\n\n$$\n259,500 - 77,850 = 181,650元\n$$\n\n假设年利率为 **5%**，贷款期限为 **5年（60个月）**，使用等额本息计算方式，月供为：\n\n$$\n\\text{月供} = \\frac{181,650 \\times (5\\% / 12) \\times (1 + 5\\% / 12)^{60}}{(1 + 5\\% / 12)^{60} - 1} \\approx 3,527元\n$$\n\n总利息为：\n\n$$\n3,527 \\times 60 - 181,650 = 211,620 - 181,650 = 29,970元\n$$\n\n**总结：**\n- 优惠后价格：259,500元\n- 首付30%：77,850元\n- 5年贷款月供：约3,527元\n- 总利息：约29,970元\n\n如需进一步帮助，可以预约试驾或了解更多车型对比信息。",
     "status": "success",
     "actual_tools": [
       "query_discount_policy",
       "text_search",
-      "text_search"
+      "text_search",
+      "query_transaction_price"
     ],
-    "tool_calls_count": 3,
+    "tool_calls_count": 4,
     "tool_correct": false,
     "missing_tools": [
       "calculate_finance"
     ],
     "extra_tools": [
+      "query_transaction_price",
       "text_search"
     ],
     "trajectory_ref": "trajectories/finance_005.jsonl"
@@ -201,7 +203,7 @@
       "calculate_finance"
     ],
     "difficulty": "medium",
-    "response": "目前无法通过现有工具获取到E5 Sportback的具体价格信息。建议您直接联系当地经销商或访问官方网站，以获取最新的车型价格和贷款相关信息。如果您有其他问题，我将很乐意帮助您！",
+    "response": "目前无法找到E5 Sportback的具体价格信息。建议您直接联系当地经销商或访问官方网站，以获取最新的车型价格和贷款相关信息。如果您有其他问题，我将很乐意帮助您！",
     "status": "success",
     "actual_tools": [
       "text_search",
@@ -228,14 +230,15 @@
       "calculate_finance"
     ],
     "difficulty": "hard",
-    "response": "我暂时无法获取到E5 Sportback的具体价格信息。建议您确认车型名称是否正确，或者直接联系当地经销商获取最新的价格和优惠政策信息。如果您有其他问题，欢迎随时咨询！",
+    "response": "目前我无法获取到E5 Sportback的具体指导价信息。如果您能提供该车型的车价信息，我可以帮您计算首付30%、5年贷款的月供金额。或者，您也可以咨询当地经销商获取最新的价格信息。",
     "status": "success",
     "actual_tools": [
       "query_discount_policy",
       "text_search",
+      "text_search",
       "text_search"
     ],
-    "tool_calls_count": 3,
+    "tool_calls_count": 4,
     "tool_correct": false,
     "missing_tools": [
       "calculate_finance"

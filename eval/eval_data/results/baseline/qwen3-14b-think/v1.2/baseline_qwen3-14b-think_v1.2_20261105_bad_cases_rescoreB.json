@@ -21,7 +21,18 @@
     "extra_tools": [
       "competitor_compare"
     ],
-    "trajectory_ref": "trajectories/car_config_007.jsonl"
+    "trajectory_ref": "trajectories/car_config_007.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 1.0,
+      "violation_tags": [],
+      "sub_scores": {
+        "tool_call": 1.0,
+        "evidence": 1.0,
+        "communication": 1.0
+      },
+      "caps_triggered": []
+    }
   },
   {
     "id": "compare_004",
@@ -32,7 +43,7 @@
       "competitor_compare"
     ],
     "difficulty": "medium",
-    "response": "<think>\nOkay, let's see. The user wants a comparison of the E5 Sportback and the Xiaomi SU7 based on their range. From the search results, the E5 Sportback 2025 Pioneer has a CLTC range of 618 km, while the Xiaomi SU7 2025 Pro has a longer range of 830 km. The battery capacities are 76 kWh for the E5 and 94.3 kWh for the SU7. The SU7's larger battery contributes to its longer range. Both have similar motor power, but the SU7's bigger battery gives it an edge in续航. I should present these numbers clearly and highlight the difference in battery size and range. Also, mention the fast charging speeds, though the user specifically asked about range. Make sure to note that the SU7 has a significantly longer range, which might be a key factor for the user.\n</think>\n\n从续航里程角度对比：\n\n**奥迪 E5 Sportback 2025款 先锋型**\n- CLTC续航里程：618km\n- 电池容量：76kWh\n- 快充功率：270kW（10%-80%充电约18分钟）\n\n**小米 SU7 2025款 Pro版**\n- CLTC续航里程：830km\n- 电池容量：94.3kWh\n- 快充功率：240kW（10%-80%充电约22分钟）\n\n**核心差异：**\n1. 续航差距：SU7比E5 Sportback多212km，主要得益于94.3kWh大电池 vs E5的76kWh\n2. 充电效率：E5 Sportback快充更快（18分钟 vs 22分钟），但SU7电池容量更大\n3. 价格差异：SU7指导价245,900元，比E5 Sportback贵10,000元\n\n若续航是核心需求，SU7的830km续航更适合长途出行；若追求充电效率，E5 Sportback的270kW快充更有优势。",
+    "response": "<think>\nOkay, let's see. The user wants a comparison of E5 Sportback and Xiaomi SU7 based on their range. From the search results, the E5 Sportback 2025 Pioneer has a CLTC range of 618km, while the Xiaomi SU7 2025 Pro has 830km. So the SU7 has a longer range. I should present these numbers clearly and mention the battery capacities as well since that's related. Also, note the fast charging speeds, but the main focus is on the range. Make sure to highlight the difference in their CLTC ranges and maybe mention the battery sizes. Keep it concise and straightforward.\n</think>\n\n从续航里程角度对比：\n\n**奥迪 E5 Sportback 2025款 先锋型**  \n- CLTC工况续航：618km  \n- 电池容量：76kWh  \n- 快充速度：270kW（10%-80%充电约18分钟）\n\n**小米 SU7 2025款 Pro版**  \n- CLTC工况续航：830km  \n- 电池容量：94.3kWh  \n- 快充速度：240kW（10%-80%充电约22分钟）\n\n**结论**：小米SU7的续航里程（830km）比E5 Sportback（618km）多出约212km，主要得益于更大的电池容量（94.3kWh vs 76kWh）。若对续航有较高需求，SU7更具优势。",
     "status": "success",
     "actual_tools": [
       "text_search",
@@ -46,7 +57,22 @@
     "extra_tools": [
       "text_search"
     ],
-    "trajectory_ref": "trajectories/compare_004.jsonl"
+    "trajectory_ref": "trajectories/compare_004.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "missing_evidence"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "missing_evidence_cap"
+      ]
+    }
   },
   {
     "id": "compare_005",
@@ -69,7 +95,22 @@
       "text_search"
     ],
     "extra_tools": [],
-    "trajectory_ref": "trajectories/compare_005.jsonl"
+    "trajectory_ref": "trajectories/compare_005.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "missing_evidence"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "missing_evidence_cap"
+      ]
+    }
   },
   {
     "id": "finance_003",
@@ -94,35 +135,26 @@
     "extra_tools": [
       "text_search"
     ],
-    "trajectory_ref": "trajectories/finance_003.jsonl"
-  },
-  {
-    "id": "finance_006",
-    "scenario": "金融方案测算",
-    "type": "单跳",
-    "question": "如果选择E5 Sportback，首付30%和首付50%哪个更划算？",
-    "expected_tools": [
-      "calculate_finance"
-    ],
-    "difficulty": "hard",
-    "response": "<think>\nOkay, the user is asking about the E5 Sportback 2025 model and wants to know if a 30% or 50% down payment is more cost-effective. However, I've tried multiple times to search for the car's price using different queries, but none of them returned any results. The text_search tool keeps coming back with \"未找到\" (not found). \n\nHmm, maybe the issue is with the model name. The user mentioned \"E5 Sportback 2025款\" which includes the \"款\" character, but when I tried searching without it, like \"E5 Sportback 2025 价格\" or \"E5 Sportback 2025 指导价\", it still didn't work. Perhaps the correct model name is different, or maybe the data isn't available in the system.\n\nWait, the discount policy query did return some information. There's a 20,000 yuan manufacturer subsidy and a 10,000 yuan trade-in subsidy. But without the base price, I can't calculate the down payments. The user needs the original price to compare the two down payment options. \n\nSince the price information isn't available through the tools, I should inform the user that I can't retrieve the current price and suggest checking the official website or contacting a dealership for the most accurate information. Alternatively, if they provide the price, I can help calculate the down payments. But as it stands, I can't proceed without the necessary data.\n</think>\n\n目前无法获取E5 Sportback 2025款的官方指导价，建议您：\n1. 访问一汽-大众官网或授权经销商获取最新价格信息\n2. 若已知具体配置版本（如1.5T/2.0T/插混等），可提供更精确的车型名称\n3. 金融方案计算需基于实际车价，建议先确认车辆最终成交价\n\n需要我帮您计算时，请提供：车型完整名称 + 车价（元） + 贷款年限（1-5年）",
-    "status": "success",
-    "actual_tools": [
-      "text_search",
-      "query_discount_policy",
-      "text_search",
-      "text_search"
-    ],
-    "tool_calls_count": 4,
-    "tool_correct": false,
-    "missing_tools": [
-      "calculate_finance"
-    ],
-    "extra_tools": [
-      "query_discount_policy",
-      "text_search"
-    ],
-    "trajectory_ref": "trajectories/finance_006.jsonl"
+    "trajectory_ref": "trajectories/finance_003.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "false_promise",
+        "missing_evidence",
+        "tool_id_exposure"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "false_promise_cap",
+        "missing_evidence_cap",
+        "tool_id_exposure_cap"
+      ]
+    }
   },
   {
     "id": "finance_007",
@@ -142,7 +174,24 @@
       "calculate_finance"
     ],
     "extra_tools": [],
-    "trajectory_ref": "trajectories/finance_007.jsonl"
+    "trajectory_ref": "trajectories/finance_007.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "missing_evidence",
+        "tool_id_exposure"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "missing_evidence_cap",
+        "tool_id_exposure_cap"
+      ]
+    }
   },
   {
     "id": "finance_008",
@@ -170,7 +219,26 @@
     "extra_tools": [
       "text_search"
     ],
-    "trajectory_ref": "trajectories/finance_008.jsonl"
+    "trajectory_ref": "trajectories/finance_008.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "false_promise",
+        "missing_evidence",
+        "no_side_effect"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "false_promise_cap",
+        "missing_evidence_cap",
+        "no_side_effect_cap"
+      ]
+    }
   },
   {
     "id": "finance_009",
@@ -196,7 +264,24 @@
     "extra_tools": [
       "text_search"
     ],
-    "trajectory_ref": "trajectories/finance_009.jsonl"
+    "trajectory_ref": "trajectories/finance_009.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "false_promise",
+        "missing_evidence"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "false_promise_cap",
+        "missing_evidence_cap"
+      ]
+    }
   },
   {
     "id": "test_drive_005",
@@ -208,7 +293,7 @@
       "book_test_drive"
     ],
     "difficulty": "hard",
-    "response": "<think>\n好的，用户已经查询到了E5 Sportback的优惠政策，现在需要预约试驾。接下来需要调用book_test_drive工具。但根据工具参数，需要提供车系名称、经销商名称、预约时间、客户姓名和手机号。用户可能还没有提供这些信息，特别是经销商名称和预约时间等。需要向用户确认这些详细信息才能完成预约。因此，应该先告知用户优惠政策的结果，然后询问必要的试驾预约信息。\n</think>\n\n当前E5 Sportback的优惠政策如下：\n1. 限时优惠：全款购车可享20000元厂商补贴（有效期至2026年12月31日）\n2. 旧车置换补贴：提供使用满3年的旧车可享10000元补贴（有效期至2026年12月31日）\n总优惠可达30000元。\n\n请问您需要预约试驾吗？请提供以下信息：\n1. 附近经销商名称\n2. 希望的试驾时间（建议工作日9:00-18:00）\n3. 您的姓名和手机号码\n4. 是否有特殊需求（如试驾路线、车辆配置要求等）",
+    "response": "<think>\n好的，用户已经查询到了E5 Sportback的优惠政策，现在需要预约试驾。接下来需要调用book_test_drive工具。但根据工具参数，需要提供车系名称、经销商名称、预约时间、客户姓名和手机号。用户可能还没有提供这些信息，特别是经销商名称和预约时间等。需要向用户确认这些详细信息才能完成预约。因此，应该先回复用户关于优惠政策的结果，并询问是否需要帮助预约试驾，同时收集必要的信息。\n</think>\n\n目前E5 Sportback的优惠政策如下：\n1. 限时优惠：全款购车可享20000元厂商补贴（有效期至2026年12月31日）\n2. 旧车置换补贴：提供使用满3年的旧车可享10000元补贴（有效期至2026年12月31日）\n总优惠可达30000元。\n\n是否需要我帮您预约试驾？如需预约，请提供：\n1. 附近经销商名称\n2. 希望的试驾时间（工作日9:00-18:00）\n3. 您的姓名和手机号码",
     "status": "success",
     "actual_tools": [
       "query_discount_policy"
@@ -219,7 +304,26 @@
       "book_test_drive"
     ],
     "extra_tools": [],
-    "trajectory_ref": "trajectories/test_drive_005.jsonl"
+    "trajectory_ref": "trajectories/test_drive_005.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "missing_evidence",
+        "no_side_effect",
+        "tool_id_exposure"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "missing_evidence_cap",
+        "no_side_effect_cap",
+        "tool_id_exposure_cap"
+      ]
+    }
   },
   {
     "id": "multi_hop_002",
@@ -232,7 +336,7 @@
       "query_discount_policy"
     ],
     "difficulty": "hard",
-    "response": "对比分析如下：\n\n1. **价格**：\n   - E5 Sportback（优惠后）：205,900元-289,900元（含30,000元优惠）\n   - 小米SU7：245,900元-303,900元（无优惠）\n\n2. **续航**：\n   - E5 Sportback：618km-773km（旗舰Plus型最高）\n   - 小米SU7：800km-830km（Pro版最高）\n\n3. **优惠政策**：\n   - E5 Sportback：限时优惠30,000元（含厂商补贴+置换补贴）\n   - 小米SU7：暂无公开优惠政策\n\n**结论**：\n- 若注重**续航能力**，小米SU7 Pro版（830km）领先；\n- 若追求**性价比**，E5 Sportback优惠后起售价205,900元，且充电速度更快（270kW vs 240kW）；\n- 建议根据预算和续航需求选择：\n  - 优先续航选小米SU7 Pro\n  - 优先性价比选E5 Sportback旗舰Plus型（773km续航+30,000元优惠）",
+    "response": "对比分析如下：\n\n1. **价格**：\n   - E5 Sportback（优惠后）：205,900元-289,900元（含30,000元优惠）\n   - 小米SU7：245,900元-303,900元（无优惠）\n\n2. **续航**：\n   - E5 Sportback：618km-773km（旗舰Plus型最高）\n   - 小米SU7：800km-830km（Pro版最高）\n\n3. **优惠政策**：\n   - E5 Sportback：限时优惠30,000元（含厂商补贴+置换补贴）\n   - 小米SU7：暂无公开优惠政策\n\n**结论**：\n- 若注重**续航能力**，小米SU7 Pro版（830km）领先；\n- 若追求**性价比**，E5 Sportback优惠后起售价205,900元，且充电速度更快（270kW vs 240kW）；\n- 建议优先考虑E5 Sportback，若对续航有极致需求可对比小米SU7 Pro版实际优惠情况。",
     "status": "success",
     "actual_tools": [
       "text_search",
@@ -246,7 +350,22 @@
       "competitor_compare"
     ],
     "extra_tools": [],
-    "trajectory_ref": "trajectories/multi_hop_002.jsonl"
+    "trajectory_ref": "trajectories/multi_hop_002.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "missing_evidence"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "missing_evidence_cap"
+      ]
+    }
   },
   {
     "id": "multi_hop_008",
@@ -258,15 +377,14 @@
       "calculate_finance"
     ],
     "difficulty": "hard",
-    "response": "<think>\n好的，用户需要知道E5 Sportback在上海和北京的优惠后价格以及首付30%的贷款月供。但两次查询指导价都未找到结果，可能车型名称或年份有误，或者数据源中没有相关信息。这时候可能需要考虑其他方法，比如使用竞品车型的价格作为参考，或者假设一个合理的价格范围。不过，作为销售顾问，应该建议用户提供更准确的车型信息，或者直接联系经销商获取最新报价。另外，可能用户提到的“E5 Sportback 2025款”实际上还未上市，导致没有指导价数据。这种情况下，可以建议用户关注官方发布或咨询经销商预订单信息。总之，在无法获取指导价的情况下，无法准确计算优惠后的价格和贷款月供，需要用户提供更多信息或采取其他途径获取数据。\n</think>\n\n由于无法查询到E5 Sportback 2025款的具体指导价，建议您联系当地经销商获取最新报价。根据现有信息，上海总优惠35000元，北京总优惠30000元，上海优惠力度更大。若提供原价或经销商报价，我可为您计算优惠后价格及贷款月供。",
+    "response": "<think>\n好的，用户需要知道E5 Sportback在上海和北京的优惠后价格以及首付30%的贷款月供。之前已经查询到上海总优惠35000元，北京30000元，但缺少指导价数据，导致无法计算优惠后的价格和月供。\n\n现在尝试用text_search查询指导价，但返回结果为空。可能需要调整查询关键词，比如使用“E5 Sportback 2025款 指导价”或者更具体的配置名称。不过用户没有提供具体配置，可能需要假设一个价格或者告知用户需要更详细的信息。\n\n由于无法获取指导价，可能需要建议用户提供具体车价，或者根据常见价格范围进行估算。例如，假设E5 Sportback的指导价为25万元，那么上海优惠后价格为21.5万元，北京为22万元。然后计算首付30%后的贷款金额，使用calculate_finance工具，假设贷款年限为3年，利率4.5%。\n\n不过，用户可能希望得到准确的数字，所以需要明确告知当前无法获取指导价，并建议用户提供具体价格或进一步查询。\n</think>\n\n由于无法查询到E5 Sportback的具体指导价，我需要您提供该车型的**优惠前价格**（或指导价），以便继续计算优惠后的贷款月供。例如：\n- 如果您知道该车型的指导价为25万元，优惠后上海为21.5万元，北京为22万元；\n- 首付30%后，贷款金额分别为15.05万元（上海）和15.4万元（北京）；\n- 假设贷款3年，利率4.5%，月供约为4,450元（上海）或4,520元（北京）。\n\n请确认具体车价，我将为您精确计算。",
     "status": "success",
     "actual_tools": [
       "query_discount_policy",
       "query_discount_policy",
-      "text_search",
       "text_search"
     ],
-    "tool_calls_count": 4,
+    "tool_calls_count": 3,
     "tool_correct": false,
     "missing_tools": [
       "calculate_finance"
@@ -274,6 +392,27 @@
     "extra_tools": [
       "text_search"
     ],
-    "trajectory_ref": "trajectories/multi_hop_008.jsonl"
+    "trajectory_ref": "trajectories/multi_hop_008.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "false_promise",
+        "missing_evidence",
+        "no_side_effect",
+        "tool_id_exposure"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "false_promise_cap",
+        "missing_evidence_cap",
+        "no_side_effect_cap",
+        "tool_id_exposure_cap"
+      ]
+    }
   }
 ]
