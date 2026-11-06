@@ -124,3 +124,23 @@ C1 三批人工审核（hallucinated_args / false_promise+missing_evidence）全
 - calculate_finance 8 场景单测通过；discount_004/009 实测从"未找到"变"查到全国优惠"
 - 离线重判（`_a3_rejudge_report.json`）：负例 5/5 干净；正例 8/20 命中（修复前即 10/20，EXPECTED 标签过时；本次变化 3 条方向全对：car_config_004 清零✓、car_config_001 去 no_side_effect✓、compare_008 因 GT 等价路径由 missing_evidence 变干净✓）
 - 待 AutoDL 重跑双基线验证全量效果
+
+## 2026-11-06 11:36:16 - baseline (qwen3-14b-think, v1.2)
+
+- **准确率**: 85.3%
+- **总问题数**: 68
+- **Bad case数量**: 10
+- **评测集版本**: v1.2
+- **模型**: qwen3-14b-think
+- **阶段**: baseline
+- **结果文件**: `results/baseline/qwen3-14b-think/v1.2/baseline_qwen3-14b-think_v1.2_20261106.json`
+
+## 2026-11-06 11:43:19 - baseline (qwen3-14b-nothink, v1.2)
+
+- **准确率**: 86.8%
+- **总问题数**: 68
+- **Bad case数量**: 9
+- **评测集版本**: v1.2
+- **模型**: qwen3-14b-nothink
+- **阶段**: baseline
+- **结果文件**: `results/baseline/qwen3-14b-nothink/v1.2/baseline_qwen3-14b-nothink_v1.2_20261106.json`
