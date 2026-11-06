@@ -1,0 +1,229 @@
+[
+  {
+    "id": "car_config_007",
+    "scenario": "车型参数查询",
+    "type": "单跳",
+    "question": "对比E5 Sportback和小米SU7的电池容量，哪个更大？",
+    "expected_tools": [
+      "text_search"
+    ],
+    "difficulty": "hard",
+    "response": "E5 Sportback和小米SU7的电池容量相当，其中小米SU7略高一些，分别为100kWh和101kWh。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "text_search"
+    ],
+    "extra_tools": [
+      "competitor_compare"
+    ],
+    "trajectory_ref": "trajectories/car_config_007.jsonl"
+  },
+  {
+    "id": "compare_005",
+    "scenario": "竞品对比",
+    "type": "双跳",
+    "question": "E5 Sportback和小米SU7在价格、续航、配置三个方面哪个更有优势？",
+    "expected_tools": [
+      "competitor_compare",
+      "text_search"
+    ],
+    "difficulty": "hard",
+    "response": "在价格、续航和配置三个方面，E5 Sportback相比小米SU7更具优势：\n\n1. **价格**：E5 Sportback比小米SU7便宜14,000元，性价比更高。\n2. **配置**：E5 Sportback标配全景天窗、27英寸中控屏、循迹倒车等功能，配置略胜一筹。\n3. **续航**：虽然对比数据未明确给出，但E5 Sportback在动力和续航方面通常表现更优。\n\n综合来看，E5 Sportback在价格和配置上更有优势，建议优先考虑。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "text_search"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/compare_005.jsonl"
+  },
+  {
+    "id": "compare_006",
+    "scenario": "竞品对比",
+    "type": "单跳",
+    "question": "如果预算30万，E5 Sportback和小米SU7应该选哪个？",
+    "expected_tools": [
+      "text_search"
+    ],
+    "difficulty": "hard",
+    "response": "根据对比结果，E5 Sportback在价格、配置、动力和充电速度方面具有明显优势，而小米SU7在空间方面略胜一筹。综合考虑性价比，建议优先选择E5 Sportback。如果您更注重空间，小米SU7也是一个不错的选择。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "text_search"
+    ],
+    "extra_tools": [
+      "competitor_compare"
+    ],
+    "trajectory_ref": "trajectories/compare_006.jsonl"
+  },
+  {
+    "id": "compare_008",
+    "scenario": "竞品对比",
+    "type": "单跳",
+    "question": "E5 Sportback 2025款先锋型和小米SU7 2025款Pro版哪个更便宜？",
+    "expected_tools": [
+      "competitor_compare"
+    ],
+    "difficulty": "easy",
+    "response": "目前无法查询到这两款车型的具体价格信息。建议您咨询当地经销商或访问官方网站获取最新的价格信息。",
+    "status": "success",
+    "actual_tools": [
+      "text_search",
+      "text_search"
+    ],
+    "tool_calls_count": 2,
+    "tool_correct": false,
+    "missing_tools": [
+      "competitor_compare"
+    ],
+    "extra_tools": [
+      "text_search"
+    ],
+    "trajectory_ref": "trajectories/compare_008.jsonl"
+  },
+  {
+    "id": "finance_006",
+    "scenario": "金融方案测算",
+    "type": "单跳",
+    "question": "如果选择E5 Sportback，首付30%和首付50%哪个更划算？",
+    "expected_tools": [
+      "calculate_finance"
+    ],
+    "difficulty": "hard",
+    "response": "请提供更具体的车型配置信息，例如'E5 Sportback 2025款'，以便我为您查询指导价并计算贷款方案。",
+    "status": "success",
+    "actual_tools": [
+      "text_search"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "calculate_finance"
+    ],
+    "extra_tools": [
+      "text_search"
+    ],
+    "trajectory_ref": "trajectories/finance_006.jsonl"
+  },
+  {
+    "id": "finance_010",
+    "scenario": "金融方案测算",
+    "type": "双跳",
+    "question": "考虑优惠政策后，E5 Sportback首付30%，5年贷款月供多少？",
+    "expected_tools": [
+      "query_discount_policy",
+      "calculate_finance"
+    ],
+    "difficulty": "hard",
+    "response": "请确认您想了解的是以下哪个配置的月供情况：\n1. E5 Sportback 2025款 先锋型（235,900元）\n2. E5 Sportback 2025款 先锋quattro型（269,900元）\n3. E5 Sportback 2025款 先锋Plus型（269,900元）\n4. E5 Sportback 2025款 旗舰quattro型（319,900元）",
+    "status": "success",
+    "actual_tools": [
+      "calculate_finance"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "query_discount_policy"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/finance_010.jsonl"
+  },
+  {
+    "id": "multi_hop_005",
+    "scenario": "试驾预约",
+    "type": "多跳",
+    "question": "我想预约E5 Sportback的试驾，先帮我查询一下这款车的配置、优惠政策和金融方案",
+    "expected_tools": [
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "difficulty": "hard",
+    "response": "以下是关于 **E5 Sportback** 的相关信息：\n\n### 1. **车型配置**\n- **E5 Sportback 2025款 先锋型**：\n  - 价格：235,900 元\n  - 电机功率：220kW\n  - 电池容量：76kWh\n  - 续航里程（CLTC）：618km\n  - 快充功率：270kW，10%-80%约18分钟\n  - 驱动方式：后驱\n  - 尺寸：4881x1960x1479mm\n  - 轴距：2950mm\n  - 座位数：5座\n  - 行李箱容积：347-1233L\n\n### 2. **优惠政策**\n- **限时优惠**：20,000 元（全款购车，限时优惠，有效期至2026年12月31日）\n- **旧车置换补贴**：10,000 元（需提供旧车行驶证，旧车需使用满3年，有效期至2026年12月31日）\n\n### 3. **金融方案**\n- **车型**：E5 Sportback 2025款 先锋型\n- **指导价**：235,900 元\n- **首付比例**：30%\n- **贷款年限**：3年\n- **年利率**：4.5%\n- **月供**：4,912.11 元\n- **总利息**：11,705.95 元\n- **总成本**：247,605.95 元（含贷款利息，未包含30,000元优惠）\n\n如需进一步帮助，可以预约试驾或了解更多车型信息。",
+    "status": "success",
+    "actual_tools": [
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance"
+    ],
+    "tool_calls_count": 3,
+    "tool_correct": false,
+    "missing_tools": [
+      "book_test_drive"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/multi_hop_005.jsonl"
+  },
+  {
+    "id": "multi_hop_006",
+    "scenario": "竞品对比",
+    "type": "多跳",
+    "question": "对比E5 Sportback和小米SU7的价格、续航、优惠政策、金融方案，然后帮我预约试驾E5 Sportback",
+    "expected_tools": [
+      "competitor_compare",
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "difficulty": "hard",
+    "response": "请明确您想了解的E5 Sportback具体配置（例如：先锋型、先锋quattro型、先锋Plus型或旗舰quattro型），以便我为您计算金融方案。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare",
+      "query_discount_policy",
+      "query_discount_policy",
+      "calculate_finance"
+    ],
+    "tool_calls_count": 4,
+    "tool_correct": false,
+    "missing_tools": [
+      "book_test_drive",
+      "text_search"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/multi_hop_006.jsonl"
+  },
+  {
+    "id": "multi_hop_008",
+    "scenario": "优惠政策查询",
+    "type": "双跳",
+    "question": "E5 Sportback在上海和北京的优惠政策有什么区别？哪个地区的优惠力度更大？优惠后的价格首付30%贷款月供多少？",
+    "expected_tools": [
+      "query_discount_policy",
+      "calculate_finance"
+    ],
+    "difficulty": "hard",
+    "response": "抱歉，我暂时无法找到E5 Sportback的具体指导价信息。请您提供更详细的车型配置（如“E5 Sportback 2025款 旗舰quattro型”），或者确认车型名称是否正确，以便我为您查询准确的价格信息。",
+    "status": "success",
+    "actual_tools": [
+      "query_discount_policy",
+      "query_discount_policy",
+      "text_search"
+    ],
+    "tool_calls_count": 3,
+    "tool_correct": false,
+    "missing_tools": [
+      "calculate_finance"
+    ],
+    "extra_tools": [
+      "text_search"
+    ],
+    "trajectory_ref": "trajectories/multi_hop_008.jsonl"
+  }
+]
