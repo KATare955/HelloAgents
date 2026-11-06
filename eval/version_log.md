@@ -201,3 +201,23 @@ AutoDL 重跑结果逐题对比后暴露的 4 个规则层缺陷修复（全部�
 - 工具自测：calculate_finance 不传首付/年限 → 默认方案标注"可调整"；显式传 50%/5年 → 无默认标注
 - 离线重判（旧轨迹 × 全部新规则，= 修前基线）：judge 口径 think 59/68（翻转 1 题：test_drive_005 think 反问合格翻正）、nothink 59/68；verify 满分 think 53/68、nothink 53/68（年份幻觉 3+4 题现形属预期——旧轨迹在无日期注入环境跑的）
 - **今晚重跑预期**：日期注入后 test_drive 系列年份恢复 2026（+3/+4）；问题 8 修复后 car_config_008 双模式如实转述不再违规；金融默认值后 M01 类题次工具返回带"可调整"标注、模型照实转述即合规
+
+## 2026-11-06 16:50:02 - baseline (qwen3-14b-think, v1.2)
+
+- **准确率**: 94.1%
+- **总问题数**: 68
+- **Bad case数量**: 4
+- **评测集版本**: v1.2
+- **模型**: qwen3-14b-think
+- **阶段**: baseline
+- **结果文件**: `results/baseline/qwen3-14b-think/v1.2/baseline_qwen3-14b-think_v1.2_20261106.json`
+
+## 2026-11-06 16:58:18 - baseline (qwen3-14b-nothink, v1.2)
+
+- **准确率**: 89.7%
+- **总问题数**: 68
+- **Bad case数量**: 7
+- **评测集版本**: v1.2
+- **模型**: qwen3-14b-nothink
+- **阶段**: baseline
+- **结果文件**: `results/baseline/qwen3-14b-nothink/v1.2/baseline_qwen3-14b-nothink_v1.2_20261106.json`
