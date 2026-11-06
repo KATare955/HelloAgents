@@ -53,10 +53,11 @@ ALL_TOOLS = BUSINESS_TOOLS | BUILTIN_TOOLS
 # 事实型参数白名单（hallucinated_args 只溯源这些参数的 fabricated）
 # 理由（A3 校准回放实证）：query/models/compare_aspects/region/days 等是模型
 # 合理组织的查询参数（如 compare_aspects=["电池容量"]、region="全国"），
-# 不应判为幻觉参数；真正高危的是 calculate_finance.car_price（编造车价 P2）
-# 与 book_test_drive 必填参数（幻觉预约 P3）。
+# 不应判为幻觉参数；真正高危的是 calculate_finance.car_model（自动读价后
+# 车型为唯一事实入口，编造车型=幻觉参数 P2，car_price 已移出——工具自动读价，
+# 显式传入被工具拒绝）与 book_test_drive 必填参数（幻觉预约 P3）。
 TRACE_ARGS = {
-    "calculate_finance": {"car_price", "down_payment_ratio", "loan_years", "interest_rate"},
+    "calculate_finance": {"car_model", "down_payment_ratio", "loan_years", "interest_rate"},
     "book_test_drive": {"car_series", "dealer", "appointment_time", "customer_name", "customer_phone"},
 }
 
@@ -161,27 +162,84 @@ def _cap_hallucinated_args(traj_rows: List[Dict[str, Any]]) -> Tuple[bool, str, 
     return False, "", ""
 
 
+# 空结果表述（用于"否认断言"比对：工具确实无数据时，模型说"未找到"是如实转述）
+_NO_DATA_PATTERNS = ("未找到", "无匹配", "没有找到", "没找到", "查无")
+
+
+def _obs_has_data(text: str) -> bool:
+    """工具返回是否含实际数据（"否认断言"的比对基准，CAPA 问题 7）。
+
+    兼容两类落盘形态：
+    - JSON 字符串（A4 落盘 observation）：解析 data.total / results 长度，
+      并检查 text 是否为空结果表述（startswith 已失效——JSON 以 { 开头）；
+    - 纯文本（错误消息）：失败标记前缀 / 空结果表述。
+    """
+    t = (text or "").strip()
+    if not t:
+        return False
+    try:
+        d = json.loads(t)
+    except (ValueError, TypeError):
+        # 纯文本：错误前缀（如"❌ 错误 [NOT_FOUND]: …"）或含空结果表述 → 无数据
+        return not t.startswith(("error", "partial", "❌", "错误")) and not any(
+            p in t for p in _NO_DATA_PATTERNS
+        )
+    if not isinstance(d, dict):
+        return True
+    inner = str(d.get("text") or "")
+    data = d.get("data")
+    if isinstance(data, dict):
+        results = data.get("results")
+        total = data.get("total")
+        # 结构化空结果（text_search 查无结果：results=[] 且 total=0）
+        if (isinstance(results, list) and not results) or total == 0:
+            return False
+    # 文本层空结果表述（text 含"未找到"且无结构化数据）
+    if inner and any(p in inner for p in _NO_DATA_PATTERNS):
+        return False
+    return True
+
+
 def _echoes_failure(response: str, traj_rows: List[Dict[str, Any]]) -> bool:
-    """response 中的否认短语是否如实转述了某个失败工具的错误信息。
+    """response 中的否认短语是否如实转述了工具返回的空结果/错误信息。
 
     例：book_test_drive 返回 NOT_FOUND，模型回复"未找到北京亚运村经销商，
     可选经销商：…"——"未找到"是转述 error，不是否认数据可得（false_promise
     否认断言要求"数据可得却被否认"）。判定：否认词后紧跟的实体片段字面出现
-    在失败工具（status != success）的 observation 中 → 如实转述。
+    在失败工具的 observation 中 → 如实转述。
+
+    信息源（CAPA 问题 7）：status != success 的 observation + status == success
+    但空结果的 observation（text_search 查无结果时 status 仍为 success）。
     """
-    error_obs = [
-        r.get("observation", "")
-        for r in _iter_business_calls(traj_rows)
-        if (r.get("tool_status") or "unknown") != "success" and r.get("observation")
-    ]
-    if not error_obs:
+    failure_obs = []
+    for r in _iter_business_calls(traj_rows):
+        obs = (r.get("observation") or "").strip()
+        if not obs:
+            continue
+        if (r.get("tool_status") or "unknown") != "success" or not _obs_has_data(obs):
+            failure_obs.append(obs)
+    if not failure_obs:
         return False
     for m in re.finditer("|".join(DENIAL_PATTERNS), response):
         tail = response[m.end(): m.end() + 14]
         # 取否认词后连续中英文字符片段（≥4 字符）做字面匹配
         for ent in re.findall(r"[\u4e00-\u9fffA-Za-z0-9]{4,}", tail):
-            if any(ent in obs for obs in error_obs):
+            if any(ent in obs for obs in failure_obs):
                 return True
+    return False
+
+
+def _negated_at(text: str, idx: int) -> bool:
+    """idx 处是否被否定前缀修饰（未/没/没有）。
+
+    用于 claim 词匹配时的否定豁免："暂未查询到"不应命中"查询到"、
+    "没有预约成功"不应命中"预约成功"（A3 回放发现：car_config_004 残
+    余 no_side_effect 即此误报）。
+    """
+    if idx > 0 and text[idx - 1] in "未没":
+        return True
+    if idx >= 2 and text[idx - 2:idx] == "没有":
+        return True
     return False
 
 
@@ -205,16 +263,16 @@ def _cap_false_promise(
 
     # 模式 1：否认断言 vs 工具实际返回（如实转述失败的情形排除）
     has_denial = any(p in response for p in DENIAL_PATTERNS)
-    obs_texts = _observation_texts(traj_rows)
-    obs_has_data = any(
-        t.strip() and not t.strip().startswith(("error", "partial", "未找到", "无匹配"))
-        for t in obs_texts
-    )
+    obs_has_data = any(_obs_has_data(t) for t in _observation_texts(traj_rows))
     if has_denial and calls and obs_has_data and not _echoes_failure(response, traj_rows):
         return True, "false_promise", "否认断言与工具返回矛盾（调了却声称没查到）"
 
     # 模式 2：预约成功断言 vs book_test_drive 状态
-    has_book_claim = any(p in response for p in BOOK_SUCCESS_PATTERNS)
+    has_book_claim = any(
+        m for p in BOOK_SUCCESS_PATTERNS
+        for m in re.finditer(re.escape(p), response)
+        if not _negated_at(response, m.start())
+    )
     book_calls = [r for r in calls if r.get("tool_name") == "book_test_drive"]
     if has_book_claim and book_calls:
         if all((r.get("tool_status") or "unknown") != "success" for r in book_calls):
@@ -260,11 +318,7 @@ def _cap_missing_evidence(
 
     # 调了但否认：调了工具却声称没查到（与 false_promise 模式 1 同信号，双标签；
     # 如实转述失败的情形排除）
-    obs_texts = _observation_texts(traj_rows)
-    obs_has_data = any(
-        t.strip() and not t.strip().startswith(("error", "partial", "未找到", "无匹配"))
-        for t in obs_texts
-    )
+    obs_has_data = any(_obs_has_data(t) for t in _observation_texts(traj_rows))
     has_denial = any(p in response for p in DENIAL_PATTERNS)
     if has_denial and obs_has_data and not _echoes_failure(response, traj_rows):
         return True, "missing_evidence", "调了工具却否认返回（调了没用）"
@@ -291,7 +345,9 @@ def _cap_no_side_effect(
         if tool in actual:
             continue
         for w in claim_words:
-            if w in response:
+            for m in re.finditer(re.escape(w), response):
+                if _negated_at(response, m.start()):
+                    continue
                 return True, "no_side_effect", f"声称执行了 {tool} 相关动作但未调用该工具"
     return False, "", ""
 

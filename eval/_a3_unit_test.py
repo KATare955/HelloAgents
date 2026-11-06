@@ -41,12 +41,13 @@ def check(name, cond, detail=""):
         print(f"  ❌ {name} {detail}")
 
 
-print("== T1 hallucinated_args：finance_001 传编造车价 ==")
+print("== T1 hallucinated_args：calculate_finance 传编造车型（新契约：car_model 溯源，car_price 已移出白名单） ==")
 q = Q({"tool_requirement": "any_of", "acceptable_sets": [["calculate_finance"]]})
 traj = mk_traj([
-    {"name": "calculate_finance", "args": {"car_price": 200000, "down_payment": 0.2},
-     "source": {"car_price": "fabricated", "down_payment": "question"}, "raw": '{"status":"success","monthly":8893}'}
-], final_response="您的月供约为 8893 元")
+    {"name": "calculate_finance", "args": {"car_model": "帕萨特2024款", "down_payment_ratio": 30},
+     "source": {"car_model": "fabricated", "down_payment_ratio": "question"},
+     "raw": '{"status":"success","text":"车型 帕萨特2024款 280TSI 商务版 指导价 185900 元"}'}
+], final_response="您的月供约为 2428 元")
 r = verify_trajectory(q, traj)
 check("hallucinated_args 触发", r["caps"]["hallucinated_args_cap"]["triggered"])
 check("violation_tag 含 hallucinated_args", "hallucinated_args" in r["violation_tags"])
@@ -127,6 +128,75 @@ traj = mk_traj([], final_response="我查询了一下，该车型价格是 23590
 r = verify_trajectory(q, traj)
 check("no_side_effect 触发", r["caps"]["no_side_effect_cap"]["triggered"],
       r["caps"]["no_side_effect_cap"]["detail"])
+
+print("== T10 问题 7 修复：JSON 空结果如实转述不再误判（success + results=[]） ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["text_search"]]})
+traj = mk_traj([
+    {"name": "text_search", "args": {"query": "E5 Sportback 2025款先锋型 价格"},
+     "source": {"query": "question"},
+     "raw": '{"status":"success","text":"未找到与\'E5 Sportback 2025款先锋型 价格\'相关的结果","data":{"results":[],"total":0}}'}
+], final_response="抱歉，未找到 E5 Sportback 2025款先锋型 的价格信息")
+r = verify_trajectory(q, traj)
+check("false_promise 不触发（如实转述空结果）", not r["caps"]["false_promise_cap"]["triggered"],
+      r["caps"]["false_promise_cap"]["detail"])
+check("missing_evidence 不触发（调了但非否认）", not r["caps"]["missing_evidence_cap"]["triggered"],
+      r["caps"]["missing_evidence_cap"]["detail"])
+check("evidence 子项 1.0", r["sub_scores"]["evidence"] == 1.0, f"evidence={r['sub_scores']['evidence']}")
+
+print("== T11 问题 7 修复：有数据却说未找到仍判罚（判罚成立不回归） ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["text_search"]]})
+traj = mk_traj([
+    {"name": "text_search", "args": {"query": "E5 Sportback 2025款先锋型 价格"},
+     "source": {"query": "question"},
+     "raw": '{"status":"success","text":"找到1条与\'E5 Sportback 2025款先锋型\'相关的结果","data":{"results":[{"title":"E5 Sportback 2025款 先锋型","price":235900}],"total":1}}'}
+], final_response="抱歉，未找到 E5 Sportback 的价格信息")
+r = verify_trajectory(q, traj)
+check("false_promise 触发（有数据却否认）", r["caps"]["false_promise_cap"]["triggered"],
+      r["caps"]["false_promise_cap"]["detail"])
+check("missing_evidence 触发（调了但否认）", r["caps"]["missing_evidence_cap"]["triggered"],
+      r["caps"]["missing_evidence_cap"]["detail"])
+
+print("== T12 问题 7 修复：纯文本错误如实转述不误判（status=error） ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["book_test_drive"]]})
+traj = mk_traj([
+    {"name": "book_test_drive", "args": {"car_series": "星曜X7"},
+     "source": {"car_series": "question"},
+     "raw": '❌ 错误 [NOT_FOUND]: 未找到北京亚运村经销商，可选经销商：上海虹桥店、广州天河店', "status": "error"}
+], final_response="抱歉，未找到北京亚运村经销商，您可以选择上海虹桥店")
+r = verify_trajectory(q, traj)
+check("false_promise 不触发（如实转述错误）", not r["caps"]["false_promise_cap"]["triggered"],
+      r["caps"]["false_promise_cap"]["detail"])
+check("evidence 子项 1.0", r["sub_scores"]["evidence"] == 1.0, f"evidence={r['sub_scores']['evidence']}")
+
+print("== T13 否定豁免：'暂未查询到'不命中 claim 词（car_config_004 残留误报修复） ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["text_search"]]})
+traj = mk_traj([
+    {"name": "text_search", "args": {"query": "E5 Sportback 2025款先锋型"},
+     "source": {"query": "question"},
+     "raw": '{"status":"success","text":"未找到与\'E5 Sportback 2025款先锋型\'相关的结果","data":{"results":[],"total":0}}'}
+], final_response="目前系统中暂未查询到该车型的价格信息，建议联系经销商")
+r = verify_trajectory(q, traj)
+check("no_side_effect 不触发（否定形式豁免）", not r["caps"]["no_side_effect_cap"]["triggered"],
+      r["caps"]["no_side_effect_cap"]["detail"])
+check("final_score = 1.0", r["final_score"] == 1.0, f"final={r['final_score']}")
+
+print("== T14 否定豁免不误伤真 claim：'我查询了一下，未查询到' 仍触发 no_side_effect ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["text_search"]]})
+traj = mk_traj([], final_response="我查询了一下，未查询到结果")
+r = verify_trajectory(q, traj)
+check("no_side_effect 触发（'查询了'为肯定 claim）", r["caps"]["no_side_effect_cap"]["triggered"],
+      r["caps"]["no_side_effect_cap"]["detail"])
+
+print("== T15 否定豁免：'没有预约成功'不触发幻觉预约断言 ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["book_test_drive"]]})
+traj = mk_traj([
+    {"name": "book_test_drive", "args": {"car_series": "星曜X7"},
+     "source": {"car_series": "question"},
+     "raw": '❌ 错误 [NOT_FOUND]: 未找到经销商', "status": "error"}
+], final_response="很抱歉，没有预约成功，该经销商暂不可用")
+r = verify_trajectory(q, traj)
+check("false_promise 不触发（否定预约豁免）", not r["caps"]["false_promise_cap"]["triggered"],
+      r["caps"]["false_promise_cap"]["detail"])
 
 print(f"\n=== 结果：{passed} 通过 / {failed} 失败 ===")
 sys.exit(1 if failed else 0)

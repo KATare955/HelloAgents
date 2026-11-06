@@ -186,8 +186,7 @@
     ],
     "actual": [
       "false_promise",
-      "missing_evidence",
-      "no_side_effect"
+      "missing_evidence"
     ],
     "hit": [
       "false_promise"
@@ -200,8 +199,7 @@
     "final_score": 0.35,
     "caps_triggered": [
       "false_promise_cap",
-      "missing_evidence_cap",
-      "no_side_effect_cap"
+      "missing_evidence_cap"
     ],
     "response_head": "根据现有信息，E5 Sportback 2025款的全国优惠政策总优惠幅度为30,000元（含厂商补贴20,000元和置换补贴10,000元）。由于系统暂未查询"
   },
@@ -211,24 +209,14 @@
     "expected": [
       "false_promise"
     ],
-    "actual": [
-      "false_promise",
-      "missing_evidence",
-      "no_side_effect"
-    ],
-    "hit": [
-      "false_promise"
-    ],
+    "actual": [],
+    "hit": [],
     "tools": [
       "text_search",
       "text_search"
     ],
-    "final_score": 0.35,
-    "caps_triggered": [
-      "false_promise_cap",
-      "missing_evidence_cap",
-      "no_side_effect_cap"
-    ],
+    "final_score": 1.0,
+    "caps_triggered": [],
     "response_head": "目前系统中暂未查询到\"E5 Sportback 2025款 先锋型\"和\"先锋quattro型\"的具体价格信息。建议您：\n\n1. 确认车型名称是否准确（如是否存在"
   },
   {

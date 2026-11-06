@@ -39,6 +39,7 @@
 
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -243,20 +244,49 @@ def _parse_tool_status(tool_name: str, raw: str) -> str:
         return "unknown"
 
 
+# 数字 token 提取（参数溯源精确匹配用，问题 12 修法①；负向后行排除
+# 车型名中的数字，与 rules.py _NUM_RE 口径一致：E8/SU7 的 8/7 不单独成 token）
+_NUM_TOKEN_RE = re.compile(r"(?<![A-Za-z])\d[\d,]*")
+
+
+def _value_in_text(value: str, text: str) -> bool:
+    """参数值是否出现在文本中（问题 12 修法：数字精确 + 短词词边界）。
+
+    - 纯数字值（含千分位）：提取目标文本数字 token 集做精确匹配
+      （"0" 不再误命中 "90天" 中的 90；"8" 不命中 "E8"）；
+    - 短 ASCII 词（<4 字符）：左右非字母数字边界匹配；
+    - 其余（中文短词/长串）：保留子串匹配。
+    """
+    if not value or not text:
+        return False
+    if _NUM_TOKEN_RE.fullmatch(value):
+        tokens = {m.group(0).replace(",", "") for m in _NUM_TOKEN_RE.finditer(text)}
+        return value.replace(",", "") in tokens
+    if len(value) < 4 and re.fullmatch(r"[A-Za-z0-9]+", value):
+        return re.search(
+            r"(?<![A-Za-z0-9])" + re.escape(value) + r"(?![A-Za-z0-9])", text
+        ) is not None
+    return value in text
+
+
 def _trace_args_source(tool_name: str, args: Dict[str, Any], question_text: str, prior_obs: List[str]) -> Dict[str, str]:
-    """参数值溯源（v1 粗粒度，供 verify 规则层 hallucinated_args_cap 细化）
+    """参数值溯源（v2 精确匹配，供 verify 规则层 hallucinated_args_cap 细化）
 
     取值：question（值来自题面）/ prior_observation（值来自此前工具返回）/
     fabricated（两个来源都没有，疑似编造）。Thought/Finish 参数不溯源。
+
+    问题 12 修法（2026-11-06）：① 数字值改精确 token 匹配（提取题面数字 token
+    集，"0" 不再命中 "90天"）；② 短 ASCII 词改词边界匹配（避免 "E5" 类误命中）；
+    ③ 长串保留子串。
     """
     if tool_name in ("Thought", "Finish"):
         return {}
     sources = {}
     for key, value in (args or {}).items():
         text = str(value)
-        if text and text in question_text:
+        if _value_in_text(text, question_text):
             sources[key] = "question"
-        elif text and any(text in obs for obs in prior_obs):
+        elif any(_value_in_text(text, obs) for obs in prior_obs):
             sources[key] = "prior_observation"
         else:
             sources[key] = "fabricated"
@@ -359,9 +389,11 @@ def evaluate_single_question(
                     continue
                 row = info["row"]
                 raw = event.get("result", "")
-                # raw 截断 ≤2KB（4.1 要求；当前框架默认 50KB 上限不触发）
-                row["tool_response_raw"] = raw[:2048]
-                row["observation"] = raw[:2048]
+                # 完整落盘（不截断）：2048 字符截断会切断多字节字符与 JSON 结构，
+                # 致 rule 层 JSON 解析失效（CAPA 问题 7/落盘截断发现）；
+                # 框架默认 50KB 上限，全量落盘体积可接受（136 份轨迹 ~10MB）
+                row["tool_response_raw"] = raw
+                row["observation"] = raw
                 row["tool_status"] = _parse_tool_status(row["tool_name"], raw)
                 row["tool_args_source"] = _trace_args_source(
                     row["tool_name"], row["tool_args"], question["question"], prior_obs
