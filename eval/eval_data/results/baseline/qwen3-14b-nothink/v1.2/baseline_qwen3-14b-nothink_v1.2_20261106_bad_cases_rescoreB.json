@@ -133,18 +133,14 @@
     "trajectory_ref": "trajectories/compare_008.jsonl",
     "verify": {
       "rejudgeable": true,
-      "final_score": 0.4,
-      "violation_tags": [
-        "no_side_effect"
-      ],
+      "final_score": 1.0,
+      "violation_tags": [],
       "sub_scores": {
         "tool_call": 1.0,
         "evidence": 1.0,
         "communication": 1.0
       },
-      "caps_triggered": [
-        "no_side_effect_cap"
-      ]
+      "caps_triggered": []
     }
   },
   {

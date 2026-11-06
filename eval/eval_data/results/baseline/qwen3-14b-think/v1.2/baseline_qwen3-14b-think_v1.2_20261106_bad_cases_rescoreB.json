@@ -24,18 +24,14 @@
     "trajectory_ref": "trajectories/car_config_007.jsonl",
     "verify": {
       "rejudgeable": true,
-      "final_score": 0.8,
-      "violation_tags": [
-        "tool_id_exposure"
-      ],
+      "final_score": 1.0,
+      "violation_tags": [],
       "sub_scores": {
         "tool_call": 1.0,
         "evidence": 1.0,
         "communication": 1.0
       },
-      "caps_triggered": [
-        "tool_id_exposure_cap"
-      ]
+      "caps_triggered": []
     }
   },
   {
@@ -142,8 +138,7 @@
       "rejudgeable": true,
       "final_score": 0.2,
       "violation_tags": [
-        "missing_evidence",
-        "no_side_effect"
+        "missing_evidence"
       ],
       "sub_scores": {
         "tool_call": 0.0,
@@ -151,8 +146,7 @@
         "communication": 1.0
       },
       "caps_triggered": [
-        "missing_evidence_cap",
-        "no_side_effect_cap"
+        "missing_evidence_cap"
       ]
     }
   },
@@ -183,8 +177,7 @@
       "rejudgeable": true,
       "final_score": 0.2,
       "violation_tags": [
-        "missing_evidence",
-        "tool_id_exposure"
+        "missing_evidence"
       ],
       "sub_scores": {
         "tool_call": 0.0,
@@ -192,8 +185,7 @@
         "communication": 1.0
       },
       "caps_triggered": [
-        "missing_evidence_cap",
-        "tool_id_exposure_cap"
+        "missing_evidence_cap"
       ]
     }
   },
@@ -389,9 +381,7 @@
       "final_score": 0.2,
       "violation_tags": [
         "false_promise",
-        "missing_evidence",
-        "no_side_effect",
-        "tool_id_exposure"
+        "missing_evidence"
       ],
       "sub_scores": {
         "tool_call": 0.0,
@@ -400,9 +390,7 @@
       },
       "caps_triggered": [
         "false_promise_cap",
-        "missing_evidence_cap",
-        "no_side_effect_cap",
-        "tool_id_exposure_cap"
+        "missing_evidence_cap"
       ]
     }
   }

@@ -198,5 +198,88 @@ r = verify_trajectory(q, traj)
 check("false_promise 不触发（否定预约豁免）", not r["caps"]["false_promise_cap"]["triggered"],
       r["caps"]["false_promise_cap"]["detail"])
 
+print("== T16 问题 14 修复：独白块提到工具名不触发 tool_id_exposure ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["text_search"]]})
+traj = mk_traj([
+    {"name": "text_search", "args": {"query": "E5 Sportback 价格"},
+     "source": {"query": "question"}, "raw": '{"status":"success","data":[{"price":235900}]}'}
+], final_response="<think>\n好的，可能需要使用 query_transaction_price 工具查看成交价。\n</think>\n\nE5 Sportback 的价格为 235,900 元")
+r = verify_trajectory(q, traj)
+check("tool_id_exposure 不触发（独白已剥）", not r["caps"]["tool_id_exposure_cap"]["triggered"],
+      r["caps"]["tool_id_exposure_cap"]["detail"])
+check("no_side_effect 不触发（独白已剥）", not r["caps"]["no_side_effect_cap"]["triggered"],
+      r["caps"]["no_side_effect_cap"]["detail"])
+check("final_score = 1.0", r["final_score"] == 1.0, f"final={r['final_score']}")
+
+print("== T17 问题 14 修复：独白里的否认不触发，正文干净（multi_hop_004 类） ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["query_transaction_price", "query_discount_policy"]]})
+traj = mk_traj([
+    {"name": "query_transaction_price", "args": {"car_model": "E5 Sportback", "days": 90, "region": "全国"},
+     "source": {"car_model": "question"}, "raw": '{"status":"success","data":{"avg_price":289500}}'},
+    {"name": "query_discount_policy", "args": {"car_model": "E5 Sportback"},
+     "source": {"car_model": "question"}, "raw": '{"status":"success","data":{"discounts":[{"amount":30000}]}}'}
+], final_response="<think>\ntext_search没有找到指导价的信息。\n</think>\n\n平均成交价 289,500 元，优惠 30,000 元")
+r = verify_trajectory(q, traj)
+check("false_promise 不触发（否认在独白内）", not r["caps"]["false_promise_cap"]["triggered"],
+      r["caps"]["false_promise_cap"]["detail"])
+check("missing_evidence 不触发（否认在独白内）", not r["caps"]["missing_evidence_cap"]["triggered"],
+      r["caps"]["missing_evidence_cap"]["detail"])
+
+print("== T18 问题 15 修复：'无法查询到'不触发 no_side_effect（car_config_004 / compare_008 类） ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["text_search"]]})
+traj = mk_traj([
+    {"name": "text_search", "args": {"query": "E5 Sportback 2025款先锋型"},
+     "source": {"query": "question"},
+     "raw": '{"status":"success","text":"未找到相关的结果","data":{"results":[],"total":0}}'}
+], final_response="目前无法查询到该车型的价格信息，建议联系经销商")
+r = verify_trajectory(q, traj)
+check("no_side_effect 不触发（无法豁免）", not r["caps"]["no_side_effect_cap"]["triggered"],
+      r["caps"]["no_side_effect_cap"]["detail"])
+check("final_score = 1.0", r["final_score"] == 1.0, f"final={r['final_score']}")
+
+print("== T19 问题 15 修复：'未能查到/不能查到'豁免，'已查询到'仍触发 ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["text_search"]]})
+traj = mk_traj([], final_response="我们未能查到该车型信息")
+r = verify_trajectory(q, traj)
+check("'未能查到'不触发", not r["caps"]["no_side_effect_cap"]["triggered"],
+      r["caps"]["no_side_effect_cap"]["detail"])
+traj2 = mk_traj([], final_response="已查询到该车型信息，价格 235,900 元")
+r2 = verify_trajectory(q, traj2)
+check("'已查询到'仍触发（肯定 claim 不豁免）", r2["caps"]["no_side_effect_cap"]["triggered"],
+      r2["caps"]["no_side_effect_cap"]["detail"])
+
+print("== T20 问题 16 修复：预约时间换算不判编造，姓名/电话编造仍判 ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["book_test_drive"]]})
+traj = mk_traj([
+    {"name": "book_test_drive",
+     "args": {"car_series": "E5 Sportback", "dealer": "上汽奥迪上海冠澳用户中心",
+              "appointment_time": "2023-10-06T15:00:00", "customer_name": "张三", "customer_phone": "13800000000"},
+     "source": {"car_series": "question", "dealer": "question", "appointment_time": "fabricated",
+               "customer_name": "fabricated", "customer_phone": "fabricated"},
+     "raw": '{"status":"success","booking":{"id":"TD1"}}'}
+], final_response="已为您预约成功")
+r = verify_trajectory(q, traj)
+check("hallucinated_args 触发（姓名/电话编造）", r["caps"]["hallucinated_args_cap"]["triggered"],
+      r["caps"]["hallucinated_args_cap"]["detail"])
+check("detail 不再包含 appointment_time", "appointment_time" not in r["caps"]["hallucinated_args_cap"]["detail"],
+      r["caps"]["hallucinated_args_cap"]["detail"])
+
+print("== T21 问题 17 修复：调了 query_discount_policy 说'查询到'不误报 text_search（test_drive_005 类） ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["query_discount_policy", "book_test_drive"]]})
+traj = mk_traj([
+    {"name": "query_discount_policy", "args": {"car_model": "E5 Sportback", "region": "全国"},
+     "source": {"car_model": "question"}, "raw": '{"status":"success","data":{"discounts":[{"amount":30000}]}}'},
+    {"name": "book_test_drive",
+     "args": {"car_series": "E5 Sportback", "dealer": "上海大众4S店", "customer_name": "张三",
+              "customer_phone": "13800138000", "appointment_time": "2023-04-05T10:00:00"},
+     "source": {"car_series": "question", "dealer": "fabricated", "customer_name": "fabricated",
+               "customer_phone": "fabricated", "appointment_time": "fabricated"},
+     "raw": '{"status":"success","booking":{"id":"TD2"}}'}
+], final_response="查询到E5 Sportback的优惠政策如下：限时优惠20000元、置换补贴10000元。预约试驾已安排。")
+r = verify_trajectory(q, traj)
+check("no_side_effect 不触发（'查询到'被 query_discount_policy 认领）",
+      not r["caps"]["no_side_effect_cap"]["triggered"],
+      r["caps"]["no_side_effect_cap"]["detail"])
+
 print(f"\n=== 结果：{passed} 通过 / {failed} 失败 ===")
 sys.exit(1 if failed else 0)

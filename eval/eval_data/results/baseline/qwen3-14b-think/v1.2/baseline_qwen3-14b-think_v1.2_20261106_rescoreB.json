@@ -191,20 +191,14 @@
       "trajectory_ref": "trajectories/car_config_004.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.4,
-        "violation_tags": [
-          "no_side_effect",
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "no_side_effect_cap",
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -255,18 +249,14 @@
       "trajectory_ref": "trajectories/car_config_006.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -294,18 +284,14 @@
       "trajectory_ref": "trajectories/car_config_007.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -420,18 +406,14 @@
       "trajectory_ref": "trajectories/discount_001.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -482,18 +464,14 @@
       "trajectory_ref": "trajectories/discount_003.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -603,18 +581,14 @@
       "trajectory_ref": "trajectories/discount_007.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.4,
-        "violation_tags": [
-          "no_side_effect"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "no_side_effect_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -636,18 +610,14 @@
       "trajectory_ref": "trajectories/discount_008.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.4,
-        "violation_tags": [
-          "no_side_effect"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "no_side_effect_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -702,18 +672,14 @@
       "trajectory_ref": "trajectories/discount_010.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -793,18 +759,14 @@
       "trajectory_ref": "trajectories/compare_003.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -865,18 +827,14 @@
       "trajectory_ref": "trajectories/compare_005.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -939,18 +897,14 @@
       "trajectory_ref": "trajectories/compare_007.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -972,18 +926,14 @@
       "trajectory_ref": "trajectories/compare_008.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -1034,18 +984,14 @@
       "trajectory_ref": "trajectories/compare_010.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -1075,8 +1021,7 @@
         "rejudgeable": true,
         "final_score": 0.2,
         "violation_tags": [
-          "missing_evidence",
-          "no_side_effect"
+          "missing_evidence"
         ],
         "sub_scores": {
           "tool_call": 0.0,
@@ -1084,8 +1029,7 @@
           "communication": 1.0
         },
         "caps_triggered": [
-          "missing_evidence_cap",
-          "no_side_effect_cap"
+          "missing_evidence_cap"
         ]
       }
     },
@@ -1178,8 +1122,7 @@
         "rejudgeable": true,
         "final_score": 0.2,
         "violation_tags": [
-          "missing_evidence",
-          "tool_id_exposure"
+          "missing_evidence"
         ],
         "sub_scores": {
           "tool_call": 0.0,
@@ -1187,8 +1130,7 @@
           "communication": 1.0
         },
         "caps_triggered": [
-          "missing_evidence_cap",
-          "tool_id_exposure_cap"
+          "missing_evidence_cap"
         ]
       }
     },
@@ -1213,18 +1155,14 @@
       "trajectory_ref": "trajectories/finance_005.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -1353,8 +1291,7 @@
         "rejudgeable": true,
         "final_score": 0.25,
         "violation_tags": [
-          "hallucinated_args",
-          "tool_id_exposure"
+          "hallucinated_args"
         ],
         "sub_scores": {
           "tool_call": 1.0,
@@ -1362,8 +1299,7 @@
           "communication": 1.0
         },
         "caps_triggered": [
-          "hallucinated_args_cap",
-          "tool_id_exposure_cap"
+          "hallucinated_args_cap"
         ]
       }
     },
@@ -1599,18 +1535,14 @@
       "trajectory_ref": "trajectories/price_007.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.4,
-        "violation_tags": [
-          "no_side_effect"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "no_side_effect_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -1721,18 +1653,14 @@
       "trajectory_ref": "trajectories/test_drive_001.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.25,
-        "violation_tags": [
-          "hallucinated_args"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "hallucinated_args_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -1814,18 +1742,14 @@
       "trajectory_ref": "trajectories/test_drive_004.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.25,
-        "violation_tags": [
-          "hallucinated_args"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "hallucinated_args_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -1918,18 +1842,14 @@
       "trajectory_ref": "trajectories/test_drive_007.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -1951,18 +1871,14 @@
       "trajectory_ref": "trajectories/test_drive_008.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.25,
-        "violation_tags": [
-          "hallucinated_args"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "hallucinated_args_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -2022,8 +1938,7 @@
         "rejudgeable": true,
         "final_score": 0.25,
         "violation_tags": [
-          "hallucinated_args",
-          "tool_id_exposure"
+          "hallucinated_args"
         ],
         "sub_scores": {
           "tool_call": 1.0,
@@ -2031,8 +1946,7 @@
           "communication": 1.0
         },
         "caps_triggered": [
-          "hallucinated_args_cap",
-          "tool_id_exposure_cap"
+          "hallucinated_args_cap"
         ]
       }
     },
@@ -2098,18 +2012,14 @@
       "trajectory_ref": "trajectories/multi_hop_002.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -2135,18 +2045,14 @@
       "trajectory_ref": "trajectories/multi_hop_003.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.8,
-        "violation_tags": [
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -2171,22 +2077,14 @@
       "trajectory_ref": "trajectories/multi_hop_004.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.35,
-        "violation_tags": [
-          "false_promise",
-          "missing_evidence",
-          "tool_id_exposure"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
-          "evidence": 0.0,
+          "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "false_promise_cap",
-          "missing_evidence_cap",
-          "tool_id_exposure_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -2345,9 +2243,7 @@
         "final_score": 0.2,
         "violation_tags": [
           "false_promise",
-          "missing_evidence",
-          "no_side_effect",
-          "tool_id_exposure"
+          "missing_evidence"
         ],
         "sub_scores": {
           "tool_call": 0.0,
@@ -2356,9 +2252,7 @@
         },
         "caps_triggered": [
           "false_promise_cap",
-          "missing_evidence_cap",
-          "no_side_effect_cap",
-          "tool_id_exposure_cap"
+          "missing_evidence_cap"
         ]
       }
     }

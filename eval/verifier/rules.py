@@ -58,7 +58,10 @@ ALL_TOOLS = BUSINESS_TOOLS | BUILTIN_TOOLS
 # 显式传入被工具拒绝）与 book_test_drive 必填参数（幻觉预约 P3）。
 TRACE_ARGS = {
     "calculate_finance": {"car_model", "down_payment_ratio", "loan_years", "interest_rate"},
-    "book_test_drive": {"car_series", "dealer", "appointment_time", "customer_name", "customer_phone"},
+    # 问题 16（2026-11-06）：appointment_time 移出受检清单——相对时间（"明天下午3点"）
+    # 必然由模型换算成具体日期，字面来源追踪必失败（问题 1 已确认工具不填默认值）；
+    # 姓名/电话等编造仍照罚。
+    "book_test_drive": {"car_series", "dealer", "customer_name", "customer_phone"},
 }
 
 # 否认断言词（调了工具却声称"没查到"：compare_008 / multi_hop_008 / car_config_001/004 类）
@@ -230,15 +233,16 @@ def _echoes_failure(response: str, traj_rows: List[Dict[str, Any]]) -> bool:
 
 
 def _negated_at(text: str, idx: int) -> bool:
-    """idx 处是否被否定前缀修饰（未/没/没有）。
+    """idx 处是否被否定前缀修饰（未/没/没有/无法/未能/不能/没法）。
 
     用于 claim 词匹配时的否定豁免："暂未查询到"不应命中"查询到"、
     "没有预约成功"不应命中"预约成功"（A3 回放发现：car_config_004 残
-    余 no_side_effect 即此误报）。
+    余 no_side_effect 即此误报）；问题 15（2026-11-06）："无法查询到"
+    前字为"法"漏豁免，补"无法/未能/不能/没法"两字前缀。
     """
     if idx > 0 and text[idx - 1] in "未没":
         return True
-    if idx >= 2 and text[idx - 2:idx] == "没有":
+    if idx >= 2 and text[idx - 2:idx] in ("没有", "无法", "未能", "不能", "没法"):
         return True
     return False
 
@@ -341,10 +345,20 @@ def _cap_no_side_effect(
     if not response.strip():
         return False, "", ""
     actual = set(_actual_tools(traj_rows))
+    # 问题 17（2026-11-06）：共享 claim 词跨工具误报——"查询到"同时挂在
+    # text_search/query_transaction_price/query_discount_policy 名下，模型调了
+    # query_discount_policy 说"查询到"，却被判"声称执行了 text_search 但未调用"。
+    # 实际调用过的工具先认领自己的词，这些词不再用来判未调用的工具。
+    claimed: Set[str] = set()
+    for tool, claim_words in SIDE_EFFECT_MAP.items():
+        if tool in actual:
+            claimed.update(claim_words)
     for tool, claim_words in SIDE_EFFECT_MAP.items():
         if tool in actual:
             continue
         for w in claim_words:
+            if w in claimed:
+                continue
             for m in re.finditer(re.escape(w), response):
                 if _negated_at(response, m.start()):
                     continue
@@ -412,6 +426,22 @@ def _score_evidence(caps: Dict[str, Dict[str, Any]]) -> float:
 # 主入口
 # ---------------------------------------------------------------------------
 
+_THINK_BLOCK_RE = re.compile(r"<think>.*?</think>", re.S)
+
+
+def _strip_think_block(response: str) -> str:
+    """剥掉 think 模式的内心独白块（<think>...</think>）。
+
+    问题 14（2026-11-06 重跑对比发现）：think 模式 64/68 题回复含独白块，
+    规则在独白上错罚——独白提到工具名被判"暴露内部工具名"、独白里的否认
+    触发"否认断言/证据缺失"。判定对象只应是用户可见的正文；独白是否单独
+    处理（C1 发现③）另议。
+    """
+    if not response:
+        return response
+    return _THINK_BLOCK_RE.sub("", response).strip()
+
+
 def verify_trajectory(
     question: Dict[str, Any],
     traj_rows: List[Dict[str, Any]],
@@ -420,6 +450,7 @@ def verify_trajectory(
     """对单题轨迹执行规则层判定（输出对齐重构计划书 3.1）。"""
     if not response:
         response = _final_response(traj_rows)
+    response = _strip_think_block(response)
 
     # 7 个 cap
     cap_checks = [
