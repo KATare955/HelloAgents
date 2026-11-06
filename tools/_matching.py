@@ -19,6 +19,31 @@ from typing import Iterable, List, Optional
 _WS = re.compile(r"\s+")
 # 分词：英文+数字连写串（如 su7、2025）、中文单字
 _TOKEN = re.compile(r"[a-z0-9]+|[\u4e00-\u9fff]")
+# 年份 token（2023/2024/2025…）：不构成实质匹配证据（问题 8 修复）
+_YEAR = re.compile(r"^\d{4}$")
+# 中文通用单字 token（款/型/价/配…意图词与后缀词）：不构成实质匹配证据（问题 8 修复）
+_GENERIC_ZH = set("款型车价配置参数信息优惠政策对比指导金融方案月供试驾预约多少钱新车现在查一下有没在与和或")
+
+
+def has_substantive_overlap(query: str, key: str) -> bool:
+    """query 与 key 是否存在"实质 token 重叠"（问题 8 修复配套，2026-11-06）。
+
+    兜底检索（无强相关条目时）的判定：共享 token 中至少一个既不是纯年份
+    （2023/2024…），也不是中文通用单字（款/型/价/配…）。
+
+    反例（假车型噪声根因）："星曜X7 2025款" 与 "E5 Sportback 2025款 先锋型"
+    共享 {2025, 款}，全是通用 token → 不算实质匹配，不再被兜底捞回。
+    正例："E5 Sportback 配置" 与 "E5 Sportback 2025款 先锋型" 共享 {e5, sportback}
+    → 实质匹配成立，正常查询不受影响。
+    """
+    qt, kt = _tokens(query), _tokens(key)
+    for t in qt & kt:
+        if _YEAR.match(t):
+            continue
+        if len(t) == 1 and t in _GENERIC_ZH:
+            continue
+        return True
+    return False
 
 
 def _norm(s: str) -> str:

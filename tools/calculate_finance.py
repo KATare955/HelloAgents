@@ -18,6 +18,12 @@ class CalculateFinanceTool(Tool):
     【输入】车型、首付比例、贷款年限。
     【返回】详细的金融方案（月供、总利息、首付金额等）。
 
+    默认方案（决策点 A 裁定 A1，2026-11-06）：
+    - 首付比例/贷款年限为可选参数，缺省时按默认方案计算（首付30%、贷款3年、
+      年利率4.5%），返回文本标注"按默认方案计算，可调整"——把确定性留给工具，
+      模型无需猜测或追问；
+    - 问题 18 同口径：模型显式传默认值（30/3/4.5）与不传等价，属遵守工具契约。
+
     自动读价（D4 批次，CAPA 问题 10）：
     - 车价由工具自动读取对应车型的指导价，模型无需（也不应）传入 car_price；
     - 返回文本标注"指导价 X 元，另有优惠 Y 未计入"——减价决策权保留在
@@ -34,7 +40,7 @@ class CalculateFinanceTool(Tool):
     def __init__(self):
         super().__init__(
             name="calculate_finance",
-            description="计算贷款月供、总利息、首付金额等金融方案。需要输入车型、首付比例、贷款年限；车价由工具自动读取车型指导价，无需传入。注意：这是计算工具，不是查询工具。如需查询历史成交价，请使用query_transaction_price工具。"
+            description="计算贷款月供、总利息、首付金额等金融方案。需要输入车型；首付比例、贷款年限为可选参数（缺省按默认方案：首付30%、3年期、年利率4.5%，返回中标注可调整）；车价由工具自动读取车型指导价，无需传入。注意：这是计算工具，不是查询工具。如需查询历史成交价，请使用query_transaction_price工具。"
         )
         # 加载Mock数据（用于快速返回预设方案）
         self.mock_data = self._load_mock_data()
@@ -78,14 +84,16 @@ class CalculateFinanceTool(Tool):
             ToolParameter(
                 name="down_payment_ratio",
                 type="number",
-                description="首付比例（0-100）。单位：百分比。常见值：20、30、50。",
-                required=True
+                description="首付比例（0-100）。单位：百分比。可选参数：缺省时按默认方案 30% 计算（返回中标注可调整）。",
+                required=False,
+                default=30
             ),
             ToolParameter(
                 name="loan_years",
                 type="integer",
-                description="贷款年限（年）。常见值：1、2、3、5。必须大于0。",
-                required=True
+                description="贷款年限（年）。可选参数：缺省时按默认方案 3 年期计算（返回中标注可调整）。必须大于0。",
+                required=False,
+                default=3
             ),
             ToolParameter(
                 name="interest_rate",
@@ -146,11 +154,13 @@ class CalculateFinanceTool(Tool):
 
     def run(self, parameters: Dict[str, Any]) -> ToolResponse:
         """执行工具"""
-        # 1. 获取参数
+        # 1. 获取参数（决策点 A：首付/年限可选，缺省用默认方案 30%/3年）
         car_model = (parameters.get("car_model") or "").strip()
-        down_payment_ratio = parameters.get("down_payment_ratio", 0)
-        loan_years = parameters.get("loan_years", 0)
+        down_payment_ratio = parameters.get("down_payment_ratio", 30)
+        loan_years = parameters.get("loan_years", 3)
         interest_rate = parameters.get("interest_rate", 4.5)
+        # 默认方案标记：模型未显式传首付/年限 → 返回文本标注"按默认方案计算，可调整"
+        used_default_plan = "down_payment_ratio" not in parameters or "loan_years" not in parameters
 
         # 2. 参数验证
         if not car_model:
@@ -201,11 +211,12 @@ class CalculateFinanceTool(Tool):
                 "discount_not_included": discount,
             })
             note = f"，另有优惠 {discount} 元未计入" if discount else ""
+            plan_note = "；按默认方案计算（首付30%、3年期），可调整" if used_default_plan else ""
             return ToolResponse.success(
                 text=(
                     f"车型 {trim_title} 指导价 {car_price} 元{note}；"
                     f"首付{down_payment_ratio}%，贷款{loan_years}年（年利率{interest_rate}%），"
-                    f"月供 {result['monthly_payment']} 元"
+                    f"月供 {result['monthly_payment']} 元{plan_note}"
                 ),
                 data=result
             )
@@ -220,11 +231,12 @@ class CalculateFinanceTool(Tool):
             })
 
             note = f"，另有优惠 {discount} 元未计入" if discount else ""
+            plan_note = "；按默认方案计算（首付30%、3年期），可调整" if used_default_plan else ""
             return ToolResponse.success(
                 text=(
                     f"车型 {trim_title} 指导价 {car_price} 元{note}；"
                     f"首付{down_payment_ratio}%，贷款{loan_years}年（年利率{interest_rate}%），"
-                    f"月供 {result['monthly_payment']} 元"
+                    f"月供 {result['monthly_payment']} 元{plan_note}"
                 ),
                 data=result
             )

@@ -12,7 +12,9 @@
 """
 
 from typing import Any, Dict, List, Optional, Set, Tuple
+from datetime import datetime
 import json
+import os
 import re
 
 # 澄清意图判定单一来源在 scoring.py（clarification_policy 消费）；
@@ -59,11 +61,13 @@ ALL_TOOLS = BUSINESS_TOOLS | BUILTIN_TOOLS
 TRACE_ARGS = {
     # 问题 18（2026-11-06）：interest_rate 移出受检清单——工具 schema 明示 default=4.5
     # （C1 第二批口径 B 已裁定：模型传 4.5 与不传等价、属遵守工具契约，应豁免）；
-    # 首付比例/贷款年限仍受检（工具必填且无默认值，题面未给时传 30/3 属编造，挂决策点 A）。
-    "calculate_finance": {"car_model", "down_payment_ratio", "loan_years"},
+    # 决策点 A（2026-11-06 裁定 A1）：down_payment_ratio/loan_years 同步移出——工具
+    # 已加默认值（首付30%/3年），缺省按默认方案计算且返回标注"可调整"，与 interest_rate
+    # 同口径：传默认值/不传属遵守工具契约，不再判编造。
+    "calculate_finance": {"car_model"},
     # 问题 16（2026-11-06）：appointment_time 移出受检清单——相对时间（"明天下午3点"）
     # 必然由模型换算成具体日期，字面来源追踪必失败（问题 1 已确认工具不填默认值）；
-    # 姓名/电话等编造仍照罚。
+    # 姓名/电话等编造仍照罚；预约时间改由年份正确性检查验证（问题 19，见 _cap_hallucinated_args）。
     "book_test_drive": {"car_series", "dealer", "customer_name", "customer_phone"},
 }
 
@@ -165,6 +169,23 @@ def _cap_hallucinated_args(traj_rows: List[Dict[str, Any]]) -> Tuple[bool, str, 
         fabricated = [k for k in traceable if sources.get(k) == "fabricated"]
         if fabricated:
             return True, "hallucinated_args", f"{tool} 事实参数 {fabricated} 无溯源依据"
+    # 问题 19（2026-11-06）：预约时间年份正确性检查——appointment_time 已豁免字面溯源
+    # （问题 16），但"年份"可验证：评测已注入基准日期（baseline_eval.py system prompt），
+    # 模型传的预约时间年份应等于基准年份；传 2023 等历史年份 = 训练记忆年份幻觉
+    # （v1.1 实锤 test_drive 系列 7 题系统性 2023 日期，当时真实年份是 2026）。
+    today_year = os.getenv("EVAL_TODAY", datetime.now().strftime("%Y-%m-%d"))[:4]
+    for r in _iter_business_calls(traj_rows):
+        if r.get("tool_name") != "book_test_drive":
+            continue
+        appt = ((r.get("tool_args") or {}).get("appointment_time") or "").strip()
+        if not appt:
+            continue
+        m = re.match(r"^(\d{4})", appt)
+        if m and m.group(1) != today_year:
+            return (
+                True, "hallucinated_args",
+                f"book_test_drive 预约时间年份幻觉：{appt}（评测基准年份 {today_year}）",
+            )
     return False, "", ""
 
 

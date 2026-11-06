@@ -39,15 +39,21 @@
           "car_b_value": "快充功率240kW，10%-80%约22分钟",
           "advantage": "A",
           "note": "E5 Sportback快充功率更高，补能更快"
+        },
+        "续航": {
+          "car_a_value": "623km（CLTC）",
+          "car_b_value": "800km（CLTC）",
+          "advantage": "B",
+          "note": "小米SU7续航更长，多177km"
         }
       },
       "summary": {
         "car_a_advantages": 4,
-        "car_b_advantages": 1,
+        "car_b_advantages": 2,
         "equal_count": 1,
         "overall_winner": "E5 Sportback"
       },
-      "recommendation": "E5 Sportback在价格、配置、动力方面更有优势，小米SU7在空间方面略胜一筹。综合考虑性价比，建议优先选择E5 Sportback。"
+      "recommendation": "E5 Sportback在价格、配置、动力方面更有优势，小米SU7在空间、续航方面领先（800km vs 623km）。综合考虑性价比，建议优先选择E5 Sportback。"
     },
     "帕萨特2024款 330TSI 精英版": {
       "car_model_a": "E5 Sportback 2025款 旗舰quattro型",

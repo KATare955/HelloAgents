@@ -265,44 +265,6 @@
     }
   },
   {
-    "id": "test_drive_005",
-    "scenario": "试驾预约",
-    "type": "双跳",
-    "question": "先查询E5 Sportback的优惠政策，然后预约试驾",
-    "expected_tools": [
-      "query_discount_policy",
-      "book_test_drive"
-    ],
-    "difficulty": "hard",
-    "response": "<think>\n好的，现在需要用户确认预约试驾的具体信息。首先，用户可能需要推荐附近的经销商，但用户没有提供所在地区，所以需要询问用户所在城市或地区，以便推荐附近的经销商。其次，预约时间需要用户指定具体的时间段，比如希望周末还是工作日，具体日期和时间。客户姓名和手机号是必须的，用于联系用户确认试驾。此外，用户是否有其他特殊需求，比如是否需要试驾特定配置的车型，或者是否有其他需求。需要逐一询问用户这些信息，才能完成预约。\n</think>\n\n为了为您预约试驾，请提供以下信息：\n1. 所在城市/地区（用于推荐附近经销商）\n2. 希望预约的试驾时间（日期和时间段）\n3. 您的姓名和手机号码\n4. 是否有其他特殊需求（如试驾配置、接待需求等）",
-    "status": "success",
-    "actual_tools": [
-      "query_discount_policy"
-    ],
-    "tool_calls_count": 1,
-    "tool_correct": false,
-    "missing_tools": [
-      "book_test_drive"
-    ],
-    "extra_tools": [],
-    "trajectory_ref": "trajectories/test_drive_005.jsonl",
-    "verify": {
-      "rejudgeable": true,
-      "final_score": 0.2,
-      "violation_tags": [
-        "missing_evidence"
-      ],
-      "sub_scores": {
-        "tool_call": 0.0,
-        "evidence": 0.0,
-        "communication": 1.0
-      },
-      "caps_triggered": [
-        "missing_evidence_cap"
-      ]
-    }
-  },
-  {
     "id": "multi_hop_006",
     "scenario": "竞品对比",
     "type": "多跳",

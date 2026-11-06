@@ -6,9 +6,9 @@ from typing import Dict, Any, List
 from hello_agents.tools import Tool, ToolParameter, ToolResponse
 
 try:
-    from ._matching import score_match
+    from ._matching import score_match, has_substantive_overlap
 except ImportError:  # 直接运行脚本时
-    from _matching import score_match
+    from _matching import score_match, has_substantive_overlap
 
 
 class TextSearchTool(Tool):
@@ -77,11 +77,18 @@ class TextSearchTool(Tool):
                 scored.append((score_match(query, result.get("title", "")), result))
 
         # 4. 相关度过滤（两级）：优先保留与 query 强相关的条目（精确/子串），
-        #    无强相关时退到 token 级相关，再兜底取得分靠前条目
+        #    无强相关时退到实质 token 重叠兜底（问题 8 修复后），再兜底取得分靠前条目
         scored.sort(key=lambda x: x[0], reverse=True)
         results = [r for s, r in scored if s >= 2.5]
         if not results:
-            results = [r for s, r in scored if s > 0]
+            # 问题 8（2026-11-06）：旧逻辑"s > 0 全兜底"把假车型查询与共享通用 token
+            # （"2025""款"）的无关条目匹配上——"星曜X7 2025款"返回 8 条噪声并声称
+            # "找到8条相关结果"，模型如实说"未找到"反被判违规。兜底收紧为：
+            # 仅保留与 query 共享品牌/型号等实质 token 的条目，其余走"未找到"分支。
+            results = [
+                r for s, r in scored
+                if s > 0 and has_substantive_overlap(query, r.get("title", ""))
+            ]
         if not results:
             available_models = "、".join(self.mock_data.keys())
             return ToolResponse.partial(

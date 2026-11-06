@@ -177,3 +177,27 @@ AutoDL 重跑结果逐题对比后暴露的 4 个规则层缺陷修复（全部�
 - 单元测试 44/44 全绿（新增 T22：interest_rate=4.5 传默认值不判编造；首付/年限编造仍判）
 - 离线重判（20261106 批第三次）：think 49→**52/68**（+3）、nothink 49→**52/68**（+3）；multi_hop_001/003/007（双模式 5 题次）+ finance_010（think）共 6 题次恢复满分，0 题下降
 - 残留坏题：think 16 / nothink 16（共 32 题次）；问题库逐题定性表已同步（6 题次移出靶子）
+
+## 2026-11-06 - 重跑前统一修复批次（问题 8/19 + 决策点 A/B/C 落地）
+
+**背景**：问题库审核定案后，四项裁定涉及工具/mock/GT 修改，为让今晚重跑一次拿齐"最终干净基线"，本批次把全部重跑前必改项落地（4 个决策点全部执行：A1 工具默认值 / B 反问合格豁免 / C3 mock 补续航 / D 问题 8 修复）。
+
+**工具层（tools/）**
+
+- 问题 8（决策点 D）：text_search 兜底 `s > 0` 全兜底 → 收紧为"实质 token 重叠"（新增 `_matching.has_substantive_overlap`，共享 token 至少一个非纯年份/非中文通用单字）。假车型"星曜X7 2025款"从返回 8 条噪声（实测得分 0.571/0.500/0.444/0.222 全因"2025""款"重叠）变为"未找到+可用车型列表"（total=0）。回归：双基线轨迹 36 个去重真实查询全部行为一致
+- 决策点 A（A1）：calculate_finance 首付比例/贷款年限改为可选参数（default 30%/3年），缺省按默认方案计算且返回标注"按默认方案计算（首付30%、3年期），可调整"——把确定性留给工具，模型无需猜或反问
+- 决策点 C（C3 mock 侧）：competitor_compare.json 补"续航"维度（E5 旗舰quattro型 623km vs 小米SU7 四驱Max版 800km，与 text_search mock 的 range_cltc 同源），summary 优势计数与 recommendation 同步
+
+**评测层（eval/）**
+
+- 问题 19：评测从未注入日期基准（查证：system prompt/题目/框架模板/工具/mock 均无），模型凭训练记忆把"今天"猜成 2023 年（v1.1 实锤 7 题）→ ① baseline_eval.py system prompt 注入"当前日期：{EVAL_TODAY}（周X）"（环境变量 EVAL_TODAY 可固定，默认运行当天，env_snapshot 记录 eval_today）；② 判分器恢复预约时间**年份正确性**检查（book_test_drive.appointment_time 年份≠基准年份→hallucinated_args，非字面溯源）；③ 同时修正问题 16 排查记录中"日期基准 2023-10-05"的未验证推断（初版结论有误）
+- 决策点 A（判分侧）：TRACE_ARGS calculate_finance 移出 down_payment_ratio/loan_years（与问题 18 interest_rate 同口径：工具已有默认值，传默认值/不传属遵守工具契约），car_model 仍受检（唯一事实入口）
+- 决策点 B：questions.json test_drive_005 加 accept_clarification（target_tool=book_test_drive，缺参反问合格）；验证：think 反问 1.0 满分、nothink 编造硬调仍罚 0.25（豁免只放行"没调 target 且反问"，nothink 调了 target 不受影响）
+- 决策点 C（GT 侧）：compare_005 GT 简化（competitor_compare mock 已可答全三方面，移出 text_search，type 双跳→单跳，gt_note 记录裁定；"降级补查"能力改由 SFT 数据示范）
+
+**验证**
+
+- 单元测试 49/49 全绿（T22 更新：首付/年限默认值不判编造+车型编造仍判；新增 T23 年份正确性检查、T24 假车型兜底收紧）
+- 工具自测：calculate_finance 不传首付/年限 → 默认方案标注"可调整"；显式传 50%/5年 → 无默认标注
+- 离线重判（旧轨迹 × 全部新规则，= 修前基线）：judge 口径 think 59/68（翻转 1 题：test_drive_005 think 反问合格翻正）、nothink 59/68；verify 满分 think 53/68、nothink 53/68（年份幻觉 3+4 题现形属预期——旧轨迹在无日期注入环境跑的）
+- **今晚重跑预期**：日期注入后 test_drive 系列年份恢复 2026（+3/+4）；问题 8 修复后 car_config_008 双模式如实转述不再违规；金融默认值后 M01 类题次工具返回带"可调整"标注、模型照实转述即合规

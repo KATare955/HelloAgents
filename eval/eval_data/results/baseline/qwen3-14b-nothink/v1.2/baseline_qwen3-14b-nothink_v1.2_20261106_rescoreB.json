@@ -1627,14 +1627,18 @@
       "trajectory_ref": "trajectories/test_drive_001.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 1.0,
-        "violation_tags": [],
+        "final_score": 0.25,
+        "violation_tags": [
+          "hallucinated_args"
+        ],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": []
+        "caps_triggered": [
+          "hallucinated_args_cap"
+        ]
       }
     },
     {
@@ -1722,14 +1726,18 @@
       "trajectory_ref": "trajectories/test_drive_004.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 1.0,
-        "violation_tags": [],
+        "final_score": 0.25,
+        "violation_tags": [
+          "hallucinated_args"
+        ],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": []
+        "caps_triggered": [
+          "hallucinated_args_cap"
+        ]
       }
     },
     {
@@ -1859,14 +1867,18 @@
       "trajectory_ref": "trajectories/test_drive_008.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 1.0,
-        "violation_tags": [],
+        "final_score": 0.25,
+        "violation_tags": [
+          "hallucinated_args"
+        ],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": []
+        "caps_triggered": [
+          "hallucinated_args_cap"
+        ]
       }
     },
     {
@@ -1888,14 +1900,18 @@
       "trajectory_ref": "trajectories/test_drive_009.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 1.0,
-        "violation_tags": [],
+        "final_score": 0.25,
+        "violation_tags": [
+          "hallucinated_args"
+        ],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": []
+        "caps_triggered": [
+          "hallucinated_args_cap"
+        ]
       }
     },
     {

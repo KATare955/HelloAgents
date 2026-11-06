@@ -9,6 +9,8 @@
     LLM_API_KEY      - API Key（默认: ollama）
     LLM_BASE_URL     - API Base URL（默认: http://localhost:11434/v1）
     EVAL_TEMPERATURE - 采样温度（默认: 0，贪婪解码确保可复现；如需模拟真实波动可设0.7并多次取平均）
+    EVAL_TODAY       - 评测基准日期 YYYY-MM-DD（默认: 运行当天）。注入 system prompt 供模型换算
+                      相对时间（问题 19：此前未注入日期，模型凭训练记忆猜成 2023 年→系统性年份幻觉）
 
 用法：
     # 本地 Ollama（默认，无需设置环境变量）
@@ -153,6 +155,25 @@ def log_evaluation(accuracy: float, total_questions: int, bad_cases_count: int):
     print(f"✅ 评测记录已保存到: {log_file}")
 
 
+def _get_eval_today() -> tuple:
+    """评测基准日期（问题 19 修复，2026-11-06）：EVAL_TODAY 环境变量优先，默认运行当天。
+
+    返回 (date_str, weekday_cn)。system prompt 注入与 env_snapshot 记录共用同一来源，
+    判分器年份检查（rules.py）读同一环境变量，保证"模型被告知的今天"与"判分基准"一致。
+    """
+    raw = os.getenv("EVAL_TODAY", "").strip()
+    if raw:
+        try:
+            d = datetime.strptime(raw, "%Y-%m-%d").date()
+        except ValueError:
+            print(f"[警告] EVAL_TODAY={raw} 格式非法（应为 YYYY-MM-DD），回退到运行当天")
+            d = datetime.now().date()
+    else:
+        d = datetime.now().date()
+    weekdays = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+    return d.strftime("%Y-%m-%d"), weekdays[d.weekday()]
+
+
 def create_sales_agent():
     """创建汽车销售 Agent"""
     
@@ -182,8 +203,14 @@ def create_sales_agent():
         registry.register_tool(tool)
     
     # 4. 创建 ReActAgent
-    system_prompt = """你是一个专业的汽车销售顾问助手。
+    # 问题 19（2026-11-06）：注入评测基准日期——此前未注入日期，模型凭训练记忆
+    # 把"今天"猜成 2023 年（系统性年份幻觉），"明天下午3点"换算成 2023-10-06；
+    # 注入后模型有换算依据，判分器恢复年份正确性检查（见 verifier/rules.py）。
+    eval_today, eval_weekday = _get_eval_today()
+    system_prompt = f"""你是一个专业的汽车销售顾问助手。
 你的任务是帮助用户了解车型信息、查询优惠政策、对比竞品、计算金融方案、预约试驾等。
+
+当前日期：{eval_today}（{eval_weekday}）。用户提到"明天/下周/周末"等相对时间时，请以当前日期为基准换算。
 
 可用工具：
 - text_search: 查询车型配置、价格、参数等信息
@@ -534,6 +561,7 @@ def run_baseline_eval():
         "thinking_observed": "unknown",  # 由 evaluate 按实际轨迹观测覆盖
         "temperature": float(os.getenv("EVAL_TEMPERATURE", "0")),
         "eval_version": EVAL_VERSION,
+        "eval_today": _get_eval_today()[0],  # 问题 19：注入 system prompt 的基准日期，供判分/比对溯源
     }
     print(f"   轨迹落盘目录: {trajectories_dir}")
     

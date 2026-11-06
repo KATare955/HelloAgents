@@ -1,8 +1,10 @@
 """A3 S1 单元测试（临时）：构造轨迹/response 场景验证规则层判定。"""
+import os
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from verifier.rules import verify_trajectory
 
@@ -281,7 +283,7 @@ check("no_side_effect 不触发（'查询到'被 query_discount_policy 认领）
       not r["caps"]["no_side_effect_cap"]["triggered"],
       r["caps"]["no_side_effect_cap"]["detail"])
 
-print("== T22 问题 18 修复：interest_rate=4.5 传工具默认值不判编造，首付/年限编造仍判 ==")
+print("== T22 问题 18 + 决策点 A 修复：首付/年限/利率传工具默认值不判编造，车型编造仍判 ==")
 q = Q({"tool_requirement": "any_of", "acceptable_sets": [["calculate_finance"]]})
 traj = mk_traj([
     {"name": "calculate_finance",
@@ -304,10 +306,63 @@ traj2 = mk_traj([
      "raw": '{"status":"success","data":{"monthly_payment":4912.11}}'}
 ], final_response="月供4,912.11元（首付30%、3年、利率4.5%）")
 r2 = verify_trajectory(q, traj2)
-check("首付/年限编造仍触发（finance_002 类）", r2["caps"]["hallucinated_args_cap"]["triggered"],
+check("决策点 A：首付/年限默认值不再判编造（A1 已加工具默认值）",
+      not r2["caps"]["hallucinated_args_cap"]["triggered"],
       r2["caps"]["hallucinated_args_cap"]["detail"])
-check("detail 不再包含 interest_rate", "interest_rate" not in r2["caps"]["hallucinated_args_cap"]["detail"],
+traj3 = mk_traj([
+    {"name": "calculate_finance",
+     "args": {"car_model": "帕萨特2024款", "down_payment_ratio": 30, "loan_years": 3},
+     "source": {"car_model": "fabricated", "down_payment_ratio": "question", "loan_years": "question"},
+     "raw": '{"status":"success","text":"车型 帕萨特2024款 280TSI 商务版 指导价 185900 元"}'}
+], final_response="您的月供约为 2428 元")
+r3 = verify_trajectory(q, traj3)
+check("车型编造仍触发（唯一事实入口不变）", r3["caps"]["hallucinated_args_cap"]["triggered"],
+      r3["caps"]["hallucinated_args_cap"]["detail"])
+
+print("== T23 问题 19 修复：预约时间年份正确性检查（EVAL_TODAY 基准） ==")
+# 固定评测基准日期，保证测试在任何年份运行都稳定（2026-11-06 为周五）
+_saved_today = os.environ.get("EVAL_TODAY")
+os.environ["EVAL_TODAY"] = "2026-11-06"
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["book_test_drive"]]})
+traj = mk_traj([
+    {"name": "book_test_drive",
+     "args": {"car_series": "E5 Sportback", "dealer": "上汽奥迪上海冠澳用户中心",
+              "appointment_time": "2023-10-06T15:00:00", "customer_name": "张三", "customer_phone": "13800000000"},
+     "source": {"car_series": "question", "dealer": "question", "appointment_time": "fabricated",
+               "customer_name": "question", "customer_phone": "question"},
+     "raw": '{"status":"success","text":"预约成功"}'}
+], final_response="已为您预约明天下午3点的试驾")
+r = verify_trajectory(q, traj)
+check("年份幻觉触发（2023 ≠ 基准 2026，其余参数全部合规）",
+      r["caps"]["hallucinated_args_cap"]["triggered"],
+      r["caps"]["hallucinated_args_cap"]["detail"])
+traj2 = mk_traj([
+    {"name": "book_test_drive",
+     "args": {"car_series": "E5 Sportback", "dealer": "上汽奥迪上海冠澳用户中心",
+              "appointment_time": "2026-11-07T15:00:00", "customer_name": "张三", "customer_phone": "13800000000"},
+     "source": {"car_series": "question", "dealer": "question", "appointment_time": "fabricated",
+               "customer_name": "question", "customer_phone": "question"},
+     "raw": '{"status":"success","text":"预约成功"}'}
+], final_response="已为您预约2026年11月7日下午3点的试驾")
+r2 = verify_trajectory(q, traj2)
+check("正确年份不触发（2026-11-07，换算正确）",
+      not r2["caps"]["hallucinated_args_cap"]["triggered"],
       r2["caps"]["hallucinated_args_cap"]["detail"])
+if _saved_today is None:
+    os.environ.pop("EVAL_TODAY", None)
+else:
+    os.environ["EVAL_TODAY"] = _saved_today
+
+print("== T24 问题 8 修复：text_search 假车型不再兜底返回噪声 ==")
+from tools.text_search import TextSearchTool
+_search = TextSearchTool()
+resp = _search.run({"query": "星曜X7 2025款", "category": "车型配置", "limit": 10})
+data = resp.data or {}
+check("假车型返回 total=0", data.get("total") == 0, f"total={data.get('total')}")
+check("假车型返回未找到提示", "未找到" in (resp.text or ""), resp.text[:60] if resp.text else "")
+resp2 = _search.run({"query": "E5 Sportback 配置", "category": "车型配置", "limit": 10})
+data2 = resp2.data or {}
+check("正常查询不受影响（E5 Sportback 配置有结果）", data2.get("total", 0) > 0, f"total={data2.get('total')}")
 
 print(f"\n=== 结果：{passed} 通过 / {failed} 失败 ===")
 sys.exit(1 if failed else 0)

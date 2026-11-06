@@ -58,18 +58,14 @@
     "trajectory_ref": "trajectories/compare_005.jsonl",
     "verify": {
       "rejudgeable": true,
-      "final_score": 0.2,
-      "violation_tags": [
-        "missing_evidence"
-      ],
+      "final_score": 1.0,
+      "violation_tags": [],
       "sub_scores": {
-        "tool_call": 0.0,
-        "evidence": 0.0,
+        "tool_call": 1.0,
+        "evidence": 1.0,
         "communication": 1.0
       },
-      "caps_triggered": [
-        "missing_evidence_cap"
-      ]
+      "caps_triggered": []
     }
   },
   {
@@ -250,7 +246,6 @@
       "rejudgeable": true,
       "final_score": 0.2,
       "violation_tags": [
-        "hallucinated_args",
         "missing_evidence"
       ],
       "sub_scores": {
@@ -259,7 +254,6 @@
         "communication": 1.0
       },
       "caps_triggered": [
-        "hallucinated_args_cap",
         "missing_evidence_cap"
       ]
     }

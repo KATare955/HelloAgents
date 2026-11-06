@@ -462,22 +462,21 @@
     {
       "id": "compare_005",
       "scenario": "竞品对比",
-      "type": "双跳",
+      "type": "单跳",
       "question": "E5 Sportback和小米SU7在价格、续航、配置三个方面哪个更有优势？",
       "expected_tools": [
-        "competitor_compare",
-        "text_search"
+        "competitor_compare"
       ],
       "difficulty": "hard",
       "answer_spec": {
         "tool_requirement": "any_of",
         "acceptable_sets": [
           [
-            "competitor_compare",
-            "text_search"
+            "competitor_compare"
           ]
         ]
-      }
+      },
+      "gt_note": "决策点C裁定C3（2026-11-06）：competitor_compare mock 已补续航维度，单工具可答全三方面，GT 简化（text_search 降级补查能力改由 SFT 数据示范）"
     },
     {
       "id": "compare_006",
@@ -1053,6 +1052,10 @@
             "book_test_drive"
           ]
         ]
+      },
+      "accept_clarification": {
+        "target_tool": "book_test_drive",
+        "reason": "决策点B裁定（2026-11-06）：预约所需姓名/电话/时间题面未给，正确行为=第一跳查优惠+缺参反问，而非编造参数硬调（nothink 模式即编造硬调，仍判罚）"
       }
     },
     {
