@@ -5,8 +5,8 @@
     "eval_version": "v1.2",
     "timestamp": "2026-11-06T16:50:02.426462",
     "total_questions": 68,
-    "overall_accuracy": 94.11764705882352,
-    "bad_cases_count": 4,
+    "overall_accuracy": 97.05882352941177,
+    "bad_cases_count": 2,
     "rescore_note": "判分逻辑 v3 + verify 规则层离线重判分"
   },
   "scenario_stats": {
@@ -25,10 +25,8 @@
     "竞品对比": {
       "total": 12,
       "success": 12,
-      "tool_correct": 9,
+      "tool_correct": 11,
       "errors": [
-        "compare_004",
-        "multi_hop_002",
         "multi_hop_006"
       ]
     },
@@ -56,7 +54,7 @@
   "type_stats": {
     "单跳": {
       "total": 47,
-      "tool_correct": 45
+      "tool_correct": 46
     },
     "失败恢复": {
       "total": 6,
@@ -68,7 +66,7 @@
     },
     "多跳": {
       "total": 6,
-      "tool_correct": 4
+      "tool_correct": 5
     }
   },
   "results": [
@@ -764,13 +762,7 @@
         "text_search"
       ],
       "tool_calls_count": 2,
-      "tool_correct": false,
-      "missing_tools": [
-        "competitor_compare"
-      ],
-      "extra_tools": [
-        "text_search"
-      ],
+      "tool_correct": true,
       "trajectory_ref": "trajectories/compare_004.jsonl",
       "verify": {
         "rejudgeable": true,
@@ -1941,26 +1933,18 @@
         "query_discount_policy"
       ],
       "tool_calls_count": 3,
-      "tool_correct": false,
-      "missing_tools": [
-        "text_search"
-      ],
-      "extra_tools": [],
+      "tool_correct": true,
       "trajectory_ref": "trajectories/multi_hop_002.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.2,
-        "violation_tags": [
-          "missing_evidence"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
-          "tool_call": 0.0,
-          "evidence": 0.0,
+          "tool_call": 1.0,
+          "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "missing_evidence_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {

@@ -94,12 +94,28 @@ def rescore(result_file: str, save: bool = False, traj_dir: str = None):
     for r in results:
         # v1 路径：tool_correct 重算（judge_tool_correct，历史能力保留）
         old = r.get("tool_correct", False)
-        new, missing, extra = judge_tool_correct(
-            r.get("expected_tools", []),
-            r.get("actual_tools", []),
-            response=r.get("response", ""),
-            accept_clarification=clar_map.get(r["id"]),
-        )
+        # E1 对齐（2026-11-06）：judge 口径改走 questions.json 的 acceptable_sets
+        #（any_of 语义，与 verify 规则层同源），GT 修订后两口径不再错位；
+        # 无 acceptable_sets 的题回退到结果快照里的 expected_tools。
+        spec = (q_map.get(r["id"]) or {}).get("answer_spec") or {}
+        sets = spec.get("acceptable_sets") or [r.get("expected_tools", [])]
+        accept = clar_map.get(r["id"])
+        new, missing, extra = False, None, None
+        for path in sets:
+            if not path:
+                continue
+            ok, mis, ext = judge_tool_correct(
+                list(path),
+                r.get("actual_tools", []),
+                response=r.get("response", ""),
+                accept_clarification=accept,
+            )
+            if ok:
+                new = True
+                missing, extra = [], []
+                break
+            if missing is None:
+                missing, extra = mis, ext
         r["tool_correct"] = new
         if not new:
             r["missing_tools"] = missing

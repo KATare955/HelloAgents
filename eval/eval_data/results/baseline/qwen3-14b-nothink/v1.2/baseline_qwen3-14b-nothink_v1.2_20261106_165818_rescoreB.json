@@ -5,18 +5,16 @@
     "eval_version": "v1.2",
     "timestamp": "2026-11-06T16:58:18.834585",
     "total_questions": 68,
-    "overall_accuracy": 89.70588235294117,
-    "bad_cases_count": 7,
+    "overall_accuracy": 95.58823529411765,
+    "bad_cases_count": 3,
     "rescore_note": "判分逻辑 v3 + verify 规则层离线重判分"
   },
   "scenario_stats": {
     "车型参数查询": {
       "total": 11,
       "success": 11,
-      "tool_correct": 10,
-      "errors": [
-        "car_config_007"
-      ]
+      "tool_correct": 11,
+      "errors": []
     },
     "优惠政策查询": {
       "total": 11,
@@ -29,11 +27,8 @@
     "竞品对比": {
       "total": 12,
       "success": 12,
-      "tool_correct": 8,
+      "tool_correct": 11,
       "errors": [
-        "compare_006",
-        "compare_008",
-        "multi_hop_002",
         "multi_hop_006"
       ]
     },
@@ -61,7 +56,7 @@
   "type_stats": {
     "单跳": {
       "total": 47,
-      "tool_correct": 44
+      "tool_correct": 47
     },
     "失败恢复": {
       "total": 6,
@@ -73,7 +68,7 @@
     },
     "多跳": {
       "total": 6,
-      "tool_correct": 3
+      "tool_correct": 4
     }
   },
   "results": [
@@ -267,13 +262,7 @@
         "competitor_compare"
       ],
       "tool_calls_count": 1,
-      "tool_correct": false,
-      "missing_tools": [
-        "text_search"
-      ],
-      "extra_tools": [
-        "competitor_compare"
-      ],
+      "tool_correct": true,
       "trajectory_ref": "trajectories/car_config_007.jsonl",
       "verify": {
         "rejudgeable": true,
@@ -825,13 +814,7 @@
         "competitor_compare"
       ],
       "tool_calls_count": 1,
-      "tool_correct": false,
-      "missing_tools": [
-        "text_search"
-      ],
-      "extra_tools": [
-        "competitor_compare"
-      ],
+      "tool_correct": true,
       "trajectory_ref": "trajectories/compare_006.jsonl",
       "verify": {
         "rejudgeable": true,
@@ -890,13 +873,7 @@
         "text_search"
       ],
       "tool_calls_count": 2,
-      "tool_correct": false,
-      "missing_tools": [
-        "competitor_compare"
-      ],
-      "extra_tools": [
-        "text_search"
-      ],
+      "tool_correct": true,
       "trajectory_ref": "trajectories/compare_008.jsonl",
       "verify": {
         "rejudgeable": true,
@@ -1940,26 +1917,18 @@
         "query_discount_policy"
       ],
       "tool_calls_count": 3,
-      "tool_correct": false,
-      "missing_tools": [
-        "text_search"
-      ],
-      "extra_tools": [],
+      "tool_correct": true,
       "trajectory_ref": "trajectories/multi_hop_002.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.2,
-        "violation_tags": [
-          "missing_evidence"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
-          "tool_call": 0.0,
-          "evidence": 0.0,
+          "tool_call": 1.0,
+          "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "missing_evidence_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {

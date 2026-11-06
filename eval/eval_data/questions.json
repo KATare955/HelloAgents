@@ -1195,24 +1195,23 @@
       "question": "对比E5 Sportback和小米SU7的价格、续航、优惠政策，哪个更值得买？",
       "expected_tools": [
         "competitor_compare",
-        "text_search",
         "query_discount_policy"
       ],
       "difficulty": "hard",
-      "note": "需要调用3个工具：竞品对比、查询配置、查询优惠",
+      "note": "两条等价路径：竞品对比+查询优惠（对比工具已含价格/续航），或检索+查询优惠",
       "answer_spec": {
         "tool_requirement": "any_of",
         "acceptable_sets": [
           [
             "competitor_compare",
-            "text_search",
             "query_discount_policy"
           ],
           [
             "text_search",
             "query_discount_policy"
           ]
-        ]
+        ],
+        "gt_note": "E1 裁定（2026-11-06）：competitor_compare 已含价格/续航等 7 维度（无优惠政策字段），text_search 不再是必跳；子集匹配下多调 text_search 不影响命中"
       }
     },
     {
