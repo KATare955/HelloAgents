@@ -1324,18 +1324,14 @@
       "trajectory_ref": "trajectories/finance_010.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.25,
-        "violation_tags": [
-          "hallucinated_args"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "hallucinated_args_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -1973,18 +1969,14 @@
       "trajectory_ref": "trajectories/multi_hop_001.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.25,
-        "violation_tags": [
-          "hallucinated_args"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "hallucinated_args_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {
@@ -2198,18 +2190,14 @@
       "trajectory_ref": "trajectories/multi_hop_007.jsonl",
       "verify": {
         "rejudgeable": true,
-        "final_score": 0.25,
-        "violation_tags": [
-          "hallucinated_args"
-        ],
+        "final_score": 1.0,
+        "violation_tags": [],
         "sub_scores": {
           "tool_call": 1.0,
           "evidence": 1.0,
           "communication": 1.0
         },
-        "caps_triggered": [
-          "hallucinated_args_cap"
-        ]
+        "caps_triggered": []
       }
     },
     {

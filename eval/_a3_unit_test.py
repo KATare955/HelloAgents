@@ -281,5 +281,33 @@ check("no_side_effect 不触发（'查询到'被 query_discount_policy 认领）
       not r["caps"]["no_side_effect_cap"]["triggered"],
       r["caps"]["no_side_effect_cap"]["detail"])
 
+print("== T22 问题 18 修复：interest_rate=4.5 传工具默认值不判编造，首付/年限编造仍判 ==")
+q = Q({"tool_requirement": "any_of", "acceptable_sets": [["calculate_finance"]]})
+traj = mk_traj([
+    {"name": "calculate_finance",
+     "args": {"car_model": "E5 Sportback 2025款旗舰quattro型", "down_payment_ratio": 30,
+              "loan_years": 5, "interest_rate": 4.5},
+     "source": {"car_model": "question", "down_payment_ratio": "question", "loan_years": "question",
+               "interest_rate": "fabricated"},
+     "raw": '{"status":"success","data":{"monthly_payment":4174.73}}'}
+], final_response="首付30%5年贷款月供4,174.73元（年利率4.5%）")
+r = verify_trajectory(q, traj)
+check("interest_rate=4.5 传默认值不触发 hallucinated_args",
+      not r["caps"]["hallucinated_args_cap"]["triggered"],
+      r["caps"]["hallucinated_args_cap"]["detail"])
+traj2 = mk_traj([
+    {"name": "calculate_finance",
+     "args": {"car_model": "E5 Sportback 2025款先锋型", "down_payment_ratio": 30,
+              "loan_years": 3, "interest_rate": 4.5},
+     "source": {"car_model": "question", "down_payment_ratio": "fabricated",
+               "loan_years": "fabricated", "interest_rate": "fabricated"},
+     "raw": '{"status":"success","data":{"monthly_payment":4912.11}}'}
+], final_response="月供4,912.11元（首付30%、3年、利率4.5%）")
+r2 = verify_trajectory(q, traj2)
+check("首付/年限编造仍触发（finance_002 类）", r2["caps"]["hallucinated_args_cap"]["triggered"],
+      r2["caps"]["hallucinated_args_cap"]["detail"])
+check("detail 不再包含 interest_rate", "interest_rate" not in r2["caps"]["hallucinated_args_cap"]["detail"],
+      r2["caps"]["hallucinated_args_cap"]["detail"])
+
 print(f"\n=== 结果：{passed} 通过 / {failed} 失败 ===")
 sys.exit(1 if failed else 0)

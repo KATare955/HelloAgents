@@ -57,7 +57,10 @@ ALL_TOOLS = BUSINESS_TOOLS | BUILTIN_TOOLS
 # 车型为唯一事实入口，编造车型=幻觉参数 P2，car_price 已移出——工具自动读价，
 # 显式传入被工具拒绝）与 book_test_drive 必填参数（幻觉预约 P3）。
 TRACE_ARGS = {
-    "calculate_finance": {"car_model", "down_payment_ratio", "loan_years", "interest_rate"},
+    # 问题 18（2026-11-06）：interest_rate 移出受检清单——工具 schema 明示 default=4.5
+    # （C1 第二批口径 B 已裁定：模型传 4.5 与不传等价、属遵守工具契约，应豁免）；
+    # 首付比例/贷款年限仍受检（工具必填且无默认值，题面未给时传 30/3 属编造，挂决策点 A）。
+    "calculate_finance": {"car_model", "down_payment_ratio", "loan_years"},
     # 问题 16（2026-11-06）：appointment_time 移出受检清单——相对时间（"明天下午3点"）
     # 必然由模型换算成具体日期，字面来源追踪必失败（问题 1 已确认工具不填默认值）；
     # 姓名/电话等编造仍照罚。
