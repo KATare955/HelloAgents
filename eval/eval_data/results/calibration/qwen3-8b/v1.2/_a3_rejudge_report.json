@@ -25,22 +25,16 @@
       "missing_evidence",
       "false_promise"
     ],
-    "actual": [
-      "missing_evidence"
-    ],
-    "hit": [
-      "missing_evidence"
-    ],
+    "actual": [],
+    "hit": [],
     "tools": [
       "text_search",
       "text_search",
       "query_transaction_price",
       "query_transaction_price"
     ],
-    "final_score": 0.2,
-    "caps_triggered": [
-      "missing_evidence_cap"
-    ],
+    "final_score": 1.0,
+    "caps_triggered": [],
     "response_head": "根据最新市场成交价数据：\n\n- **E5 Sportback 2025款 先锋型** 近90天平均成交价 **225,000元**（趋势下跌）\n- **小米SU"
   },
   {

@@ -452,9 +452,6 @@
         "acceptable_sets": [
           [
             "competitor_compare"
-          ],
-          [
-            "text_search"
           ]
         ]
       }
@@ -535,9 +532,6 @@
         "acceptable_sets": [
           [
             "competitor_compare"
-          ],
-          [
-            "text_search"
           ]
         ]
       }
@@ -1191,10 +1185,6 @@
         "acceptable_sets": [
           [
             "competitor_compare",
-            "text_search",
-            "query_discount_policy"
-          ],
-          [
             "text_search",
             "query_discount_policy"
           ]

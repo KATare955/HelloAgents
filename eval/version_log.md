@@ -117,10 +117,10 @@ C1 三批人工审核（hallucinated_args / false_promise+missing_evidence）全
 **工具与数据**
 - 问题 10：`tools/calculate_finance.py` 重写为自动读价（car_model 必填、显式 car_price 拒绝、score_match 解析指导价：1 条取价/多条 partial 列配置/0 条 NOT_FOUND、反查优惠"另有优惠 Y 未计入"）
 - 问题 9：`tools/mock_data/query_discount_policy.json` 帕萨特/小米补"全国"键
-- 问题 11：`questions_v1.2.json` acceptable_sets 加等价路径（compare_004/008 加 ["text_search"]、multi_hop_002 加 ["text_search","query_discount_policy"]）
+- 问题 11：`questions.json`（生效版）acceptable_sets 加等价路径（compare_004/008 加 ["text_search"]、multi_hop_002 加 ["text_search","query_discount_policy"]）；`questions_v1.2.json` 为冻结快照不回写
 
 **验证（A3 校准回放）**
 - 单元测试 29/29 全绿（含新增 T10-T15：问题 7 三向 + 否定豁免三向）
 - calculate_finance 8 场景单测通过；discount_004/009 实测从"未找到"变"查到全国优惠"
-- 离线重判（`_a3_rejudge_report.json`）：负例 5/5 干净；正例 9/20 命中（修复前即 10/20，EXPECTED 标签过时；本次变化仅 2 条：car_config_004 清零✓、car_config_001 去 no_side_effect✓，方向全对）
+- 离线重判（`_a3_rejudge_report.json`）：负例 5/5 干净；正例 8/20 命中（修复前即 10/20，EXPECTED 标签过时；本次变化 3 条方向全对：car_config_004 清零✓、car_config_001 去 no_side_effect✓、compare_008 因 GT 等价路径由 missing_evidence 变干净✓）
 - 待 AutoDL 重跑双基线验证全量效果
