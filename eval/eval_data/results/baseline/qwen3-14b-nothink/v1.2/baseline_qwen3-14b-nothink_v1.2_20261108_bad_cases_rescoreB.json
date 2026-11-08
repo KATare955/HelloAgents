@@ -1,0 +1,134 @@
+[
+  {
+    "id": "multi_hop_005",
+    "scenario": "试驾预约",
+    "type": "多跳",
+    "question": "我想预约E5 Sportback的试驾，先帮我查询一下这款车的配置、优惠政策和金融方案",
+    "expected_tools": [
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "difficulty": "hard",
+    "response": "您提到的E5 Sportback有多个配置，我将为您列出主要信息：\n\n### 配置信息：\n1. **E5 Sportback 2025款 先锋型**：\n   - 价格：235,900元\n   - 电机功率：220kW\n   - 电池容量：76kWh\n   - 续航里程：618km\n   - 快充时间：10%-80%约18分钟\n   - 驱动方式：后驱\n\n2. **E5 Sportback 2025款 先锋quattro型**：\n   - 价格：269,900元\n   - 电机功率：386kW\n   - 电池容量：83kWh\n   - 续航里程：623km\n   - 快充时间：10%-80%约18分钟\n   - 驱动方式：quattro智能四驱\n\n3. **E5 Sportback 2025款 先锋Plus型**：\n   - 价格：269,900元\n   - 电机功率：300kW\n   - 电池容量：100kWh\n   - 续航里程：773km\n   - 快充时间：10%-80%约18分钟\n   - 驱动方式：后驱\n\n4. **E5 Sportback 2025款 旗舰quattro型**：\n   - 价格：319,900元\n   - 电机功率：579kW\n   - 电池容量：100kWh\n   - 续航里程：647km\n   - 快充时间：10%-80%约18分钟\n   - 驱动方式：quattro智能四驱\n\n### 优惠政策：\n1. **限时优惠**（全国）：\n   - 金额：20,000元\n   - 条件：全款购车，限时优惠\n   - 有效期：2026年10月1日 - 2026年12月31日\n\n2. **旧车置换补贴**（全国）：\n   - 金额：10,000元\n   - 条件：需提供旧车行驶证，旧车需使用满3年\n   - 有效期：2026年1月1日 - 2026年12月31日\n\n### 金融方案（以先锋型为例）：\n- **首付比例**：30%\n- **贷款年限**：3年\n- **年利率**：4.5%\n- **月供**：约5,330元\n- **总利息**：约15,130元\n\n如需进一步了解某个配置的金融方案或优惠政策，请告诉我您感兴趣的配置。",
+    "status": "success",
+    "actual_tools": [
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance"
+    ],
+    "tool_calls_count": 3,
+    "tool_correct": false,
+    "missing_tools": [
+      "book_test_drive"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/multi_hop_005.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "missing_evidence"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "missing_evidence_cap"
+      ]
+    }
+  },
+  {
+    "id": "multi_hop_006",
+    "scenario": "竞品对比",
+    "type": "多跳",
+    "question": "对比E5 Sportback和小米SU7的价格、续航、优惠政策、金融方案，然后帮我预约试驾E5 Sportback",
+    "expected_tools": [
+      "competitor_compare",
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "difficulty": "hard",
+    "response": "请明确您想了解的E5 Sportback具体配置（例如：先锋型、先锋quattro型、先锋Plus型或旗舰quattro型），以便我为您计算金融方案。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare",
+      "query_discount_policy",
+      "query_discount_policy",
+      "calculate_finance"
+    ],
+    "tool_calls_count": 4,
+    "tool_correct": false,
+    "missing_tools": [
+      "book_test_drive",
+      "text_search"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/multi_hop_006.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "missing_evidence"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "missing_evidence_cap"
+      ]
+    }
+  },
+  {
+    "id": "multi_hop_008",
+    "scenario": "优惠政策查询",
+    "type": "双跳",
+    "question": "E5 Sportback在上海和北京的优惠政策有什么区别？哪个地区的优惠力度更大？优惠后的价格首付30%贷款月供多少？",
+    "expected_tools": [
+      "query_discount_policy",
+      "calculate_finance"
+    ],
+    "difficulty": "hard",
+    "response": "我暂时无法找到E5 Sportback的具体指导价信息。不过，您可以提供一个参考价格，我可以帮您计算优惠后的价格以及贷款月供。或者，您也可以选择一个相近车型的价格作为参考。",
+    "status": "success",
+    "actual_tools": [
+      "query_discount_policy",
+      "query_discount_policy",
+      "text_search",
+      "text_search"
+    ],
+    "tool_calls_count": 4,
+    "tool_correct": false,
+    "missing_tools": [
+      "calculate_finance"
+    ],
+    "extra_tools": [
+      "text_search"
+    ],
+    "trajectory_ref": "trajectories/multi_hop_008.jsonl",
+    "verify": {
+      "rejudgeable": true,
+      "final_score": 0.2,
+      "violation_tags": [
+        "false_promise",
+        "missing_evidence"
+      ],
+      "sub_scores": {
+        "tool_call": 0.0,
+        "evidence": 0.0,
+        "communication": 1.0
+      },
+      "caps_triggered": [
+        "false_promise_cap",
+        "missing_evidence_cap"
+      ]
+    }
+  }
+]

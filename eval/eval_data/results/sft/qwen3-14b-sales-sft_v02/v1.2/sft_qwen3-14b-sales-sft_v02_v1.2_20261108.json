@@ -1,0 +1,1435 @@
+{
+  "metadata": {
+    "eval_type": "sft",
+    "model": "qwen3-14b-sales-sft_v02",
+    "eval_version": "v1.2",
+    "timestamp": "2026-11-08T18:50:02.127656",
+    "total_questions": 68,
+    "overall_accuracy": 75.0,
+    "bad_cases_count": 17
+  },
+  "scenario_stats": {
+    "车型参数查询": {
+      "total": 11,
+      "success": 11,
+      "tool_correct": 9,
+      "errors": [
+        "car_config_007",
+        "multi_hop_003"
+      ]
+    },
+    "优惠政策查询": {
+      "total": 11,
+      "success": 11,
+      "tool_correct": 10,
+      "errors": [
+        "multi_hop_008"
+      ]
+    },
+    "竞品对比": {
+      "total": 12,
+      "success": 12,
+      "tool_correct": 8,
+      "errors": [
+        "compare_006",
+        "compare_007",
+        "multi_hop_002",
+        "multi_hop_006"
+      ]
+    },
+    "金融方案测算": {
+      "total": 12,
+      "success": 12,
+      "tool_correct": 10,
+      "errors": [
+        "finance_007",
+        "finance_010"
+      ]
+    },
+    "历史成交价查询": {
+      "total": 11,
+      "success": 11,
+      "tool_correct": 11,
+      "errors": []
+    },
+    "试驾预约": {
+      "total": 11,
+      "success": 11,
+      "tool_correct": 3,
+      "errors": [
+        "test_drive_003",
+        "test_drive_004",
+        "test_drive_005",
+        "test_drive_006",
+        "test_drive_007",
+        "test_drive_009",
+        "test_drive_010",
+        "multi_hop_005"
+      ]
+    }
+  },
+  "type_stats": {
+    "单跳": {
+      "total": 47,
+      "tool_correct": 42
+    },
+    "失败恢复": {
+      "total": 6,
+      "tool_correct": 3
+    },
+    "双跳": {
+      "total": 9,
+      "tool_correct": 4
+    },
+    "多跳": {
+      "total": 6,
+      "tool_correct": 2
+    }
+  },
+  "results": [
+    {
+      "id": "car_config_001",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款先锋型的价格是多少？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "easy",
+      "response": "E5 Sportback 2025款先锋型的厂商指导价是235900元。",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/car_config_001.jsonl"
+    },
+    {
+      "id": "car_config_002",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款旗舰quattro型的电池容量是多少？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "easy",
+      "response": "E5 Sportback 2025款旗舰quattro型搭载的电池容量是100kWh。",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/car_config_002.jsonl"
+    },
+    {
+      "id": "car_config_003",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "帕萨特2024款280TSI商务版的发动机排量是多少？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "easy",
+      "response": "帕萨特2024款280TSI商务版搭载的是1.4T 150马力 L4发动机。",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/car_config_003.jsonl"
+    },
+    {
+      "id": "car_config_004",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款先锋型和先锋quattro型的价格差多少？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "medium",
+      "response": "E5 Sportback 2025款先锋quattro型比先锋型贵34000元。具体来说，先锋型指导价235900元，先锋quattro型指导价269900元，两者差价34000元。",
+      "status": "success",
+      "actual_tools": [
+        "text_search",
+        "text_search"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/car_config_004.jsonl"
+    },
+    {
+      "id": "car_config_005",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "小米SU7 2025款四驱Max版的续航里程是多少？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "medium",
+      "response": "小米SU7 2025款四驱Max版的CLTC续航里程是800km。",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/car_config_005.jsonl"
+    },
+    {
+      "id": "car_config_006",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款所有车型配置中，哪款续航里程最长？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback 2025款中续航里程最长的是先锋Plus型，CLTC续航可以达到773km。",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/car_config_006.jsonl"
+    },
+    {
+      "id": "car_config_007",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "对比E5 Sportback和小米SU7的电池容量，哪个更大？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback和小米SU7的电池容量相当，差不多都是100kWh左右，不过小米SU7稍微高一点点，是101kWh。",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": false,
+      "missing_tools": [
+        "text_search"
+      ],
+      "extra_tools": [
+        "competitor_compare"
+      ],
+      "trajectory_ref": "trajectories/car_config_007.jsonl"
+    },
+    {
+      "id": "car_config_008",
+      "scenario": "车型参数查询",
+      "type": "失败恢复",
+      "question": "查询'星曜X7 2025款'的配置",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "hard",
+      "response": "不好意思，知识库里没有找到'星曜X7 2025款'的相关信息。目前知识库支持的车型有：\n1. E5 Sportback 2025款（4个配置）\n2. 帕萨特2024款\n3. 小米SU7 2025款\n\n您想了解哪款车的参数和价格，告诉我车型名称就好。",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/car_config_008.jsonl"
+    },
+    {
+      "id": "car_config_009",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款先锋型的驱动类型是什么？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "easy",
+      "response": "E5 Sportback 2025款先锋型是后驱的。",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/car_config_009.jsonl"
+    },
+    {
+      "id": "car_config_010",
+      "scenario": "车型参数查询",
+      "type": "单跳",
+      "question": "帕萨特2024款330TSI精英版的变速箱类型是什么？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "medium",
+      "response": "帕萨特2024款330TSI精英版搭载的是7挡双离合变速箱。",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/car_config_010.jsonl"
+    },
+    {
+      "id": "discount_001",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "E5 Sportback现在有什么优惠？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "easy",
+      "response": "E5 Sportback目前全国范围内有2项优惠活动：\n1. 限时优惠：20000元（全款购车才能享受，活动截止到2026-12-31）\n2. 旧车置换补贴：10000元（需要提供旧车行驶证，而且旧车得开满3年，同样有效期至2026-12-31）\n\n两项加起来总共能优惠30000元。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/discount_001.jsonl"
+    },
+    {
+      "id": "discount_002",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "上海地区E5 Sportback的厂商补贴是多少？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "easy",
+      "response": "上海地区E5 Sportback目前有3项优惠可以叠加：\n1. 限时优惠：20000元（全款购车才能享受，活动截止到2026-12-31）\n2. 旧车置换补贴：10000元（需要提供旧车行驶证，而且旧车得用满3年，有效期同样到2026-12-31）\n3. 低息贷款：5000元（贷款购车的话才能用，首付不能低于30%，贷款期限至少2年，有效期至2026-11-30）\n\n三项加起来总共能优惠35000元。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/discount_002.jsonl"
+    },
+    {
+      "id": "discount_003",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "E5 Sportback的置换补贴需要满足什么条件？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "medium",
+      "response": "E5 Sportback的旧车置换补贴需要满足以下条件：\n1. 旧车使用年限需满3年\n2. 需提供旧车行驶证\n\n满足条件后可享受10000元的置换补贴。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/discount_003.jsonl"
+    },
+    {
+      "id": "discount_004",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "北京地区帕萨特2024款有什么优惠政策？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "medium",
+      "response": "北京地区帕萨特2024款目前有2项优惠活动：\n1. 限时优惠：15000元（全款购车才能享受，有效期到2026-12-31）\n2. 旧车置换补贴：8000元（需要提供旧车行驶证，有效期同样到2026-12-31）\n\n两项加起来总共能优惠23000元。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/discount_004.jsonl"
+    },
+    {
+      "id": "discount_005",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "E5 Sportback在上海和北京的优惠政策有什么区别？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback的优惠政策在上海和北京都有，但具体优惠内容略有不同：\n\n【上海】目前有3项优惠：\n1. 限时优惠：20000元（全款购车，限时优惠）\n2. 旧车置换补贴：10000元（需提供旧车行驶证，旧车需使用满3年）\n3. 低息贷款：5000元（贷款购车，首付不低于30%，贷款期限不低于2年）\n\n【北京】目前有2项优惠：\n1. 限时优惠：20000元（全款购车，限时优惠）\n2. 旧车置换补贴：10000元（需提供旧车行驶证，旧车需使用满3年）\n\n可以看出，上海多了一项低息贷款优惠，金额是5000元，北京这边没有这项。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy",
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/discount_005.jsonl"
+    },
+    {
+      "id": "discount_006",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "现在购买E5 Sportback，最多能优惠多少钱？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback目前在全国范围内有2项优惠活动：\n1. 限时优惠：20000元（全款购车才能享受，活动截止到2026-12-31）\n2. 旧车置换补贴：10000元（需要提供旧车行驶证，而且旧车得用满3年，同样有效期至2026-12-31）\n\n两项加起来最多可以优惠30000元。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/discount_006.jsonl"
+    },
+    {
+      "id": "discount_007",
+      "scenario": "优惠政策查询",
+      "type": "失败恢复",
+      "question": "查询'星曜X7 2025款'的优惠政策",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "hard",
+      "response": "目前没有查到星曜X7 2025款的全国通用优惠政策。您想了解哪个地区的专属政策呢？比如：\n1. 上海\n2. 北京\n3. 广州\n4. 深圳\n5. 其他地区（请告诉我具体城市）",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/discount_007.jsonl"
+    },
+    {
+      "id": "discount_008",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "E5 Sportback的金融贴息政策是什么？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "easy",
+      "response": "E5 Sportback目前全国范围内有2项优惠活动：\n1. 限时优惠：20000元（全款购车才能享受，活动截止到2026-12-31）\n2. 旧车置换补贴：10000元（需要提供旧车行驶证，而且旧车得用满3年，同样有效期至2026-12-31）\n\n两项加起来总共能优惠30000元。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/discount_008.jsonl"
+    },
+    {
+      "id": "discount_009",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "小米SU7 2025款现在有什么限时活动？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "medium",
+      "response": "小米SU7 2025款目前全国范围内有1项限时优惠：\n1. 新品上市优惠：10000元（限时活动，先到先得，有效期至2026-11-30）\n\n加起来一共能优惠10000元。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/discount_009.jsonl"
+    },
+    {
+      "id": "discount_010",
+      "scenario": "优惠政策查询",
+      "type": "单跳",
+      "question": "E5 Sportback的优惠政策有效期到什么时候？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback目前在全国范围内有2项通用优惠：\n1. 限时优惠：20000元（全款购车才能享受，活动截止到2026-12-31）\n2. 旧车置换补贴：10000元（需要提供旧车行驶证，而且旧车得用满3年，同样有效期至2026-12-31）\n\n您没有提到具体城市，所以这里按全国口径给您查的。要是想了解您所在地区有没有额外的地方政策，告诉我城市就行。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/discount_010.jsonl"
+    },
+    {
+      "id": "compare_001",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "E5 Sportback和小米SU7哪个好？",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "easy",
+      "response": "E5 Sportback 2025款 先锋型 vs 小米SU7 2025款 四驱Max版：E5 Sportback 2025款 先锋型更胜一筹（4:1）。\n\nE5 Sportback在价格、配置、动力方面更有优势，小米SU7在空间、续航方面领先（800km vs 623km）。综合考虑性价比，建议优先选择E5 Sportback。",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/compare_001.jsonl"
+    },
+    {
+      "id": "compare_002",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "对比E5 Sportback 2025款旗舰quattro型和小米SU7 2025款四驱Max版",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "easy",
+      "response": "E5 Sportback 2025款 旗舰quattro型 vs 小米SU7 2025款 四驱Max版：E5 Sportback 2025款 旗舰quattro型更胜一筹（优势项4:1）。\n\nE5 Sportback在价格、配置、动力方面更有优势，小米SU7在空间、续航方面领先（800km vs 623km）。综合考虑性价比，建议优先选择E5 Sportback。",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/compare_002.jsonl"
+    },
+    {
+      "id": "compare_003",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "E5 Sportback和帕萨特2024款哪个更划算？",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "medium",
+      "response": "E5 Sportback vs 帕萨特2024款：E5 Sportback更胜一筹（优势项4:1，相当项0）。\n\nE5 Sportback在配置、空间、动力、使用成本这几个维度上都占优势，不过价格方面确实要高一些。如果预算比较宽裕、又比较在意长期用车成本的话，推荐入手E5 Sportback；要是预算有限，帕萨特会是更实惠的选择。",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/compare_003.jsonl"
+    },
+    {
+      "id": "compare_004",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "从续航里程角度对比E5 Sportback和小米SU7",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "medium",
+      "response": "E5 Sportback 2025款 先锋型的CLTC续航是623km，小米SU7 2025款 四驱Max版的CLTC续航是800km，小米SU7的续航更长，多177km。综合来看，E5 Sportback在价格、配置、动力方面更有优势，小米SU7在空间、续航方面领先（800km vs 623km）。综合考虑性价比，建议优先选择E5 Sportback。",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/compare_004.jsonl"
+    },
+    {
+      "id": "compare_005",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "E5 Sportback和小米SU7在价格、续航、配置三个方面哪个更有优势？",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback vs 小米SU7：E5 Sportback更胜一筹（4:1）\n\n价格：E5 Sportback便宜14000元\n配置：E5 Sportback配置略高，多循迹倒车功能\n空间：小米SU7轴距更长，后排空间更大\n动力：E5 Sportback功率更大\n电池容量：两者电池容量相当，小米SU7略高一些\n\n综合来看，E5 Sportback在价格、配置、动力方面更有优势，小米SU7在空间、续航方面领先（800km vs 623km）。综合考虑性价比，建议优先选择E5 Sportback。",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/compare_005.jsonl"
+    },
+    {
+      "id": "compare_006",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "如果预算30万，E5 Sportback和小米SU7应该选哪个？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "hard",
+      "response": "对比结论：E5 Sportback整体更占优势（优势项4:1，相当项1）。\n\nE5 Sportback在价格、配置、动力这几个维度上都更有竞争力，小米SU7则在空间和续航方面稍胜一筹（CLTC续航800km vs E5 Sportback 623km）。综合来看性价比更突出，建议优先考虑E5 Sportback。",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": false,
+      "missing_tools": [
+        "text_search"
+      ],
+      "extra_tools": [
+        "competitor_compare"
+      ],
+      "trajectory_ref": "trajectories/compare_006.jsonl"
+    },
+    {
+      "id": "compare_007",
+      "scenario": "竞品对比",
+      "type": "失败恢复",
+      "question": "对比E5 Sportback和'星曜X7 2025款'",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback有4款配置可以选：\n1. E5 Sportback 2025款 先锋型（235900元）\n2. E5 Sportback 2025款 先锋quattro型（269900元）\n3. E5 Sportback 2025款 先锋Plus型（269900元）\n4. E5 Sportback 2025款 旗舰quattro型（319900元）\n\n您想对比哪款配置呢？",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": false,
+      "missing_tools": [
+        "competitor_compare"
+      ],
+      "extra_tools": [
+        "text_search"
+      ],
+      "trajectory_ref": "trajectories/compare_007.jsonl"
+    },
+    {
+      "id": "compare_008",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款先锋型和小米SU7 2025款Pro版哪个更便宜？",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "easy",
+      "response": "E5 Sportback 2025款先锋型更便宜一些。具体来看，E5 Sportback 2025款先锋型的指导价是289900元，小米SU7 2025款Pro版的指导价是303900元，E5 Sportback便宜了14000元。",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/compare_008.jsonl"
+    },
+    {
+      "id": "compare_009",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "从品牌、价格、配置三个维度对比E5 Sportback和帕萨特",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "medium",
+      "response": "E5 Sportback vs 帕萨特：E5 Sportback更胜一筹（4:1）\n\nE5 Sportback在配置、空间、动力、使用成本这几个维度上都占优势，不过价格方面确实偏高一些。如果预算比较宽裕、又比较在意长期用车成本的话，推荐入手E5 Sportback；要是预算有限，帕萨特会是更实惠的选择。",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/compare_009.jsonl"
+    },
+    {
+      "id": "compare_010",
+      "scenario": "竞品对比",
+      "type": "单跳",
+      "question": "E5 Sportback和小米SU7的充电速度哪个更快？",
+      "expected_tools": [
+        "competitor_compare"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback在充电速度上更胜一筹：快充功率达到270kW，从10%充到80%仅需约18分钟；而小米SU7的快充功率为240kW，同样从10%充到80%要约22分钟。",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/compare_010.jsonl"
+    },
+    {
+      "id": "finance_001",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "E5 Sportback首付30%，5年贷款月供多少？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "easy",
+      "response": "E5 Sportback有好几个配置版本，麻烦您确认一下具体想看哪款，我再帮您算：E5 Sportback 2025款 先锋型 235900 元；E5 Sportback 2025款 先锋quattro型 269900 元；E5 Sportback 2025款 先锋Plus型 269900 元；E5 Sportback 2025款 旗舰quattro型 319900 元。您倾向于哪个配置呢？",
+      "status": "success",
+      "actual_tools": [
+        "calculate_finance"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/finance_001.jsonl"
+    },
+    {
+      "id": "finance_002",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "计算E5 Sportback 2025款先锋型的贷款月供",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "easy",
+      "response": "好的，按E5 Sportback 2025款先锋型给您算了一下：这款车指导价235900元，首付30%的话大概要付70770元，剩下165130元分3年还清，年利率4.5%，这样算下来每个月月供大约是4912元。\n\n以上是按首付30%、贷款3年来测算的，如果您想换个首付比例或者调整贷款年限，随时跟我说就行。",
+      "status": "success",
+      "actual_tools": [
+        "calculate_finance"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/finance_002.jsonl"
+    },
+    {
+      "id": "finance_003",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "E5 Sportback首付50%，3年贷款总利息多少？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "medium",
+      "response": "E5 Sportback有好几个配置版本，麻烦您确认一下具体想看哪款，我再帮您算：E5 Sportback 2025款 先锋型 235900 元；E5 Sportback 2025款 先锋quattro型 269900 元；E5 Sportback 2025款 先锋Plus型 269900 元；E5 Sportback 2025款 旗舰quattro型 319900 元。您倾向于哪个配置呢？",
+      "status": "success",
+      "actual_tools": [
+        "calculate_finance"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/finance_003.jsonl"
+    },
+    {
+      "id": "finance_004",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "小米SU7 2025款四驱Max版首付20%，5年贷款月供多少？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "medium",
+      "response": "小米SU7 2025款四驱Max版的指导价是303900元，首付20%的话大概需要付60780元，剩下243120元走贷款，分5年期、年利率4.5%，算下来月供大约是4532元，总利息差不多28829元。",
+      "status": "success",
+      "actual_tools": [
+        "calculate_finance"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/finance_004.jsonl"
+    },
+    {
+      "id": "finance_005",
+      "scenario": "金融方案测算",
+      "type": "双跳",
+      "question": "E5 Sportback 2025款旗舰quattro型现在有什么优惠？首付30%，5年贷款月供多少？",
+      "expected_tools": [
+        "query_discount_policy",
+        "calculate_finance"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback 2025款 旗舰quattro型的优惠和月供情况如下：\n\n【优惠】全国通用优惠共2项：\n1. 限时优惠：20000元（全款购车可享，限时活动）\n2. 旧车置换补贴：10000元（需提供旧车行驶证，旧车需使用满3年）\n\n【月供】指导价319900元，首付30%（约95970元），贷款5年、年利率4.5%，月供约4175元。",
+      "status": "success",
+      "actual_tools": [
+        "calculate_finance",
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/finance_005.jsonl"
+    },
+    {
+      "id": "finance_006",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "如果选择E5 Sportback，首付30%和首付50%哪个更划算？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback 2025款 先锋型指导价235900元，按默认方案（贷款3年、年利率4.5%）测算：\n首付30%：月供约4912元，总利息约11705元；\n首付50%：月供约3508元，总利息约8361元。\n\n从月供来看，首付50%能少还约1404元/月；总利息也更少，能省约3344元。不过首付比例越高，前期现金流压力也越大。建议根据自身资金情况选择，如果手头宽裕、想少付利息，选首付50%更划算。",
+      "status": "success",
+      "actual_tools": [
+        "calculate_finance",
+        "calculate_finance"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/finance_006.jsonl"
+    },
+    {
+      "id": "finance_007",
+      "scenario": "金融方案测算",
+      "type": "失败恢复",
+      "question": "计算'星曜X7 2025款'的贷款月供",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "hard",
+      "response": "不好意思，知识库里没有找到'星曜X7 2025款'的相关配置信息。目前知识库里有以下这些车型可以查询：\n1. E5 Sportback 2025款（4个配置）\n2. 帕萨特2024款\n3. 小米SU7 2025款\n\n您想了解哪款车的月供情况呢？或者告诉我具体配置，我来帮您测算。",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": false,
+      "missing_tools": [
+        "calculate_finance"
+      ],
+      "extra_tools": [
+        "text_search"
+      ],
+      "trajectory_ref": "trajectories/finance_007.jsonl"
+    },
+    {
+      "id": "finance_008",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "帕萨特2024款280TSI商务版首付40%，3年贷款月供多少？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "easy",
+      "response": "帕萨特2024款 280TSI 商务版的指导价是185900元，首付40%的话大概需要付74360元，剩下贷款111540元，分3年期、年利率4.5%，算下来月供大约是3318元。",
+      "status": "success",
+      "actual_tools": [
+        "calculate_finance"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/finance_008.jsonl"
+    },
+    {
+      "id": "finance_009",
+      "scenario": "金融方案测算",
+      "type": "单跳",
+      "question": "E5 Sportback 5年贷款和3年贷款哪个总利息更少？",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "medium",
+      "response": "E5 Sportback 2025款 先锋型的指导价是235900元，首付30%（约70770元），年利率4.5%：\n3年期：月供约4912元，总利息约11705元\n5年期：月供约3078元，总利息约19577元\n\n从总利息来看，3年期更少，能省约7872元；不过月供会高一些，您可以根据自己的现金流情况来选。",
+      "status": "success",
+      "actual_tools": [
+        "calculate_finance",
+        "calculate_finance"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/finance_009.jsonl"
+    },
+    {
+      "id": "finance_010",
+      "scenario": "金融方案测算",
+      "type": "双跳",
+      "question": "考虑优惠政策后，E5 Sportback首付30%，5年贷款月供多少？",
+      "expected_tools": [
+        "query_discount_policy",
+        "calculate_finance"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback有好几个配置版本，麻烦您确认一下具体想看哪款，我再帮您算：E5 Sportback 2025款 先锋型 235900 元；E5 Sportback 2025款 先锋quattro型 269900 元；E5 Sportback 2025款 先锋Plus型 269900 元；E5 Sportback 2025款 旗舰quattro型 319900 元。您倾向于哪个配置呢？",
+      "status": "success",
+      "actual_tools": [
+        "calculate_finance"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": false,
+      "missing_tools": [
+        "query_discount_policy"
+      ],
+      "extra_tools": [],
+      "trajectory_ref": "trajectories/finance_010.jsonl"
+    },
+    {
+      "id": "price_001",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "E5 Sportback 2025款旗舰quattro型近90天的平均成交价是多少？",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "easy",
+      "response": "E5 Sportback 2025款旗舰quattro型近90天的平均成交价是289500元，价格走势比较稳定。最低成交价287400元，最高成交价319900元，样本共175条。目前价格处于历史低位，建议考虑入手。",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/price_001.jsonl"
+    },
+    {
+      "id": "price_002",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "查询E5 Sportback 2025款先锋型的价格趋势",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "easy",
+      "response": "E5 Sportback 2025款先锋型近90天的成交情况如下：平均成交价225000元，最低成交价220000元，最高成交价235900元，整体呈下跌趋势，共采集样本120条。建议：价格还在往下走，可以再等等。\n\n（本次按默认近90天查询，如需查看近30天的数据也可以帮您调取。）",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/price_002.jsonl"
+    },
+    {
+      "id": "price_003",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "E5 Sportback近30天和近90天的成交价有什么变化？",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "medium",
+      "response": "E5 Sportback 2025款 旗舰quattro型近30天平均成交价289500元，趋势稳定；近90天平均成交价也是289500元，同样趋势稳定。从数据来看，价格比较平稳，现在入手时机不错。",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price",
+        "query_transaction_price"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/price_003.jsonl"
+    },
+    {
+      "id": "price_004",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "小米SU7 2025款四驱Max版的历史成交价是多少？",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "medium",
+      "response": "小米SU7 2025款四驱Max版近90天的成交情况如下：平均成交价303900元（最低303900元，最高也是303900元），价格走势相当稳定，共有85条样本数据。目前这款车属于新车上市阶段，价格比较坚挺。",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/price_004.jsonl"
+    },
+    {
+      "id": "price_005",
+      "scenario": "历史成交价查询",
+      "type": "双跳",
+      "question": "E5 Sportback现在值得买吗？结合历史成交价和当前优惠分析",
+      "expected_tools": [
+        "query_transaction_price",
+        "query_discount_policy"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback 2025款 旗舰quattro型近90天平均成交价289500元，价格走势比较平稳。目前全国范围内有2项优惠活动：\n1. 限时优惠：20000元（全款购车才能享受，活动截止到2026-12-31）\n2. 旧车置换补贴：10000元（需要提供旧车行驶证，而且旧车得用满3年，同样有效期至2026-12-31）\n\n综合来看，这款车目前的价格已经处于历史低位，是个不错的入手时机。",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price",
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/price_005.jsonl"
+    },
+    {
+      "id": "price_006",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "对比E5 Sportback和小米SU7的历史成交价趋势",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback 2025款 旗舰quattro型近90天平均成交价289500元，最低成交价287400元，最高319900元，整体走势比较平稳。\n小米SU7 2025款 四驱Max版近90天平均成交价303900元，最低和最高都是303900元，价格相当稳定。\n从数据来看，E5 Sportback 2025款 旗舰quattro型目前处于历史低位，入手时机不错。",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price",
+        "query_transaction_price"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/price_006.jsonl"
+    },
+    {
+      "id": "price_007",
+      "scenario": "历史成交价查询",
+      "type": "失败恢复",
+      "question": "查询'星曜X7 2025款'的历史成交价",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "hard",
+      "response": "不好意思，系统暂时没有查到星曜X7 2025款的历史成交价数据（近90天和近30天都无记录）。\n\n目前没有成交数据可供参考，建议您直接查看官方指导价：235900元。如果您想了解具体配置的价格，也可以告诉我，我来帮您算一下。",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price",
+        "query_transaction_price"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/price_007.jsonl"
+    },
+    {
+      "id": "price_008",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "帕萨特2024款280TSI商务版的历史成交价是多少？",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "easy",
+      "response": "帕萨特2024款280TSI商务版近90天的成交情况如下：平均成交价195000元，最低成交价190000元，最高成交价205900元，整体走势比较平稳。从目前来看价格挺稳定的，有意向的话可以考虑入手。",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/price_008.jsonl"
+    },
+    {
+      "id": "price_009",
+      "scenario": "历史成交价查询",
+      "type": "单跳",
+      "question": "E5 Sportback的价格趋势是上涨还是下跌？",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "medium",
+      "response": "E5 Sportback 2025款 旗舰quattro型近90天的成交情况如下：平均成交价289500元，最低成交价287400元，最高成交价319900元，整体趋势比较稳定，共有175条样本数据。从目前来看，价格处于历史低位，是个不错的入手时机。",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/price_009.jsonl"
+    },
+    {
+      "id": "price_010",
+      "scenario": "历史成交价查询",
+      "type": "双跳",
+      "question": "结合历史成交价和当前优惠，E5 Sportback现在的性价比如何？",
+      "expected_tools": [
+        "query_transaction_price",
+        "query_discount_policy"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback 2025款 旗舰quattro型近90天平均成交价289500元，价格走势比较平稳。全国通用优惠目前有2项：\n1. 限时优惠：20000元（全款购车才能享受，活动限时）\n2. 旧车置换补贴：10000元（需要提供旧车行驶证，而且旧车得用满3年）\n\n两项加起来总共能优惠30000元，整体性价比还是不错的。",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price",
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/price_010.jsonl"
+    },
+    {
+      "id": "test_drive_001",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "我想预约E5 Sportback的试驾，我叫张三，电话13800138000，明天下午3点在上汽奥迪上海冠澳用户中心",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "easy",
+      "response": "张三您好！您的试驾预约已经安排好啦～具体信息如下：时间是2026-11-09（周一）15:00，地点在上汽奥迪上海冠澳用户中心，试驾车型为E5 Sportback。到时候记得带上驾驶证原件，建议提前15分钟到店哦。",
+      "status": "success",
+      "actual_tools": [
+        "book_test_drive"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/test_drive_001.jsonl"
+    },
+    {
+      "id": "test_drive_002",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "预约明天下午3点在上汽奥迪上海冠澳用户中心试驾E5 Sportback",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "easy",
+      "response": "没问题，E5 Sportback的试驾我来帮您安排！不过还需要您提供两样信息：\n1. 您的姓名\n2. 联系电话\n\n您把这两项告诉我，我马上给您预约上汽奥迪上海冠澳用户中心的试驾。",
+      "status": "success",
+      "actual_tools": [],
+      "tool_calls_count": 0,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/test_drive_002.jsonl"
+    },
+    {
+      "id": "test_drive_003",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "帮我预约周末在上汽奥迪上海冠松用户中心试驾E5 Sportback",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "medium",
+      "response": "不好意思，E5 Sportback 有好几个配置版本，麻烦您确认一下想试驾的具体配置，我再帮您安排上汽奥迪上海冠松用户中心的试驾：\n1. E5 Sportback 2025款 先锋型（235900元）\n2. E5 Sportback 2025款 先锋quattro型（269900元）\n3. E5 Sportback 2025款 先锋Plus型（269900元）\n4. E5 Sportback 2025款 旗舰quattro型（319900元）",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": false,
+      "missing_tools": [
+        "book_test_drive"
+      ],
+      "extra_tools": [
+        "text_search"
+      ],
+      "trajectory_ref": "trajectories/test_drive_003.jsonl"
+    },
+    {
+      "id": "test_drive_004",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "我想试驾E5 Sportback，我叫李四，电话13900139000，周末在上汽奥迪上海冠松用户中心，有什么时间可选？",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "medium",
+      "response": "李四您好！E5 Sportback 的试驾预约目前有以下这些时间可以选（上汽奥迪上海冠松用户中心）：\n1. 11 月 8 日（周日）09:00\n2. 11 月 8 日（周日）10:30\n3. 11 月 8 日（周日）14:00\n4. 11 月 8 日（周日）15:30\n5. 11 月 8 日（周日）17:00\n6. 11 月 15 日（周日）09:00\n7. 11 月 15 日（周日）10:30\n8. 11 月 15 日（周日）14:00\n9. 11 月 15 日（周日）15:30\n10. 11 月 15 日（周日）17:00\n11. 11 月 16 日（周一）09:00\n\n您看中意哪个时段？确认之后我马上帮您锁定预约。",
+      "status": "success",
+      "actual_tools": [],
+      "tool_calls_count": 0,
+      "tool_correct": false,
+      "missing_tools": [
+        "book_test_drive"
+      ],
+      "extra_tools": [],
+      "trajectory_ref": "trajectories/test_drive_004.jsonl"
+    },
+    {
+      "id": "test_drive_005",
+      "scenario": "试驾预约",
+      "type": "双跳",
+      "question": "先查询E5 Sportback的优惠政策，然后预约试驾",
+      "expected_tools": [
+        "query_discount_policy",
+        "book_test_drive"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback目前全国通用的优惠一共有2项：\n1. 限时优惠：20000元（全款购车才能享受，活动截止到2026-12-31）\n2. 旧车置换补贴：10000元（需要提供旧车行驶证，而且旧车得用满3年，有效期同样到2026-12-31）\n\n要帮您预约试驾的话，还需要留一个联系电话，麻烦提供一下，我这边马上给您安排。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": false,
+      "missing_tools": [
+        "book_test_drive"
+      ],
+      "extra_tools": [],
+      "trajectory_ref": "trajectories/test_drive_005.jsonl"
+    },
+    {
+      "id": "test_drive_006",
+      "scenario": "试驾预约",
+      "type": "双跳",
+      "question": "对比E5 Sportback和小米SU7后，预约试驾E5 Sportback",
+      "expected_tools": [
+        "competitor_compare",
+        "book_test_drive"
+      ],
+      "difficulty": "hard",
+      "response": "对比结论：E5 Sportback 2025款 先锋型整体更胜一筹（优势项4:1，相当项1）。\n\nE5 Sportback在价格、配置、动力方面更有优势，小米SU7在空间、续航方面领先（800km vs 623km）。综合考虑性价比，建议优先选择E5 Sportback。\n\n想预约E5 Sportback的试驾吗？可以帮您安排：\n1. 选择门店（共10家）：\n   1. 上汽奥迪上海郑隆奥翟\n   2. 上汽奥迪上海大宁音乐广场\n   3. 上汽奥迪西上海用户中心\n   4. 上汽奥迪上海东昌用户中心\n   5. 上汽奥迪上海冠澳用户中心\n   6. 上汽奥迪上海冠松用户中心\n   7. 上汽奥迪上海冠松冠威用户中心\n   8. 上汽奥迪上海冠松冠松用户中心\n   9. 上汽奥迪上海冠松冠盛用户中心\n   10. 上汽奥迪上海冠松冠杰用户中心\n2. 选择时间（最早可预约2026-11-14（周六）09:00）\n3. 留下您的姓名和联系电话\n\n您确认预约的话，我马上帮您操作！",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": false,
+      "missing_tools": [
+        "book_test_drive"
+      ],
+      "extra_tools": [],
+      "trajectory_ref": "trajectories/test_drive_006.jsonl"
+    },
+    {
+      "id": "test_drive_007",
+      "scenario": "试驾预约",
+      "type": "失败恢复",
+      "question": "预约'星曜X7 2025款'的试驾",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "hard",
+      "response": "好的，先帮您确认一下配置：\n星曜X7 2025款目前有以下4种配置可选：\n1. 星曜X7 2025款 先锋型（235900元，CLTC续航618km）\n2. 星曜X7 2025款 先锋quattro型（269900元，CLTC续航623km）\n3. 星曜X7 2025款 先锋Plus型（269900元，CLTC续航773km）\n4. 星曜X7 2025款 先锋Plus quattro型（319900元，CLTC续航778km）\n\n您倾向于哪款配置呢？确认之后我马上帮您安排试驾。",
+      "status": "success",
+      "actual_tools": [],
+      "tool_calls_count": 0,
+      "tool_correct": false,
+      "missing_tools": [
+        "book_test_drive"
+      ],
+      "extra_tools": [],
+      "trajectory_ref": "trajectories/test_drive_007.jsonl"
+    },
+    {
+      "id": "test_drive_008",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "预约E5 Sportback 2025款旗舰quattro型的试驾，我叫王五，电话13700137000，后天上午10点在上汽奥迪奥迪之城旗舰店",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "easy",
+      "response": "王五您好！您的试驾预约已经安排好啦～具体信息如下：时间是2026年11月10日（周二）10:00，地点在上汽奥迪奥迪之城旗舰店，试驾车型为E5 Sportback 2025款旗舰quattro型。到时候记得带上驾驶证原件，建议提前15分钟到店哦。",
+      "status": "success",
+      "actual_tools": [
+        "book_test_drive"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/test_drive_008.jsonl"
+    },
+    {
+      "id": "test_drive_009",
+      "scenario": "试驾预约",
+      "type": "单跳",
+      "question": "我想在上海预约E5 Sportback的试驾，我叫赵六，电话13600136000，下周一上午9点，有什么门店可选？",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "medium",
+      "response": "赵六您好！目前上海地区可以预约E5 Sportback试驾的门店一共有7家，给您列一下：\n1. 上汽奥迪上海郑隆奥翟\n2. 上汽奥迪上海大宁音乐广场\n3. 上汽奥迪西上海用户中心\n4. 上汽奥迪上海东昌用户中心\n5. 上汽奥迪上海冠澳用户中心\n6. 上汽奥迪上海冠松用户中心\n7. 上汽奥迪奥迪之城旗舰店\n\n您看中意哪家？确认之后我马上帮您锁定下周一上午9点的试驾名额。",
+      "status": "success",
+      "actual_tools": [],
+      "tool_calls_count": 0,
+      "tool_correct": false,
+      "missing_tools": [
+        "book_test_drive"
+      ],
+      "extra_tools": [],
+      "trajectory_ref": "trajectories/test_drive_009.jsonl"
+    },
+    {
+      "id": "test_drive_010",
+      "scenario": "试驾预约",
+      "type": "双跳",
+      "question": "查询E5 Sportback的金融方案后，预约试驾",
+      "expected_tools": [
+        "calculate_finance",
+        "book_test_drive"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback有好几个配置版本，麻烦您确认一下想了解哪款，我再帮您算：E5 Sportback 2025款 先锋型 235900 元；E5 Sportback 2025款 先锋quattro型 269900 元；E5 Sportback 2025款 先锋Plus型 269900 元；E5 Sportback 2025款 旗舰quattro型 319900 元。您倾向于哪个配置呢？",
+      "status": "success",
+      "actual_tools": [
+        "calculate_finance"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": false,
+      "missing_tools": [
+        "book_test_drive"
+      ],
+      "extra_tools": [],
+      "trajectory_ref": "trajectories/test_drive_010.jsonl"
+    },
+    {
+      "id": "multi_hop_001",
+      "scenario": "金融方案测算",
+      "type": "多跳",
+      "question": "E5 Sportback 2025款旗舰quattro型现在有什么优惠？首付30%，5年贷款月供多少？近90天的平均成交价是多少？",
+      "expected_tools": [
+        "query_discount_policy",
+        "calculate_finance",
+        "query_transaction_price"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback 2025款旗舰quattro型目前全国共有2项优惠：\n1. 限时优惠：20000元（全款购车可享，限时活动）\n2. 旧车置换补贴：10000元（需提供旧车行驶证，旧车需使用满3年）\n\n按首付30%、贷款5年来算的话：指导价319900元，首付约95970元，贷款223930元，年利率4.5%，月供约4175元。\n\n近90天的成交情况：平均成交价289500元，最低成交价287400元，最高成交价319900元，整体走势比较平稳。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy",
+        "calculate_finance",
+        "query_transaction_price"
+      ],
+      "tool_calls_count": 3,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/multi_hop_001.jsonl"
+    },
+    {
+      "id": "multi_hop_002",
+      "scenario": "竞品对比",
+      "type": "多跳",
+      "question": "对比E5 Sportback和小米SU7的价格、续航、优惠政策，哪个更值得买？",
+      "expected_tools": [
+        "competitor_compare",
+        "query_discount_policy"
+      ],
+      "difficulty": "hard",
+      "response": "不好意思，小米SU7目前不在我们的知识库里，暂时没办法帮您做对比。\n\n现在可以对比的车系有这些：E5 Sportback、帕萨特2024款、迈腾2024款、E31 2025款、E30 2025款、E50 2025款、E50 2026款、E50 2026款四驱版。\n\n您想了解哪款车，告诉我车型名称就好。",
+      "status": "success",
+      "actual_tools": [
+        "competitor_compare"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": false,
+      "missing_tools": [
+        "query_discount_policy"
+      ],
+      "extra_tools": [],
+      "trajectory_ref": "trajectories/multi_hop_002.jsonl"
+    },
+    {
+      "id": "multi_hop_003",
+      "scenario": "车型参数查询",
+      "type": "多跳",
+      "question": "E5 Sportback 2025款所有车型配置中，哪款续航里程最长？这款车的优惠政策是什么？首付30%贷款月供多少？",
+      "expected_tools": [
+        "text_search",
+        "query_discount_policy",
+        "calculate_finance"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback 2025款目前有4个配置：\n1. 先锋型：CLTC续航618km\n2. 先锋quattro型：CLTC续航623km\n3. 先锋Plus型：CLTC续航773km\n4. 旗舰quattro型：CLTC续航647km\n\n续航最长的是先锋Plus型，CLTC续航773km。",
+      "status": "success",
+      "actual_tools": [
+        "text_search"
+      ],
+      "tool_calls_count": 1,
+      "tool_correct": false,
+      "missing_tools": [
+        "calculate_finance",
+        "query_discount_policy"
+      ],
+      "extra_tools": [],
+      "trajectory_ref": "trajectories/multi_hop_003.jsonl"
+    },
+    {
+      "id": "multi_hop_004",
+      "scenario": "历史成交价查询",
+      "type": "双跳",
+      "question": "E5 Sportback近90天的平均成交价是多少？现在有什么优惠？优惠后的价格比历史成交价低多少？",
+      "expected_tools": [
+        "query_transaction_price",
+        "query_discount_policy"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback 2025款 旗舰quattro型近90天的平均成交价是289500元，价格走势比较平稳。目前全国通用的优惠共有2项：\n1. 限时优惠：20000元（全款购车才能享受，活动限时进行）\n2. 旧车置换补贴：10000元（需要提供旧车行驶证，而且旧车得使用满3年）\n\n两项加起来总共能优惠30000元。按这个优惠力度算下来，优惠后的价格比近90天的平均成交价低了大约30000元。",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price",
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/multi_hop_004.jsonl"
+    },
+    {
+      "id": "multi_hop_005",
+      "scenario": "试驾预约",
+      "type": "多跳",
+      "question": "我想预约E5 Sportback的试驾，先帮我查询一下这款车的配置、优惠政策和金融方案",
+      "expected_tools": [
+        "text_search",
+        "query_discount_policy",
+        "calculate_finance",
+        "book_test_drive"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback有好几个配置版本，麻烦您确认一下具体想了解哪款，我再帮您算：E5 Sportback 2025款 先锋型 235900 元；E5 Sportback 2025款 先锋quattro型 269900 元；E5 Sportback 2025款 先锋Plus型 269900 元；E5 Sportback 2025款 旗舰quattro型 319900 元。您倾向于哪个配置呢？",
+      "status": "success",
+      "actual_tools": [
+        "text_search",
+        "query_discount_policy",
+        "calculate_finance"
+      ],
+      "tool_calls_count": 3,
+      "tool_correct": false,
+      "missing_tools": [
+        "book_test_drive"
+      ],
+      "extra_tools": [],
+      "trajectory_ref": "trajectories/multi_hop_005.jsonl"
+    },
+    {
+      "id": "multi_hop_006",
+      "scenario": "竞品对比",
+      "type": "多跳",
+      "question": "对比E5 Sportback和小米SU7的价格、续航、优惠政策、金融方案，然后帮我预约试驾E5 Sportback",
+      "expected_tools": [
+        "competitor_compare",
+        "text_search",
+        "query_discount_policy",
+        "calculate_finance",
+        "book_test_drive"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback 2025款 先锋型 vs 小米SU7 2025款 四驱Max版：E5 Sportback 2025款 先锋型更胜一筹（4:1）。\n\nE5 Sportback在价格、配置、动力方面更有优势，小米SU7在空间、续航方面领先（800km vs 623km）。综合考虑性价比，建议优先选择E5 Sportback。\n\nE5 Sportback 2025款 先锋型近90天平均成交价225000元，趋势下跌；指导价235900元，首付30%（约70770元），贷款3年、年利率4.5%，月供约4912元。\n\n要帮您预约E5 Sportback的试驾，还需要您提供一下联系电话和想去的门店，我这边马上帮您安排！",
+      "status": "success",
+      "actual_tools": [
+        "query_transaction_price",
+        "calculate_finance",
+        "competitor_compare"
+      ],
+      "tool_calls_count": 3,
+      "tool_correct": false,
+      "missing_tools": [
+        "book_test_drive",
+        "query_discount_policy",
+        "text_search"
+      ],
+      "extra_tools": [
+        "query_transaction_price"
+      ],
+      "trajectory_ref": "trajectories/multi_hop_006.jsonl"
+    },
+    {
+      "id": "multi_hop_007",
+      "scenario": "金融方案测算",
+      "type": "多跳",
+      "question": "E5 Sportback 2025款旗舰quattro型的配置是什么？现在有什么优惠？首付30%，5年贷款月供多少？近90天的平均成交价是多少？",
+      "expected_tools": [
+        "text_search",
+        "query_discount_policy",
+        "calculate_finance",
+        "query_transaction_price"
+      ],
+      "difficulty": "hard",
+      "response": "E5 Sportback 2025款 旗舰quattro型的核心参数是这样的：单电机配置，电机最大功率579kW，电池容量100kWh，CLTC续航647km。\n\n目前全国范围内有2项优惠：\n1. 限时优惠：20000元（全款购车才能享受，活动截止到2026-12-31）\n2. 旧车置换补贴：10000元（需要提供旧车行驶证，且旧车得使用满3年，同样有效期至2026-12-31）\n\n指导价319900元，首付30%的话大概是95970元，贷款期限5年、年利率4.5%，算下来月供大约4175元。\n\n近90天的平均成交价在289500元左右，整体走势比较平稳。",
+      "status": "success",
+      "actual_tools": [
+        "text_search",
+        "query_discount_policy",
+        "calculate_finance",
+        "query_transaction_price"
+      ],
+      "tool_calls_count": 4,
+      "tool_correct": true,
+      "trajectory_ref": "trajectories/multi_hop_007.jsonl"
+    },
+    {
+      "id": "multi_hop_008",
+      "scenario": "优惠政策查询",
+      "type": "双跳",
+      "question": "E5 Sportback在上海和北京的优惠政策有什么区别？哪个地区的优惠力度更大？优惠后的价格首付30%贷款月供多少？",
+      "expected_tools": [
+        "query_discount_policy",
+        "calculate_finance"
+      ],
+      "difficulty": "hard",
+      "response": "上海地区有3项优惠：限时优惠20000元、旧车置换补贴10000元、低息贷款优惠5000元，总优惠35000元；北京地区有2项优惠：限时优惠20000元、旧车置换补贴10000元，总优惠30000元。上海的优惠力度更大，多出5000元的低息贷款优惠。\n\n按首付30%、贷款3年、年利率4.5%来算的话：E5 Sportback 2025款先锋型的指导价是235900元，优惠后大概196900元，首付约69000元，贷款127900元，月供大概4600元。",
+      "status": "success",
+      "actual_tools": [
+        "query_discount_policy",
+        "query_discount_policy"
+      ],
+      "tool_calls_count": 2,
+      "tool_correct": false,
+      "missing_tools": [
+        "calculate_finance"
+      ],
+      "extra_tools": [],
+      "trajectory_ref": "trajectories/multi_hop_008.jsonl"
+    }
+  ]
+}

@@ -221,3 +221,23 @@ AutoDL 重跑结果逐题对比后暴露的 4 个规则层缺陷修复（全部�
 - **模型**: qwen3-14b-nothink
 - **阶段**: baseline
 - **结果文件**: `results/baseline/qwen3-14b-nothink/v1.2/baseline_qwen3-14b-nothink_v1.2_20261106.json`
+
+## 2026-11-08 18:50:02 - sft (qwen3-14b-sales-sft_v02, v1.2)
+
+- **准确率**: 75.0%
+- **总问题数**: 68
+- **Bad case数量**: 17
+- **评测集版本**: v1.2
+- **模型**: qwen3-14b-sales-sft_v02
+- **阶段**: sft
+- **结果文件**: `results/sft/qwen3-14b-sales-sft_v02/v1.2/sft_qwen3-14b-sales-sft_v02_v1.2_20261108.json`
+
+## 2026-11-08 19:49:04 - baseline (qwen3-14b-nothink, v1.2)
+
+- **准确率**: 91.2%
+- **总问题数**: 68
+- **Bad case数量**: 6
+- **评测集版本**: v1.2
+- **模型**: qwen3-14b-nothink
+- **阶段**: baseline
+- **结果文件**: `results/baseline/qwen3-14b-nothink/v1.2/baseline_qwen3-14b-nothink_v1.2_20261108.json`
