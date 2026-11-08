@@ -153,7 +153,29 @@ def _final_response(traj_rows: List[Dict[str, Any]], fallback: str = "") -> str:
 # cap 判定函数（每个返回 (triggered, violation_tag, detail)）
 # ---------------------------------------------------------------------------
 
-def _cap_hallucinated_args(traj_rows: List[Dict[str, Any]]) -> Tuple[bool, str, str]:
+def _car_model_prefix_in_question(car_model: str, question_text: str) -> bool:
+    """车型规范补全豁免：参数值的前缀核心段（品牌+系列）出现在题面 → 视为源自题面。
+
+    v02 SFT 复盘（2026-11-08）：题面简称（"E5 Sportback"）被模型规范补全为工具
+    规范名（"E5 Sportback 2025款 先锋型"），字面溯源判 fabricated 误伤
+    finance_006/009（多方案对比题，第一次调用传补全名）。与"编造无关车型"
+    （前缀不匹配题面任何车名段）有本质区别：后者前缀匹配必失败，仍判 fabricated。
+    """
+    if not car_model or not question_text:
+        return False
+    tokens = [t for t in re.split(r"\s+", car_model) if t]
+    for n in (2, 1):
+        if len(tokens) < n:
+            continue
+        prefix = " ".join(tokens[:n])
+        if len(prefix) >= 3 and prefix in question_text:
+            return True
+    return False
+
+
+def _cap_hallucinated_args(
+    traj_rows: List[Dict[str, Any]], question_text: str = ""
+) -> Tuple[bool, str, str]:
     """参数值溯源：事实型参数（TRACE_ARGS 白名单）存在 fabricated → 触发。
 
     依赖 A4 落盘的 tool_args_source（参数值 ∉ 题面 ∪ 前序工具返回 即 fabricated），
@@ -166,7 +188,17 @@ def _cap_hallucinated_args(traj_rows: List[Dict[str, Any]]) -> Tuple[bool, str, 
         if not traceable:
             continue
         sources = r.get("tool_args_source") or {}
-        fabricated = [k for k in traceable if sources.get(k) == "fabricated"]
+        fabricated = [
+            k
+            for k in traceable
+            if sources.get(k) == "fabricated"
+            and not (
+                k == "car_model"
+                and _car_model_prefix_in_question(
+                    str((r.get("tool_args") or {}).get(k, "")), question_text
+                )
+            )
+        ]
         if fabricated:
             return True, "hallucinated_args", f"{tool} 事实参数 {fabricated} 无溯源依据"
     # 问题 19（2026-11-06）：预约时间年份正确性检查——appointment_time 已豁免字面溯源
@@ -478,7 +510,7 @@ def verify_trajectory(
 
     # 7 个 cap
     cap_checks = [
-        ("hallucinated_args_cap", _cap_hallucinated_args(traj_rows)),
+        ("hallucinated_args_cap", _cap_hallucinated_args(traj_rows, question.get("question", ""))),
         ("false_promise_cap", _cap_false_promise(traj_rows, response)),
         ("missing_evidence_cap", _cap_missing_evidence(question, traj_rows, response)),
         ("wrong_tool_cap", _cap_wrong_tool(traj_rows)),

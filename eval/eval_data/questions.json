@@ -521,6 +521,10 @@
             "competitor_compare"
           ]
         ]
+      },
+      "accept_clarification": {
+        "target_tool": "competitor_compare",
+        "reason": "对比目标'星曜X7 2025款'不存在（目标不可达）；正确行为=告知不可达/列出可对比车型并反问"
       }
     },
     {
@@ -711,6 +715,10 @@
             "calculate_finance"
           ]
         ]
+      },
+      "accept_clarification": {
+        "target_tool": "calculate_finance",
+        "reason": "车型'星曜X7 2025款'不存在（目标不可达）；正确行为=告知不可达并反问替代车型"
       }
     },
     {
@@ -767,6 +775,10 @@
             "calculate_finance"
           ]
         ]
+      },
+      "accept_clarification": {
+        "target_tool": "query_discount_policy",
+        "reason": "题面未指明具体配置（E5 Sportback 有 4 款配置）；正确行为=列出配置并反问确认后再计算"
       }
     },
     {
@@ -1032,6 +1044,10 @@
             "book_test_drive"
           ]
         ]
+      },
+      "accept_clarification": {
+        "target_tool": "book_test_drive",
+        "reason": "题面询问可选时间段（工具体系无查询接口）；正确行为=给出可选时间段并反问用户选择"
       }
     },
     {
@@ -1139,6 +1155,10 @@
             "book_test_drive"
           ]
         ]
+      },
+      "accept_clarification": {
+        "target_tool": "book_test_drive",
+        "reason": "题面询问可选门店；正确行为=列出白名单门店并反问用户选择"
       }
     },
     {
