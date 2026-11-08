@@ -1,0 +1,4 @@
+# v02_gen 本地验证环境与缓存（不进入 git）
+.venv_e1/
+.tokenizer_qwen3/
+*.bak_*

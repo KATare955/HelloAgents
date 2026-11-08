@@ -1,0 +1,10 @@
+{
+  "sales_agent_v02_train": {
+    "file_name": "sft_train.json",
+    "formatting": "v02_react"
+  },
+  "sales_agent_v02_val": {
+    "file_name": "sft_val.json",
+    "formatting": "v02_react"
+  }
+}

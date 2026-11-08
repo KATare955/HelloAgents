@@ -1,14 +1,18 @@
 # =============================================================================
-# Qwen3-14B 汽车销售 Agent — LoRA SFT 训练配置（LLaMA-Factory）
-# 对应计划 s5：LoRA SFT Qwen3-14B（3 epochs, batch8, 2×A800-80GB）
+# Qwen3-14B 汽车销售 Agent — LoRA SFT 训练配置（LLaMA-Factory）— D1/R2 v02 版
+# 对应 D1 决策：960/40、2 epochs、全局 batch 4、nothink 单格式、message 级 loss
 #
-# 启动（AutoDL，2 卡 NVLink）：
+# 启动（AutoDL，单卡 A800-80GB，per_device 1 × grad_accum 4 = 全局 batch 4）：
 #   cd /root/autodl-tmp/LLaMA-Factory
-#   FORCE_TORCHRUN=1 NNODES=1 NPROC_PER_NODE=2 \
-#     llamafactory-cli train /root/autodl-tmp/HelloAgents/eval/sft_data/autodl/qwen3_14b_lora_sft.yaml
-#
-# 单卡也能跑（14B LoRA + gradient_checkpointing，占用 < 40GB）：
 #   llamafactory-cli train /root/autodl-tmp/HelloAgents/eval/sft_data/autodl/qwen3_14b_lora_sft.yaml
+#
+# ⚠️ 上机前置（A2 扩展点部署，本 yaml 依赖）：
+#   1. 复制 HelloAgents/eval/sft_data/v02_gen/lf_extensions.py
+#      → src/llamafactory/data/lf_extensions.py
+#   2. src/llamafactory/data/__init__.py 末尾加一行：
+#        from .lf_extensions import *  # noqa: F401  (注册 qwen3_semantic_pair / v02_react)
+#   3. src/llamafactory/data/processor/supervised.py 段数校验放宽（0.9.3 第 93/136 行）：
+#        if (len(...) % 2 != 1 or ...) and not isinstance(self.template, SemanticPairTemplate):
 # ⚠️ 所有路径均在数据盘 /root/autodl-tmp（系统盘 /root 仅 30GB）
 # =============================================================================
 
@@ -28,21 +32,23 @@ lora_dropout: 0.05
 lora_target: all              # 对所有线性层加 LoRA（Qwen3 推荐）
 
 ### dataset
-# dataset_dir 指向上传的转换产物目录（含 dataset_info.json + sft_train.json + sft_val.json）
-dataset_dir: /root/autodl-tmp/HelloAgents/eval/sft_data/llamafactory
-dataset: sales_agent_sft_train
-eval_dataset: sales_agent_sft_val
-template: qwen3
+# dataset_dir 指向 v02 转换产物目录（dataset_info.json + sft_train.json + sft_val.json）
+dataset_dir: /root/autodl-tmp/HelloAgents/eval/sft_data/v02_gen/llamafactory_v02
+dataset: sales_agent_v02_train
+eval_dataset: sales_agent_v02_val
+# v02 自定义模板（语义配对 + message 级 loss，见头部部署说明）；官方 qwen3 管线
+# 无法表达桶 2 "编造轮无 gpt 收尾"形态（converter 拦截 + encode_multiturn IndexError）
+template: qwen3_semantic_pair
 # 关键排雷点：我们的数据用 ReActAgent 的 Thought 工具（function_call）承载推理，
 # 不含 Qwen3 原生 <think> CoT，故关闭思考模式；训练/推理/评测三处必须一致！
 enable_thinking: false
-cutoff_len: 8192              # 实测240条token max~4532/p99~4306，8192零截断且留足够余量（防tokenizer估计误差切掉末尾Finish答案）
+cutoff_len: 8192              # v02 实测（SemanticPairTemplate 渲染）train max~2008 / val max~1469，8192 零截断留足余量
 max_samples: 100000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/qwen3-14b-sales/lora/sft
+output_dir: saves/qwen3-14b-sales/lora/sft_v02
 logging_steps: 5
 save_steps: 50
 plot_loss: true
@@ -50,9 +56,9 @@ overwrite_output_dir: true
 
 ### train
 per_device_train_batch_size: 1
-gradient_accumulation_steps: 4   # 2 卡 × 1 × 4 = 全局 batch 8（对齐计划）
+gradient_accumulation_steps: 4   # 单卡 × 1 × 4 = 全局 batch 4（对齐 D1 决策 batch 4）
 learning_rate: 1.0e-4
-num_train_epochs: 3.0
+num_train_epochs: 2.0          # D1 决策：960/4 = 240 步/epoch × 2 epochs = 480 步
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
