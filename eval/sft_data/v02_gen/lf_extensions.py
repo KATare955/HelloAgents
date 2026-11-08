@@ -27,7 +27,7 @@
   4. 训练 yaml：template: qwen3_semantic_pair；其余沿用 R1 配置（已更新为 v02 版）。
 
 PATCH（src/llamafactory/data/processor/supervised.py，两处同一段校验，0.9.3 实测
-第 93 行与第 136 行，各改 1 行；上机以实际行号为准）：
+第 93/136 行、0.9.6.dev0 实测第 113/156 行，各改 1 行；上机以 grep 为准）：
   SupervisedDatasetProcessor.preprocess_dataset 与
   PackedSupervisedDatasetProcessor.preprocess_dataset 的段数校验对语义配对模板放宽：
     if len(examples["_prompt"][i]) % 2 != 1 or len(examples["_response"][i]) != 1:
@@ -64,7 +64,10 @@ class SemanticPairTemplate(type(TEMPLATES["qwen3"])):
         messages: list[dict[str, Any]],
         system: Optional[str] = None,
         tools: Optional[str] = None,
+        discarding_history_cot: bool = False,
     ) -> list[tuple[list[int], list[int]]]:
+        # 注：discarding_history_cot 为 0.9.6.dev0 processor 传入的第 5 位置参数
+        # （mask_history 时丢弃历史 cot）；本路线 mask_history 恒为 False，忽略即可
         messages = deepcopy(messages)
         # nothink：对所有 target 段移除 cot（官方只处理偶数位，语义配对下 target 位置不固定）
         if self.enable_thinking is False:
