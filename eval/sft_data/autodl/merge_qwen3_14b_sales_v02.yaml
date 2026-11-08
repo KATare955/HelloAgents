@@ -1,0 +1,11 @@
+# v02 LoRA merge 配置（D1/R2 训练产物合并，AutoDL 上执行）
+# 用法：llamafactory-cli export /root/autodl-tmp/HelloAgents/eval/sft_data/autodl/merge_qwen3_14b_sales_v02.yaml
+model_name_or_path: /root/autodl-tmp/models/Qwen3-14B
+adapter_name_or_path: /root/autodl-tmp/LLaMA-Factory/saves/qwen3-14b-sales/lora/sft_v02
+template: qwen3
+finetuning_type: lora
+trust_remote_code: true
+export_dir: /root/autodl-tmp/models/qwen3-14b-sales-sft_v02
+export_size: 2
+export_device: cpu
+export_legacy_format: false

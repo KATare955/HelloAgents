@@ -81,7 +81,8 @@ class SemanticPairTemplate(type(TEMPLATES["qwen3"])):
         pairs, buf = [], []
         for m, toks in zip(messages, encoded):
             if m["role"] in TARGET_ROLES:
-                pairs.append({"src": buf, "tgt": toks, "learn": m.get("loss", True)})
+                # learn: 默认 True；显式 False 才不学；None（schema 填充）按默认学习
+                pairs.append({"src": buf, "tgt": toks, "learn": m.get("loss", True) is not False})
                 buf = []
             else:
                 buf.append(toks)
@@ -170,8 +171,11 @@ class V02ReactConverter(DatasetConverter):
         messages = []
         for c in example["conversations"]:
             msg = {"role": self.ROLE_MAP[c["from"]], "content": c.get("value") or ""}
-            if "loss" in c:  # 编造段 loss=false 透传
-                msg["loss"] = bool(c["loss"])
+            # 所有段统一输出 loss 键（bool），保证 datasets map 批内 schema 一致。
+            # 注意：datasets 的 json builder 做 schema 推断时会把部分段缺失的 loss 键
+            # 统一填充为 None（"loss" in c 恒为 True），因此 None 必须按默认学习处理。
+            loss = c.get("loss")
+            msg["loss"] = bool(loss) if loss is not None else True
             messages.append(msg)
         return {
             "_prompt": messages[:-1],
