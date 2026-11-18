@@ -1,0 +1,150 @@
+{
+  "date": "2026-11-18",
+  "config": {
+    "w_acc": 0.8,
+    "w_proc": 0.0,
+    "recover_bonus": 0.15
+  },
+  "groups": {
+    "G1_noncorr_750": {
+      "n": 750,
+      "mean_r": 0.8,
+      "mean_r_acc": 1.0,
+      "gate0_rate": 0.0,
+      "tool_correct_rate": 1.0
+    },
+    "G1_corr_250": {
+      "n": 250,
+      "mean_r": 0.48,
+      "mean_r_acc": 1.0,
+      "gate0_rate": 0.4,
+      "tool_correct_rate": 1.0
+    },
+    "G2_sft_v02_eval_68": {
+      "n": 68,
+      "mean_r": 0.7176,
+      "mean_r_acc": 0.8971,
+      "gate0_rate": 0.0,
+      "tool_correct_rate": 0.8971
+    },
+    "F_baseline_136": {
+      "n": 136,
+      "mean_r": 0.6765,
+      "mean_r_acc": 0.9338,
+      "gate0_rate": 0.0956,
+      "tool_correct_rate": 0.9338
+    },
+    "F_fail_subset": {
+      "n": 9,
+      "mean_r": 0.0,
+      "mean_r_acc": 0.0,
+      "gate0_rate": 0.1111,
+      "tool_correct_rate": 0.0
+    },
+    "F_correct_subset": {
+      "n": 127,
+      "mean_r": 0.7244,
+      "mean_r_acc": 1.0,
+      "gate0_rate": 0.0945,
+      "tool_correct_rate": 1.0
+    }
+  },
+  "verify_alignment": {
+    "n": 204,
+    "pearson_r(r_acc, verify_final_score)": 0.4916
+  },
+  "assertions": {
+    "1_distinguish": {
+      "golden_mean_r": 0.72,
+      "failure_mean_r": 0.0,
+      "diff": 0.72,
+      "threshold": 0.5,
+      "passed": true
+    },
+    "2_fabrication_gated": {
+      "n_fabricated_cases": 13,
+      "cases": [
+        {
+          "group": "F_think",
+          "id": "multi_hop_006",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_think",
+          "id": "test_drive_002",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_think",
+          "id": "test_drive_003",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_think",
+          "id": "test_drive_005",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_think",
+          "id": "test_drive_006",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_think",
+          "id": "test_drive_009",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_think",
+          "id": "test_drive_010",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_nothink",
+          "id": "test_drive_002",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_nothink",
+          "id": "test_drive_003",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_nothink",
+          "id": "test_drive_005",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_nothink",
+          "id": "test_drive_006",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_nothink",
+          "id": "test_drive_007",
+          "reason": "fabricated_args"
+        },
+        {
+          "group": "F_nothink",
+          "id": "test_drive_010",
+          "reason": "fabricated_args"
+        }
+      ],
+      "all_gated": true,
+      "passed": true
+    },
+    "3_gate_miskill": {
+      "n_gate0": 0,
+      "total": 750,
+      "rate": 0.0,
+      "threshold": 0.05,
+      "gate_reasons": {
+        "fabricated_args": 100
+      },
+      "note": "非纠错桶口径；纠错桶嵌入负面轮为真阳性，单独统计",
+      "correction_bucket_gate_rate": 0.4,
+      "passed": true
+    }
+  },
+  "per_sample_file": "/Users/kay/Desktop/hello-agents-family/HelloAgents/rl/regression_per_sample_2026-11-18.jsonl"
+}

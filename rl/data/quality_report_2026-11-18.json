@@ -1,0 +1,9 @@
+{
+  "mode": "check",
+  "generated_at": null,
+  "r1_violations": [],
+  "r2_violations": [],
+  "r2_skipped": 49,
+  "r3_violations": [],
+  "pass": true
+}
