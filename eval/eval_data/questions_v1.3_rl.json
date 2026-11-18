@@ -1,0 +1,297 @@
+{
+  "metadata": {
+    "total_questions": 15,
+    "scenarios": 3,
+    "question_types": [
+      "单跳",
+      "失败恢复"
+    ],
+    "note": "RL 专属评测子集（2026-11-18 冻结）：新工具 8 + 失败恢复 7；由 reward 函数判分（verify 68 题 harness 不覆盖新工具）；训练集实体组合与本子集隔离，冻结后不得再修改"
+  },
+  "questions": [
+    {
+      "id": "rl_nt_001",
+      "scenario": "新工具-网页搜索",
+      "type": "单跳",
+      "question": "我听说E5 Sportback最近有召回，帮我查一下涉及多少辆车",
+      "expected_tools": [
+        "web_search"
+      ],
+      "difficulty": "medium",
+      "gt_facts": {
+        "召回数量": "1482"
+      },
+      "accept_clarification": false,
+      "fail_inject": null,
+      "dep_edges": []
+    },
+    {
+      "id": "rl_nt_002",
+      "scenario": "新工具-网页搜索",
+      "type": "单跳",
+      "question": "A5L 2026款是不是已经上市了？卖多少钱？",
+      "expected_tools": [
+        "web_search"
+      ],
+      "difficulty": "medium",
+      "gt_facts": {
+        "价格区间": "29.98万"
+      },
+      "accept_clarification": false,
+      "fail_inject": null,
+      "dep_edges": []
+    },
+    {
+      "id": "rl_nt_003",
+      "scenario": "新工具-网页搜索",
+      "type": "单跳",
+      "question": "帮我搜一下Model 3现在卖多少钱",
+      "expected_tools": [
+        "web_search"
+      ],
+      "difficulty": "medium",
+      "gt_facts": {
+        "价格": "23.19万"
+      },
+      "accept_clarification": false,
+      "fail_inject": null,
+      "dep_edges": []
+    },
+    {
+      "id": "rl_nt_004",
+      "scenario": "新工具-网页搜索",
+      "type": "单跳",
+      "question": "2026年新能源车购置税政策是什么样的？",
+      "expected_tools": [
+        "web_search"
+      ],
+      "difficulty": "medium",
+      "gt_facts": {
+        "税率": "5%"
+      },
+      "accept_clarification": false,
+      "fail_inject": null,
+      "dep_edges": []
+    },
+    {
+      "id": "rl_nt_005",
+      "scenario": "新工具-跟进任务",
+      "type": "单跳",
+      "question": "帮我看下王建国的跟进任务有哪些",
+      "expected_tools": [
+        "follow_up_query"
+      ],
+      "difficulty": "easy",
+      "gt_facts": {
+        "任务1": "试驾提醒",
+        "任务2": "报价跟进"
+      },
+      "accept_clarification": false,
+      "fail_inject": null,
+      "dep_edges": []
+    },
+    {
+      "id": "rl_nt_006",
+      "scenario": "新工具-跟进任务",
+      "type": "单跳",
+      "question": "孙丽那边有什么待跟进的事？",
+      "expected_tools": [
+        "follow_up_query"
+      ],
+      "difficulty": "easy",
+      "gt_facts": {
+        "任务1": "试驾提醒",
+        "任务2": "报价跟进",
+        "任务3": "交车确认"
+      },
+      "accept_clarification": false,
+      "fail_inject": null,
+      "dep_edges": []
+    },
+    {
+      "id": "rl_nt_007",
+      "scenario": "新工具-跟进任务",
+      "type": "单跳",
+      "question": "查一下周伟还有没有没做完的跟进任务",
+      "expected_tools": [
+        "follow_up_query"
+      ],
+      "difficulty": "easy",
+      "gt_facts": {
+        "任务": "没有未完成"
+      },
+      "accept_clarification": false,
+      "fail_inject": null,
+      "dep_edges": []
+    },
+    {
+      "id": "rl_nt_008",
+      "scenario": "新工具-跟进任务",
+      "type": "单跳",
+      "question": "帮我查下李明的跟进任务",
+      "expected_tools": [
+        "follow_up_query"
+      ],
+      "difficulty": "medium",
+      "gt_facts": {},
+      "accept_clarification": {
+        "target_tool": "follow_up_query",
+        "reason": "客户'李明'不在CRM中（目标不可达）；正确行为=告知未找到并请用户确认姓名"
+      },
+      "fail_inject": null,
+      "dep_edges": []
+    },
+    {
+      "id": "rl_fr_001",
+      "scenario": "失败恢复",
+      "type": "失败恢复",
+      "question": "帕萨特2024款330TSI精英版现在卖多少钱？",
+      "expected_tools": [
+        "text_search"
+      ],
+      "difficulty": "hard",
+      "gt_facts": {
+        "指导价": 205900
+      },
+      "accept_clarification": false,
+      "fail_inject": {
+        "tool": "text_search",
+        "fail_times": 1,
+        "error_code": "TIMEOUT"
+      },
+      "dep_edges": []
+    },
+    {
+      "id": "rl_fr_002",
+      "scenario": "失败恢复",
+      "type": "失败恢复",
+      "question": "帮我算一下E5 Sportback 2025款先锋型首付30%贷3年的月供",
+      "expected_tools": [
+        "calculate_finance"
+      ],
+      "difficulty": "hard",
+      "gt_facts": {
+        "指导价": 235900,
+        "月供": 4912.11
+      },
+      "accept_clarification": false,
+      "fail_inject": {
+        "tool": "calculate_finance",
+        "fail_times": 1,
+        "error_code": "PARAM_ERROR"
+      },
+      "dep_edges": []
+    },
+    {
+      "id": "rl_fr_003",
+      "scenario": "失败恢复",
+      "type": "失败恢复",
+      "question": "我想约E5 Sportback试驾，浦东金桥店，11月21日下午3点，我叫李强，电话13800138001",
+      "expected_tools": [
+        "book_test_drive"
+      ],
+      "difficulty": "hard",
+      "gt_facts": {},
+      "accept_clarification": {
+        "target_tool": "book_test_drive",
+        "reason": "经销商'浦东金桥店'不在白名单（目标不可达）；正确行为=告知可选门店并反问确认"
+      },
+      "fail_inject": {
+        "tool": "book_test_drive",
+        "fail_times": 1,
+        "error_code": "NOT_FOUND"
+      },
+      "dep_edges": []
+    },
+    {
+      "id": "rl_fr_004",
+      "scenario": "失败恢复",
+      "type": "失败恢复",
+      "question": "现在买小米SU7 2025款有什么优惠？",
+      "expected_tools": [
+        "query_discount_policy"
+      ],
+      "difficulty": "hard",
+      "gt_facts": {
+        "优惠总额": 10000
+      },
+      "accept_clarification": false,
+      "fail_inject": {
+        "tool": "query_discount_policy",
+        "fail_times": 1,
+        "error_code": "TIMEOUT"
+      },
+      "dep_edges": []
+    },
+    {
+      "id": "rl_fr_005",
+      "scenario": "失败恢复",
+      "type": "失败恢复",
+      "question": "帮我查下帕萨特2024款330TSI精英版最近成交价",
+      "expected_tools": [
+        "query_transaction_price"
+      ],
+      "difficulty": "hard",
+      "gt_facts": {
+        "成交均价": 195000
+      },
+      "accept_clarification": false,
+      "fail_inject": {
+        "tool": "query_transaction_price",
+        "fail_times": 1,
+        "error_code": "NOT_FOUND"
+      },
+      "dep_edges": []
+    },
+    {
+      "id": "rl_fr_006",
+      "scenario": "失败恢复",
+      "type": "失败恢复",
+      "question": "帮我搜下汉EV现在什么价格",
+      "expected_tools": [
+        "web_search"
+      ],
+      "difficulty": "hard",
+      "gt_facts": {
+        "价格": "21.98万"
+      },
+      "accept_clarification": false,
+      "fail_inject": {
+        "tool": "web_search",
+        "fail_times": 1,
+        "error_code": "TIMEOUT"
+      },
+      "dep_edges": []
+    },
+    {
+      "id": "rl_fr_007",
+      "scenario": "失败恢复",
+      "type": "失败恢复",
+      "question": "查下王芳的跟进任务",
+      "expected_tools": [
+        "follow_up_query"
+      ],
+      "difficulty": "hard",
+      "gt_facts": {},
+      "accept_clarification": {
+        "target_tool": "follow_up_query",
+        "reason": "客户'王芳'不在CRM中（目标不可达）；正确行为=告知未找到并请用户确认姓名"
+      },
+      "fail_inject": {
+        "tool": "follow_up_query",
+        "fail_times": 1,
+        "error_code": "NOT_FOUND"
+      },
+      "dep_edges": []
+    }
+  ],
+  "scenario_distribution": {
+    "新工具-网页搜索": 4,
+    "新工具-跟进任务": 4,
+    "失败恢复": 7
+  },
+  "type_distribution": {
+    "单跳": 8,
+    "失败恢复": 7
+  }
+}

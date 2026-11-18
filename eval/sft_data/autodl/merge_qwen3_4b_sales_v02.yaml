@@ -1,0 +1,13 @@
+# SFT4B LoRA merge 配置（v02 快训产物合并，AutoDL 上执行）
+# 用法：llamafactory-cli export /root/autodl-tmp/HelloAgents/eval/sft_data/autodl/merge_qwen3_4b_sales_v02.yaml
+# 产物 = GRPO --base-model 起点（--sft-adapter 仍指 adapter 目录，trainer 内 merge_and_unload）
+# 同时供 serve sft4b 评测 / pass@8 过滤（--served-model-name sft4b）
+model_name_or_path: /root/autodl-tmp/models/Qwen3-4B
+adapter_name_or_path: /root/autodl-tmp/LLaMA-Factory/saves/qwen3-4b-sales/lora/sft_v02
+template: qwen3
+finetuning_type: lora
+trust_remote_code: true
+export_dir: /root/autodl-tmp/models/qwen3-4b-sales-sft_v02
+export_size: 2
+export_device: cpu
+export_legacy_format: false
