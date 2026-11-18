@@ -1,0 +1,120 @@
+{
+  "王建国": {
+    "name": "王建国",
+    "phone": "139****2211",
+    "level": "A",
+    "tasks": [
+      {
+        "task_type": "试驾提醒",
+        "deadline": "2026-11-20",
+        "priority": "高",
+        "status": "未完成",
+        "last_followup_summary": "11-10 电话确认意向 E5 Sportback 先锋型，约定 11-20 到店试驾，客户将带旧车评估置换"
+      },
+      {
+        "task_type": "报价跟进",
+        "deadline": "2026-11-25",
+        "priority": "中",
+        "status": "未完成",
+        "last_followup_summary": "11-14 微信发送金融方案（首付30%、三年期），客户未回复"
+      }
+    ]
+  },
+  "陈静": {
+    "name": "陈静",
+    "phone": "137****8834",
+    "level": "B",
+    "tasks": [
+      {
+        "task_type": "交车确认",
+        "deadline": "2026-11-19",
+        "priority": "高",
+        "status": "未完成",
+        "last_followup_summary": "11-15 订单进入交付准备，需与客户确认 11-22 交车时间及到场人数"
+      },
+      {
+        "task_type": "回访",
+        "deadline": "2026-12-05",
+        "priority": "低",
+        "status": "未完成",
+        "last_followup_summary": "交车后 2 周回访用车体验与充电安装情况"
+      }
+    ]
+  },
+  "赵强": {
+    "name": "赵强",
+    "phone": "136****5570",
+    "level": "A",
+    "tasks": [
+      {
+        "task_type": "报价跟进",
+        "deadline": "2026-11-21",
+        "priority": "高",
+        "status": "未完成",
+        "last_followup_summary": "11-12 对比竞品后要求重新报价，需补充置换补贴测算"
+      },
+      {
+        "task_type": "试驾提醒",
+        "deadline": "2026-11-28",
+        "priority": "中",
+        "status": "未完成",
+        "last_followup_summary": "意向帕萨特 2024 款 280TSI 商务版，客户仅周末有空，待约具体时段"
+      },
+      {
+        "task_type": "保养提醒",
+        "deadline": "2026-12-15",
+        "priority": "低",
+        "status": "未完成",
+        "last_followup_summary": "车辆已行驶约 9000 公里，提醒首保"
+      }
+    ]
+  },
+  "刘洋": {
+    "name": "刘洋",
+    "phone": "135****6629",
+    "level": "C",
+    "tasks": [
+      {
+        "task_type": "回访",
+        "deadline": "2026-11-24",
+        "priority": "中",
+        "status": "未完成",
+        "last_followup_summary": "11-08 到店未试驾即离店，回访了解顾虑（疑似预算不足）"
+      }
+    ]
+  },
+  "孙丽": {
+    "name": "孙丽",
+    "phone": "138****0916",
+    "level": "A",
+    "tasks": [
+      {
+        "task_type": "试驾提醒",
+        "deadline": "2026-11-18",
+        "priority": "高",
+        "status": "未完成",
+        "last_followup_summary": "11-16 预约今日下午 A5L 试驾，需提前 1 小时电话确认"
+      },
+      {
+        "task_type": "报价跟进",
+        "deadline": "2026-11-22",
+        "priority": "高",
+        "status": "未完成",
+        "last_followup_summary": "11-17 询问 A5L 金融贴息方案，待发送测算明细"
+      },
+      {
+        "task_type": "交车确认",
+        "deadline": "2026-12-01",
+        "priority": "中",
+        "status": "未完成",
+        "last_followup_summary": "已下订 A5L 2026 款，排产中，待通知交车时间"
+      }
+    ]
+  },
+  "周伟": {
+    "name": "周伟",
+    "phone": "133****3045",
+    "level": "B",
+    "tasks": []
+  }
+}
