@@ -22,7 +22,7 @@ Rollout 沙盒（§7）：
     - 首跑 w_proc=0（λ=0 消融起点），r_proc 第二轮再开。
 
 用法（GPU 日）：
-    uv run python rl/grpo_train.py \
+    python rl/grpo_train.py \
         --data rl/data/rl_prompts_filtered.jsonl \
         --base-model /root/autodl-tmp/models/Qwen3-4B \
         --sft-adapter /root/autodl-tmp/HelloAgents/saves/qwen3-4b-sales/lora/sft_v02 \

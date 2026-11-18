@@ -6,7 +6,7 @@ baseline_eval——用训练同款 run_rollout + compute_reward 判分（同一�
 r = r_gate × (0.8·r_acc + 0·r_proc)，fail_inject 按题面注入）。
 
 用法（GPU 日，某组模型已 serve）：
-    uv run python rl/eval_rl_subset.py \
+    python rl/eval_rl_subset.py \
         --data eval/eval_data/questions_v1.3_rl.json \
         --llm-base-url http://127.0.0.1:8000/v1 --llm-model base4b --llm-api-key EMPTY \
         --eval-today 2026-11-19 --temperature 0 \

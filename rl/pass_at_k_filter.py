@@ -8,7 +8,7 @@
 通过定义：r_gate == 1 且 r_acc == 1（首跑 λ=0 口径下等价于 r == 0.8）。
 
 用法（GPU 日，SFT4B 已 serve）：
-    uv run python rl/pass_at_k_filter.py \
+    python rl/pass_at_k_filter.py \
         --data rl/data/rl_prompts_v1_2026-11-18.jsonl \
         --n-samples 8 --temperature 0.7 \
         --llm-base-url http://127.0.0.1:8000/v1 --llm-model sft4b --llm-api-key EMPTY \
