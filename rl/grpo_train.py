@@ -68,7 +68,7 @@ from rl.reward import compute_reward
 # 首跑超参（Reward 规格书 §1；网格起点，命令行可覆盖）
 # ---------------------------------------------------------------------------
 
-DEFAULT_BETA = 0.04
+DEFAULT_BETA = 0.05
 DEFAULT_GROUP_SIZE = 8
 DEFAULT_LR = 1e-5
 DEFAULT_TEMPERATURE = 0.7
