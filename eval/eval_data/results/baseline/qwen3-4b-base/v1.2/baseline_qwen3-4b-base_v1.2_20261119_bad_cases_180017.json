@@ -1,0 +1,109 @@
+[
+  {
+    "id": "car_config_007",
+    "scenario": "车型参数查询",
+    "type": "单跳",
+    "question": "对比E5 Sportback和小米SU7的电池容量，哪个更大？",
+    "expected_tools": [
+      "text_search"
+    ],
+    "difficulty": "hard",
+    "response": "根据对比结果，小米SU7的电池容量为101kWh，而E5 Sportback的电池容量为100kWh。因此，小米SU7的电池容量略大一些。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "text_search"
+    ],
+    "extra_tools": [
+      "competitor_compare"
+    ],
+    "trajectory_ref": "trajectories/car_config_007.jsonl"
+  },
+  {
+    "id": "compare_006",
+    "scenario": "竞品对比",
+    "type": "单跳",
+    "question": "如果预算30万，E5 Sportback和小米SU7应该选哪个？",
+    "expected_tools": [
+      "text_search"
+    ],
+    "difficulty": "hard",
+    "response": "根据对比结果，E5 Sportback在价格、配置、动力和充电速度方面均优于小米SU7，而小米SU7在空间和续航方面略胜一筹。考虑到您的预算为30万元，E5 Sportback的性价比更高，建议优先选择E5 Sportback。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "text_search"
+    ],
+    "extra_tools": [
+      "competitor_compare"
+    ],
+    "trajectory_ref": "trajectories/compare_006.jsonl"
+  },
+  {
+    "id": "multi_hop_005",
+    "scenario": "试驾预约",
+    "type": "多跳",
+    "question": "我想预约E5 Sportback的试驾，先帮我查询一下这款车的配置、优惠政策和金融方案",
+    "expected_tools": [
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "difficulty": "hard",
+    "response": "根据您的要求，以下是关于E5 Sportback的详细信息：\n\n### 车型配置\n1. **E5 Sportback 2025款 先锋型**：价格235,900元，单电机，最大功率220kW，电池容量76kWh，CLTC续航618km，快充功率270kW，10%-80%约18分钟，后驱，尺寸4881x1960x1479mm，轴距2950mm，5座，后备箱容积347-1233L。\n2. **E5 Sportback 2025款 先锋quattro型**：价格269,900元，单电机，最大功率386kW，电池容量83kWh，CLTC续航623km，快充功率270kW，10%-80%约18分钟，quattro四驱，尺寸4881x1960x1479mm，轴距2950mm，5座，后备箱容积347-1233L。\n3. **E5 Sportback 2025款 先锋Plus型**：价格269,900元，单电机，最大功率300kW，电池容量100kWh，CLTC续航773km，快充功率270kW，10%-80%约18分钟，后驱，尺寸4881x1960x1479mm，轴距2950mm，5座，后备箱容积347-1233L。\n4. **E5 Sportback 2025款 旗舰quattro型**：价格319,900元，单电机，最大功率579kW，电池容量100kWh，CLTC续航647km，快充功率270kW，10%-80%约18分钟，quattro四驱，尺寸4881x1960x1479mm，轴距2950mm，5座，后备箱容积347-1233L。\n\n### 优惠政策\n- **厂商补贴**：20,000元（限时优惠，2026-10-01至2026-12-31）。\n- **旧车置换补贴**：10,000元（需提供旧车行驶证，旧车使用满3年）。\n- **总优惠**：30,000元。\n\n### 金融方案（以269,900元先锋quattro型为例）\n- **首付比例**：30%（80,970元）。\n- **贷款年限**：3年。\n- **年利率**：4.5%。\n- **月供**：约7,234元。\n- **总利息**：约14,220元。\n\n请根据您的需求选择合适的车型和配置，并考虑优惠政策以降低购车成本。如果您需要进一步的帮助，如预约试驾或比较竞品，请随时告知。",
+    "status": "success",
+    "actual_tools": [
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance"
+    ],
+    "tool_calls_count": 3,
+    "tool_correct": false,
+    "missing_tools": [
+      "book_test_drive"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/multi_hop_005.jsonl"
+  },
+  {
+    "id": "multi_hop_006",
+    "scenario": "竞品对比",
+    "type": "多跳",
+    "question": "对比E5 Sportback和小米SU7的价格、续航、优惠政策、金融方案，然后帮我预约试驾E5 Sportback",
+    "expected_tools": [
+      "competitor_compare",
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "difficulty": "hard",
+    "response": "很抱歉，试驾预约工具暂时不可用。建议您稍后再试，或联系上汽奥迪官方客服咨询试驾安排。同时，您也可以直接前往附近的经销商门店，如“上汽奥迪上海郑隆奥翟”进行试驾体验。需要我帮您查询该经销商的联系方式吗？",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare",
+      "query_discount_policy",
+      "query_discount_policy",
+      "calculate_finance",
+      "calculate_finance",
+      "book_test_drive",
+      "book_test_drive"
+    ],
+    "tool_calls_count": 7,
+    "tool_correct": false,
+    "missing_tools": [
+      "text_search"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/multi_hop_006.jsonl"
+  }
+]
