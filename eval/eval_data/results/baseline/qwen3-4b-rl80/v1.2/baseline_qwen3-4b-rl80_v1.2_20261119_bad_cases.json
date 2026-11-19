@@ -1,0 +1,82 @@
+[
+  {
+    "id": "car_config_007",
+    "scenario": "车型参数查询",
+    "type": "单跳",
+    "question": "对比E5 Sportback和小米SU7的电池容量，哪个更大？",
+    "expected_tools": [
+      "text_search"
+    ],
+    "difficulty": "hard",
+    "response": "E5 Sportback和小米SU7的电池容量分别为100kWh和101kWh，两者电池容量相当，小米SU7略高一些。综合考虑性价比，建议优先选择E5 Sportback。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "text_search"
+    ],
+    "extra_tools": [
+      "competitor_compare"
+    ],
+    "trajectory_ref": "trajectories/car_config_007.jsonl"
+  },
+  {
+    "id": "compare_006",
+    "scenario": "竞品对比",
+    "type": "单跳",
+    "question": "如果预算30万，E5 Sportback和小米SU7应该选哪个？",
+    "expected_tools": [
+      "text_search"
+    ],
+    "difficulty": "hard",
+    "response": "根据对比结果，E5 Sportback在价格、配置、动力和充电速度方面均优于小米SU7，而小米SU7在空间和续航方面稍有优势。考虑到您的预算为30万元，E5 Sportback的性价比更高，建议优先选择E5 Sportback。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "text_search"
+    ],
+    "extra_tools": [
+      "competitor_compare"
+    ],
+    "trajectory_ref": "trajectories/compare_006.jsonl"
+  },
+  {
+    "id": "multi_hop_006",
+    "scenario": "竞品对比",
+    "type": "多跳",
+    "question": "对比E5 Sportback和小米SU7的价格、续航、优惠政策、金融方案，然后帮我预约试驾E5 Sportback",
+    "expected_tools": [
+      "competitor_compare",
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "difficulty": "hard",
+    "response": "当前工具 'book_test_drive' 被禁用，由于连续失败。请稍后再试。298 秒后该工具将重新启用。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare",
+      "query_discount_policy",
+      "query_discount_policy",
+      "calculate_finance",
+      "calculate_finance",
+      "book_test_drive",
+      "book_test_drive"
+    ],
+    "tool_calls_count": 7,
+    "tool_correct": false,
+    "missing_tools": [
+      "text_search"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/multi_hop_006.jsonl"
+  }
+]
