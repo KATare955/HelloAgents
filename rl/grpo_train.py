@@ -461,7 +461,7 @@ class GRPOTrainer:
         ids = torch.tensor([input_ids], device=self.model.device)
         logits = self.model(input_ids=ids).logits[0]
         logprobs = torch.log_softmax(logits[:-1], dim=-1)
-        return logprobs.gather(1, ids[:, 1:].unsqueeze(-1)).squeeze(-1)[0]
+        return logprobs.gather(1, ids[0, 1:].unsqueeze(-1)).squeeze(-1)
 
     def logps_list(self, input_ids: List[int]) -> List[float]:
         """ref 前向：关 LoRA adapter（= SFT4B 权重），无梯度，返回 Python 浮点。"""
@@ -472,7 +472,7 @@ class GRPOTrainer:
             with self.model.disable_adapter():
                 logits = self.model(input_ids=ids).logits[0]
             logprobs = torch.log_softmax(logits[:-1], dim=-1)
-            gathered = logprobs.gather(1, ids[:, 1:].unsqueeze(-1)).squeeze(-1)[0]
+            gathered = logprobs.gather(1, ids[0, 1:].unsqueeze(-1)).squeeze(-1)
             return [float(v) for v in gathered.cpu().tolist()]
 
     def train_step(
