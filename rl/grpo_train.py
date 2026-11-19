@@ -339,6 +339,11 @@ def _encode(tokenizer, msgs: List[Dict[str, Any]], tools_schema: Optional[list])
     if tools_schema:
         kwargs["tools"] = tools_schema
     out = tokenizer.apply_chat_template(msgs, tokenize=True, **kwargs)
+    # transformers 5.x：tokenize=True 返回 BatchEncoding；旧版本返回 list[int]
+    if isinstance(out, dict):
+        out = out["input_ids"]
+    elif not isinstance(out, list):
+        out = out.input_ids
     return list(out)
 
 
