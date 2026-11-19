@@ -38,6 +38,7 @@ import math
 import os
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -566,6 +567,7 @@ def main(argv: Optional[List[str]] = None):
     ap.add_argument("--beta", type=float, default=DEFAULT_BETA)
     ap.add_argument("--lr", type=float, default=DEFAULT_LR)
     ap.add_argument("--group-size", type=int, default=DEFAULT_GROUP_SIZE)
+    ap.add_argument("--rollout-workers", type=int, default=8, help="每步 rollout 采样并发数（run_rollout 每样本独立实例，线程安全）")
     ap.add_argument("--prompts-per-step", type=int, default=4)
     ap.add_argument("--steps", type=int, default=40)
     ap.add_argument("--w-acc", type=float, default=0.8)
@@ -643,19 +645,23 @@ def main(argv: Optional[List[str]] = None):
         start = (args.prompt_offset + (step - 1) * args.prompts_per_step) % len(prompts)
         group_prompts = [prompts[(start + i) % len(prompts)] for i in range(args.prompts_per_step)]
 
-        records: List[Dict[str, Any]] = []
-        step_rows: List[Dict[str, Any]] = []
-        for p in group_prompts:
-            for _ in range(args.group_size):
-                rec = run_rollout(
-                    p, llm_kwargs, args.eval_today, weekday_cn,
-                    w_acc=trainer.w_acc, w_proc=trainer.w_proc,
-                    eval_year=eval_year, max_steps=args.max_steps,
-                    max_consec_fail=args.max_consec_fail,
-                )
-                rec["prompt_id"] = p.get("id", "?")
-                records.append(rec)
-                step_rows.extend(rollout_rows(rec, step, rec["prompt_id"]))
+        tasks = [(p, k) for p in group_prompts for k in range(args.group_size)]
+
+        def _rollout(task):
+            p, _ = task
+            rec = run_rollout(
+                p, llm_kwargs, args.eval_today, weekday_cn,
+                w_acc=trainer.w_acc, w_proc=trainer.w_proc,
+                eval_year=eval_year, max_steps=args.max_steps,
+                max_consec_fail=args.max_consec_fail,
+            )
+            rec["prompt_id"] = p.get("id", "?")
+            return rec
+
+        with ThreadPoolExecutor(max_workers=args.rollout_workers) as ex:
+            records = list(ex.map(_rollout, tasks))
+        step_rows = [row for rec in records
+                     for row in rollout_rows(rec, step, rec["prompt_id"])]
         with rollouts_file.open("a", encoding="utf-8") as f:
             for row in step_rows:
                 f.write(json.dumps(row, ensure_ascii=False) + "\n")

@@ -23,6 +23,7 @@ import argparse
 import json
 import os
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
@@ -87,6 +88,7 @@ def main(argv: List[str] | None = None) -> int:
     ap.add_argument("--min-rate", type=float, default=0.2)
     ap.add_argument("--max-rate", type=float, default=0.8)
     ap.add_argument("--min-keep", type=int, default=150)
+    ap.add_argument("--workers", type=int, default=8, help="每 prompt 采样并发数（run_rollout 每样本独立实例无共享状态，线程安全）")
     ap.add_argument("--out-filtered", required=True)
     ap.add_argument("--out-report", required=True)
     args = ap.parse_args(argv)
@@ -104,12 +106,13 @@ def main(argv: List[str] | None = None) -> int:
 
     rows: List[Dict[str, Any]] = []
     for i, p in enumerate(prompts, 1):
-        flags, rewards = [], []
-        for s in range(args.n_samples):
-            rec = run_rollout(p, llm_kwargs, args.eval_today, weekday_cn)
-            rw = rec["reward"]
-            flags.append(is_pass(rw))
-            rewards.append(rw["r"])
+        with ThreadPoolExecutor(max_workers=args.workers) as ex:
+            recs = list(ex.map(
+                lambda s: run_rollout(p, llm_kwargs, args.eval_today, weekday_cn),
+                range(args.n_samples),
+            ))
+        flags = [is_pass(rec["reward"]) for rec in recs]
+        rewards = [rec["reward"]["r"] for rec in recs]
         n_pass = sum(flags)
         rows.append({
             "id": p.get("id", f"#{i}"),
