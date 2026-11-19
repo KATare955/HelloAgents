@@ -491,6 +491,7 @@ class GRPOTrainer:
         n_tokens_total = 0
         kl_accum = 0.0
         seq_count = 0
+        n_recs = len(rollout_records)
         for rec, adv in zip(rollout_records, advs):
             ids, mask = tokenize_with_mask(
                 self.tokenizer, rec["messages"], self.tools_schema
@@ -503,7 +504,11 @@ class GRPOTrainer:
                 self.logps_list(ids), device=lp_theta.device, dtype=lp_theta.dtype
             )
             per_pos = -adv * lp_theta[pos] - self.beta * (lp_theta[pos] - lp_ref[pos])
-            losses.append(per_pos.mean())
+            # 逐条立即 backward（梯度累积，图随条释放）：
+            # 32 条轨迹若统一 backward，前向激活全量累积（4B×长轨迹 OOM）；
+            # 除以 n_recs 等价于原 sum(losses)/seq_count 的平均口径（pos 全空的罕见条忽略）。
+            per_pos.mean().div(n_recs).backward()
+            losses.append(float(per_pos.mean().detach().cpu()))
             n_tokens_total += int(pos.sum())
             kl_accum += float((lp_theta[pos] - lp_ref[pos]).mean().detach().cpu())
             seq_count += 1
@@ -512,15 +517,13 @@ class GRPOTrainer:
             return {"loss": 0.0, "n_seqs": 0, "n_tokens": 0,
                     "kl_mean": 0.0, "adv_mean": sum(advs) / len(advs)}
 
-        total_loss = sum(losses) / seq_count
         self.model.train()
-        total_loss.backward()
         torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
         self.optimizer.step()
         self.optimizer.zero_grad()
 
         return {
-            "loss": float(total_loss.detach().cpu()),
+            "loss": sum(losses) / seq_count,
             "n_seqs": seq_count,
             "n_tokens": n_tokens_total,
             "kl_mean": kl_accum / seq_count,
