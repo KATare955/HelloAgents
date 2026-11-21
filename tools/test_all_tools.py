@@ -87,7 +87,7 @@ def main():
     response = registry.execute_tool(
         "calculate_finance",
         {
-            "car_price": 289900,
+            "car_model": "E5 Sportback 2025款 旗舰quattro型",
             "down_payment_ratio": 30,
             "loan_years": 5,
             "interest_rate": 4.5

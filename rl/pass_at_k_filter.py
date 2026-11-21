@@ -9,10 +9,10 @@
 
 用法（GPU 日，SFT4B 已 serve）：
     python rl/pass_at_k_filter.py \
-        --data rl/data/rl_prompts_v1_2026-11-18.jsonl \
+        --data rl/data/rl_prompts_v1_2026-11-21.jsonl \
         --n-samples 8 --temperature 0.7 \
         --llm-base-url http://127.0.0.1:8000/v1 --llm-model sft4b --llm-api-key EMPTY \
-        --eval-today 2026-11-19 \
+        --eval-today 2026-11-21 \
         --min-rate 0.2 --max-rate 0.8 --min-keep 150 \
         --out-filtered rl/data/rl_prompts_filtered.jsonl \
         --out-report rl/data/pass_at_k_sft4b.jsonl

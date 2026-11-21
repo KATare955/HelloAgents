@@ -12,6 +12,9 @@
         --data rl/data/rl_prompts_v1_2026-11-18.jsonl \
         [--out rl/data/probe_failure_matrix.json]
 
+注意：--data 必须与轨迹生成时的 prompt 集同版（历史 probe 轨迹配 11-18 集；
+2026-11-21 起新轨迹配 rl_prompts_v1_2026-11-21.jsonl，mock 指导价已统一口径）。
+
 纯 stdlib，不依赖 hello_agents，可在无 GPU 环境离线跑。
 """
 from __future__ import annotations

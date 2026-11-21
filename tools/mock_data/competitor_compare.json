@@ -5,10 +5,10 @@
       "car_model_b": "小米SU7 2025款 四驱Max版",
       "comparison": {
         "价格": {
-          "car_a_value": 289900,
+          "car_a_value": 319900,
           "car_b_value": 303900,
           "advantage": "A",
-          "note": "E5 Sportback便宜14000元"
+          "note": "E5 Sportback便宜16000元"
         },
         "配置": {
           "car_a_value": "标配全景天窗、电动座椅按摩通风加热、27英寸中控屏、循迹倒车",
@@ -60,10 +60,10 @@
       "car_model_b": "帕萨特2024款 330TSI 精英版",
       "comparison": {
         "价格": {
-          "car_a_value": 289900,
-          "car_b_value": 195000,
+          "car_a_value": 319900,
+          "car_b_value": 205900,
           "advantage": "B",
-          "note": "帕萨特便宜94900元"
+          "note": "帕萨特便宜114000元"
         },
         "配置": {
           "car_a_value": "标配全景天窗、电动座椅按摩通风加热、27英寸中控屏、循迹倒车",
@@ -112,9 +112,9 @@
       "comparison": {
         "价格": {
           "car_a_value": 303900,
-          "car_b_value": 289900,
+          "car_b_value": 319900,
           "advantage": "B",
-          "note": "E5 Sportback便宜14000元"
+          "note": "E5 Sportback便宜16000元"
         },
         "配置": {
           "car_a_value": "分段式不可开启天窗、电动座椅按摩通风加热、16.1英寸中控屏",

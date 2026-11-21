@@ -3,8 +3,8 @@
 配比：多跳 100 / 失败恢复 62 / 新工具 50 / 回归 38（共 250 条）
 输出：
 - eval/eval_data/questions_v1.3_rl.json   15 题 RL 专属评测子集（先冻结，训练集不得复用其实体组合）
-- rl/data/rl_prompts_v1_2026-11-18.jsonl  250 条训练 prompt（spec §1 schema）
-- rl/data/quality_report_2026-11-18.json   红线断言报告
+- rl/data/rl_prompts_v1_2026-11-21.jsonl  250 条训练 prompt（spec §1 schema；对比价统一指导价口径重生成）
+- rl/data/quality_report_2026-11-21.json   红线断言报告
 
 红线：
 R1 与 questions_v1.2.1（68）+ questions_v1.3_rl（15）精确 + 归一化零重叠（双向子串级）
@@ -33,8 +33,8 @@ from tools.book_test_drive import BookTestDriveTool  # noqa: E402
 from tools.follow_up_query import FollowUpQueryTool  # noqa: E402
 
 EVAL_YEAR = "2026"
-OUT_JSONL = DATA_DIR / "rl_prompts_v1_2026-11-18.jsonl"
-OUT_REPORT = DATA_DIR / "quality_report_2026-11-18.json"
+OUT_JSONL = DATA_DIR / "rl_prompts_v1_2026-11-21.jsonl"
+OUT_REPORT = DATA_DIR / "quality_report_2026-11-21.json"
 OUT_SUBSET = EVAL_DATA / "questions_v1.3_rl.json"
 
 # ---------------------------------------------------------------------------
@@ -423,7 +423,7 @@ def mh_f():
                          name=s["name"], phone=s["phone"])
         P("多跳", q, ["text_search", "competitor_compare", "query_transaction_price",
                       "calculate_finance", "book_test_drive"],
-          gt_facts={"指导价": top[1], "对比价A": 289900, "对比价B": rival[1],
+          gt_facts={"指导价": top[1], "对比价A": 319900, "对比价B": rival[1],
                     "成交均价": TX_AVG[top[0]], "月供": _monthly(top[1], r, y),
                     "试驾预约": "预约成功"},
           dep_edges=[["text_search", "competitor_compare"],
@@ -593,7 +593,7 @@ def mh_l():
 def mh_m():
     """4跳：对比→优惠→金融→试驾。"""
     a, b = "E5 Sportback 2025款 旗舰quattro型", "小米SU7 2025款 四驱Max版"
-    va, vb = 289900, 303900
+    va, vb = 319900, 303900
     params = [(30, 5), (50, 3)]
     ph = [
         "帮我对比{a}跟{b}，现在买E5有什么优惠？算下{a}首付{r}%贷{y}年月供，"
@@ -635,7 +635,7 @@ def mh_n():
         q = ph[i].format(a=a, b=b, s=bk_text(s), name=s["name"], phone=s["phone"])
         P("多跳", q, ["text_search", "competitor_compare", "query_transaction_price",
                       "calculate_finance", "book_test_drive"],
-          gt_facts={"对比价A": 289900, "对比价B": 303900, "成交均价": 289500,
+          gt_facts={"对比价A": 319900, "对比价B": 303900, "成交均价": 289500,
                     "指导价": 319900, "月供": _monthly(319900, 30, 5),
                     "试驾预约": "预约成功"},
           difficulty="multi_hop_5",
@@ -777,19 +777,19 @@ def fr_build():
 
     # competitor_compare
     add("帮我对比一下E5 Sportback 2025款旗舰quattro型和小米SU7 2025款四驱Max版",
-        ["competitor_compare"], {"对比价A": 289900, "对比价B": 303900},
+        ["competitor_compare"], {"对比价A": 319900, "对比价B": 303900},
         inj=F("competitor_compare", 1, "TIMEOUT"),
         ground={"compare": ("E5 Sportback 2025款 旗舰quattro型", "小米SU7 2025款 四驱Max版")})
     add("E5 Sportback 2025款旗舰quattro型跟小米SU7 2025款四驱Max版哪个好？",
-        ["competitor_compare"], {"对比价A": 289900, "对比价B": 303900},
+        ["competitor_compare"], {"对比价A": 319900, "对比价B": 303900},
         inj=F("competitor_compare", 1, "TIMEOUT"),
         ground={"compare": ("E5 Sportback 2025款 旗舰quattro型", "小米SU7 2025款 四驱Max版")})
     add("帮我对比下小米SU7 2025款四驱Max版和E5 Sportback 2025款旗舰quattro型",
-        ["competitor_compare"], {"对比价A": 303900, "对比价B": 289900},
+        ["competitor_compare"], {"对比价A": 303900, "对比价B": 319900},
         inj=F("competitor_compare", 1, "NOT_FOUND"),
         ground={"compare": ("小米SU7 2025款 四驱Max版", "E5 Sportback 2025款 旗舰quattro型")})
     add("小米SU7 2025款四驱Max版对比E5 Sportback 2025款旗舰quattro型怎么样？",
-        ["competitor_compare"], {"对比价A": 303900, "对比价B": 289900},
+        ["competitor_compare"], {"对比价A": 303900, "对比价B": 319900},
         inj=F("competitor_compare", 1, "NOT_FOUND"),
         ground={"compare": ("小米SU7 2025款 四驱Max版", "E5 Sportback 2025款 旗舰quattro型")})
 

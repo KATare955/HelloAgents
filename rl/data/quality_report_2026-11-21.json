@@ -1,0 +1,32 @@
+{
+  "generated_at": "2026-11-18",
+  "counts": {
+    "多跳": 100,
+    "失败恢复": 62,
+    "新工具": 50,
+    "回归": 38
+  },
+  "total": 250,
+  "subset_frozen": "/Users/kay/Desktop/hello-agents-family/HelloAgents/eval/eval_data/questions_v1.3_rl.json",
+  "r1": {
+    "violations": [],
+    "pass": true,
+    "note": "与 questions_v1.2.1(68) + questions_v1.3_rl(15) 精确+归一化(小写去空格)零重叠，双向子串级"
+  },
+  "r2": {
+    "violations": [],
+    "pass": true,
+    "note": "gt_facts 与 mock 数据接地一致（生成期 ground 全量校验）",
+    "standalone_crosscheck": {
+      "violations": [],
+      "skipped": 49,
+      "pass": true
+    }
+  },
+  "r3": {
+    "violations": [],
+    "pass": true,
+    "note": "accept_clarification 与 v1.2.1 同口径：{target_tool, reason} 字典，题面真实缺参才豁免"
+  },
+  "pass": true
+}
