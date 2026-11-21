@@ -281,3 +281,13 @@ AutoDL 重跑结果逐题对比后暴露的 4 个规则层缺陷修复（全部�
 - **模型**: qwen3-4b-rl
 - **阶段**: baseline
 - **结果文件**: `results/baseline/qwen3-4b-rl/v1.2/baseline_qwen3-4b-rl_v1.2_20261119.json`
+
+## 2026-11-19 21:28:47 - baseline (qwen3-4b-rl80, v1.2)
+
+- **准确率**: 95.6%
+- **总问题数**: 68
+- **Bad case数量**: 3
+- **评测集版本**: v1.2
+- **模型**: qwen3-4b-rl80
+- **阶段**: baseline
+- **结果文件**: `results/baseline/qwen3-4b-rl80/v1.2/baseline_qwen3-4b-rl80_v1.2_20261119.json`
