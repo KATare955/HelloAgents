@@ -22,6 +22,18 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
+# 8 个业务工具白名单：steps 里混有模型输出/思考事件（Thought/Answer/Question/Finish 等），
+# 统计前先过滤，否则失败模式矩阵被噪声行污染。
+BUSINESS_TOOLS = {
+    "text_search", "competitor_compare", "query_discount_policy",
+    "book_test_drive", "query_transaction_price", "calculate_finance",
+    "web_search", "follow_up_query",
+}
+
+
+def _clean_steps(steps: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    return [s for s in steps if (s.get("tool_name") or "") in BUSINESS_TOOLS]
+
 
 def load_traces(traces_dir: Path) -> List[Dict[str, Any]]:
     recs: List[Dict[str, Any]] = []
@@ -30,6 +42,7 @@ def load_traces(traces_dir: Path) -> List[Dict[str, Any]]:
             if line.strip():
                 d = json.loads(line)
                 if "prompt_id" in d:  # 跳过同目录下混入的其他 jsonl（如 prompts 集）
+                    d["steps"] = _clean_steps(d.get("steps", []))
                     recs.append(d)
     return recs
 
@@ -74,7 +87,7 @@ def matrix_bucket(recs: List[Dict[str, Any]], labels: Dict[str, Dict[str, Any]])
                 if acc.get("facts_matched", 1.0) < 1.0:
                     facts_miss += 1
             exp = labels.get(r["prompt_id"], {}).get("expected_tools") or []
-            n_calls = (r.get("meta") or {}).get("n_calls") or len(r.get("steps") or [])
+            n_calls = len(r.get("steps") or [])  # 已过滤噪声事件
             calls_total += n_calls
             if n_calls < len(exp):
                 broken += 1
@@ -96,7 +109,7 @@ def matrix_bucket(recs: List[Dict[str, Any]], labels: Dict[str, Dict[str, Any]])
 
 def matrix_tool(recs: List[Dict[str, Any]]) -> Dict[str, Any]:
     stats: Dict[str, Dict[str, Any]] = defaultdict(lambda: {
-        "n_calls": 0, "n_fab_params": 0, "fab_traj_ratio": 0, "fab_traj": 0, "traj": 0,
+        "n_calls": 0, "n_fab_params": 0, "fab_traj": set(),
         "after_fail": Counter(),
     })
     for r in recs:
@@ -109,8 +122,7 @@ def matrix_tool(recs: List[Dict[str, Any]]) -> Dict[str, Any]:
             for v in src.values():
                 if v == "fabricated":
                     st["n_fab_params"] += 1
-                    st["fab_traj"] += 1
-                    break
+                    st["fab_traj"].add(r["prompt_id"] + "#" + str(r.get("sample_idx", "")))
             if (s.get("tool_status") or "") != "success":
                 later = [x.get("tool_name") for x in steps[i + 1:]]
                 if later and later[0] == t:
@@ -119,15 +131,15 @@ def matrix_tool(recs: List[Dict[str, Any]]) -> Dict[str, Any]:
                     st["after_fail"]["switch"] += 1
                 else:
                     st["after_fail"]["stop"] += 1
-    # fab_traj 比例：出现过 fabricated 参数的轨迹 / 调用了该工具的轨迹
     traj_with_tool: Dict[str, set] = defaultdict(set)
     for r in recs:
         for s in (r.get("steps") or []):
-            traj_with_tool[s.get("tool_name") or "?"].add(id(r))
+            traj_with_tool[s.get("tool_name") or "?"].add(r["prompt_id"] + "#" + str(r.get("sample_idx", "")))
     for t, st in stats.items():
         st["n_traj"] = len(traj_with_tool.get(t, set()))
-        st["fab_traj_ratio"] = round(st["fab_traj"] / st["n_traj"], 3) if st["n_traj"] else 0.0
+        st["fab_traj_ratio"] = round(len(st["fab_traj"]) / st["n_traj"], 3) if st["n_traj"] else 0.0
         st["after_fail"] = dict(st["after_fail"])
+        st.pop("fab_traj", None)
     return dict(stats)
 
 
