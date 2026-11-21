@@ -296,6 +296,56 @@ def _value_in_text(value: str, text: str) -> bool:
     return value in text
 
 
+# GT 事实匹配容差（2026-11-21 多跳根因诊断：SFT 教近似报数"月供大约4758元"，
+# gt_facts 要求字面精确 4758.02 → 1171 个失分事实中 70% 为舍入/语义/单位口径误伤）。
+# 仅供 GT 事实匹配（reward._score_r_acc）；参数溯源 _trace_args_source 保持
+# _value_in_text 精确口径不变，防编造判定放宽。
+_FACT_NUM_RE = re.compile(r"(?<![A-Za-z])\d[\d,]*(?:\.\d+)?")
+_FACT_REL_TOL = 0.005  # 0.5% 相对误差：覆盖整数/十位舍入，拒绝百位以上偏差
+_BOOKING_OK_SYNS = ("约好", "安排好", "预约好", "预约完成", "已预约", "预约成功", "预约已确认")
+_BOOKING_FAIL_SYNS = ("预约失败", "未能预约", "无法预约", "没约上", "预约不成功")
+
+
+def _fact_in_text(value: str, text: str) -> bool:
+    """GT 事实匹配：精确优先 + 两类合理容差。
+
+    ① 数字舍入/万元单位换算：token 级比对（避免子串误命中），相对误差≤0.5%；
+      scale∈{1, 万→元, 元→万}，不做百分比换算（防小数字跨量级误命中）；
+    ② 预约状态词语义同义（带否定检查，"还没约好"不豁免）；
+    ③ 其余值保持 _value_in_text 精确口径。
+    """
+    if _value_in_text(value, text):
+        return True
+    if not value or not text:
+        return False
+    v = str(value).strip()
+    try:
+        x = float(v.replace(",", ""))
+    except ValueError:
+        x = None
+    if x is not None and x > 0:
+        for m in _FACT_NUM_RE.finditer(text):
+            try:
+                y = float(m.group(0).replace(",", ""))
+            except ValueError:
+                continue
+            for scale in (1.0, 10000.0, 0.0001):
+                target = x * scale
+                if abs(y - target) <= _FACT_REL_TOL * target:
+                    return True
+    if v == "预约成功":
+        syns = _BOOKING_OK_SYNS
+    elif v == "预约失败":
+        syns = _BOOKING_FAIL_SYNS
+    else:
+        syns = ()
+    for syn in syns:
+        i = text.find(syn)
+        if i >= 0 and not re.search(r"[未没无不]|失败", text[max(0, i - 3):i]):
+            return True
+    return False
+
+
 def _trace_args_source(tool_name: str, args: Dict[str, Any], question_text: str, prior_obs: List[str]) -> Dict[str, str]:
     """参数值溯源（v2 精确匹配，供 verify 规则层 hallucinated_args_cap 细化）
 

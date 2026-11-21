@@ -30,7 +30,7 @@ project_root = Path(__file__).parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from eval.baseline_eval import _parse_tool_status, _trace_args_source, _value_in_text
+from eval.baseline_eval import _parse_tool_status, _trace_args_source, _value_in_text, _fact_in_text
 from eval.scoring import _has_clarification_intent, judge_tool_correct
 from eval.verifier.rules import (
     BUILTIN_TOOLS,
@@ -243,7 +243,7 @@ def _score_r_acc(
     }
     gt_facts = label.get("gt_facts") or {}
     if gt_facts:
-        matched = sum(1 for v in gt_facts.values() if _value_in_text(str(v), response))
+        matched = sum(1 for v in gt_facts.values() if _fact_in_text(str(v), response))
         facts = matched / len(gt_facts)
         detail["facts_matched"] = facts
         detail["facts_total"] = len(gt_facts)
