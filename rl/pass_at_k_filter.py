@@ -89,9 +89,14 @@ def main(argv: List[str] | None = None) -> int:
     ap.add_argument("--max-rate", type=float, default=0.8)
     ap.add_argument("--min-keep", type=int, default=150)
     ap.add_argument("--workers", type=int, default=8, help="每 prompt 采样并发数（run_rollout 每样本独立实例无共享状态，线程安全）")
+    ap.add_argument("--save-traces", default=None, help="轨迹明细落盘目录（可选）：每 prompt 一个 {id}.jsonl，含 steps/reward 分解，供失败模式拆解")
     ap.add_argument("--out-filtered", required=True)
     ap.add_argument("--out-report", required=True)
     args = ap.parse_args(argv)
+
+    traces_dir = Path(args.save_traces) if args.save_traces else None
+    if traces_dir:
+        traces_dir.mkdir(parents=True, exist_ok=True)
 
     prompts = [json.loads(l) for l in Path(args.data).read_text(encoding="utf-8").splitlines() if l.strip()]
     weekday_cn = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"][
@@ -114,6 +119,21 @@ def main(argv: List[str] | None = None) -> int:
         flags = [is_pass(rec["reward"]) for rec in recs]
         rewards = [rec["reward"]["r"] for rec in recs]
         n_pass = sum(flags)
+        if traces_dir:
+            # 轨迹明细落盘（§5.4 schema）：每行一条采样轨迹，供失败模式拆解
+            with (traces_dir / f"{p.get('id', f'#{i}')}.jsonl").open("w", encoding="utf-8") as tf:
+                for si, rec in enumerate(recs):
+                    tf.write(json.dumps({
+                        "prompt_id": p.get("id", f"#{i}"),
+                        "bucket": p.get("bucket"),
+                        "difficulty": p.get("difficulty"),
+                        "sample_idx": si,
+                        "temperature": args.temperature,
+                        "reward": rec.get("reward"),
+                        "steps": rec.get("steps", []),
+                        "response": rec.get("response", ""),
+                        "meta": rec.get("meta", {}),
+                    }, ensure_ascii=False) + "\n")
         rows.append({
             "id": p.get("id", f"#{i}"),
             "difficulty": p.get("difficulty"),
