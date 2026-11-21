@@ -1,0 +1,182 @@
+{
+  "bucket": {
+    "回归": {
+      "n_traj": 304,
+      "pass_rate": 0.414,
+      "gate_hits": {
+        "(无拦截)": 304
+      },
+      "tool_miss": {
+        "text_search": 13
+      },
+      "facts_miss_rate": 0.556,
+      "broken_rate": 0.0,
+      "avg_calls": 1.0
+    },
+    "多跳": {
+      "n_traj": 800,
+      "pass_rate": 0.006,
+      "gate_hits": {
+        "(无拦截)": 797,
+        "fabricated_args": 3
+      },
+      "tool_miss": {
+        "book_test_drive": 116,
+        "calculate_finance": 78,
+        "text_search": 66,
+        "query_discount_policy": 86,
+        "query_transaction_price": 55,
+        "competitor_compare": 51,
+        "web_search": 4
+      },
+      "facts_miss_rate": 0.994,
+      "broken_rate": 0.376,
+      "avg_calls": 2.85
+    },
+    "失败恢复": {
+      "n_traj": 496,
+      "pass_rate": 0.397,
+      "gate_hits": {
+        "(无拦截)": 488,
+        "fabricated_args": 8
+      },
+      "tool_miss": {
+        "text_search": 1,
+        "web_search": 28,
+        "query_discount_policy": 9,
+        "book_test_drive": 17,
+        "follow_up_query": 5
+      },
+      "facts_miss_rate": 0.771,
+      "broken_rate": 0.119,
+      "avg_calls": 1.31
+    },
+    "新工具": {
+      "n_traj": 400,
+      "pass_rate": 0.665,
+      "gate_hits": {
+        "(无拦截)": 400
+      },
+      "tool_miss": {
+        "web_search": 120,
+        "follow_up_query": 12
+      },
+      "facts_miss_rate": 0.307,
+      "broken_rate": 0.05,
+      "avg_calls": 1.12
+    }
+  },
+  "tool": {
+    "text_search": {
+      "n_calls": 554,
+      "n_fab_params": 0,
+      "after_fail": {
+        "switch": 125,
+        "stop": 112,
+        "retry": 8
+      },
+      "n_traj": 544,
+      "fab_traj_ratio": 0.0
+    },
+    "web_search": {
+      "n_calls": 257,
+      "n_fab_params": 0,
+      "after_fail": {
+        "stop": 19,
+        "switch": 21,
+        "retry": 1
+      },
+      "n_traj": 245,
+      "fab_traj_ratio": 0.0
+    },
+    "calculate_finance": {
+      "n_calls": 762,
+      "n_fab_params": 8,
+      "after_fail": {
+        "stop": 64,
+        "switch": 12,
+        "retry": 19
+      },
+      "n_traj": 741,
+      "fab_traj_ratio": 0.011
+    },
+    "query_transaction_price": {
+      "n_calls": 489,
+      "n_fab_params": 0,
+      "after_fail": {
+        "switch": 16,
+        "stop": 18,
+        "retry": 14
+      },
+      "n_traj": 457,
+      "fab_traj_ratio": 0.0
+    },
+    "query_discount_policy": {
+      "n_calls": 687,
+      "n_fab_params": 0,
+      "after_fail": {
+        "retry": 19,
+        "switch": 17,
+        "stop": 12
+      },
+      "n_traj": 645,
+      "fab_traj_ratio": 0.0
+    },
+    "competitor_compare": {
+      "n_calls": 272,
+      "n_fab_params": 0,
+      "after_fail": {
+        "switch": 7,
+        "stop": 22,
+        "retry": 3
+      },
+      "n_traj": 269,
+      "fab_traj_ratio": 0.0
+    },
+    "book_test_drive": {
+      "n_calls": 429,
+      "n_fab_params": 5,
+      "after_fail": {
+        "stop": 58,
+        "retry": 7
+      },
+      "n_traj": 422,
+      "fab_traj_ratio": 0.007
+    },
+    "follow_up_query": {
+      "n_calls": 227,
+      "n_fab_params": 0,
+      "after_fail": {
+        "stop": 49,
+        "retry": 7
+      },
+      "n_traj": 220,
+      "fab_traj_ratio": 0.0
+    }
+  },
+  "multihop": {
+    "n_traj": 800,
+    "calls_hist": {
+      "0": 10,
+      "1": 79,
+      "2": 136,
+      "3": 408,
+      "4": 137,
+      "5": 27,
+      "6": 3
+    },
+    "first_mismatch": {
+      "0": 776,
+      "1": 13,
+      "2": 5,
+      "3": 4,
+      "4": 2
+    },
+    "mismatch_total": 28,
+    "expected_len_hist": {
+      "3": 536,
+      "4": 224,
+      "5": 40
+    }
+  }
+}

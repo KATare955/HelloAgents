@@ -1,0 +1,195 @@
+{
+  "bucket": {
+    "回归": {
+      "n_traj": 304,
+      "pass_rate": 0.461,
+      "gate_hits": {
+        "(无拦截)": 296,
+        "wrong_tool:Answer": 1,
+        "fabricated_args": 7
+      },
+      "tool_miss": {
+        "text_search": 17,
+        "query_discount_policy": 3,
+        "competitor_compare": 2,
+        "book_test_drive": 1
+      },
+      "facts_miss_rate": 0.53,
+      "broken_rate": 0.062,
+      "avg_calls": 1.02
+    },
+    "多跳": {
+      "n_traj": 800,
+      "pass_rate": 0.054,
+      "gate_hits": {
+        "(无拦截)": 799,
+        "fabricated_args": 1
+      },
+      "tool_miss": {
+        "book_test_drive": 45,
+        "text_search": 30,
+        "calculate_finance": 84,
+        "query_discount_policy": 56,
+        "query_transaction_price": 38,
+        "competitor_compare": 8,
+        "web_search": 7
+      },
+      "facts_miss_rate": 0.946,
+      "broken_rate": 0.164,
+      "avg_calls": 3.08
+    },
+    "失败恢复": {
+      "n_traj": 496,
+      "pass_rate": 0.29,
+      "gate_hits": {
+        "(无拦截)": 491,
+        "wrong_tool:Question": 3,
+        "fabricated_args": 1,
+        "wrong_tool:Answer": 1,
+        "wrong_tool:ask": 1
+      },
+      "tool_miss": {
+        "text_search": 12,
+        "query_discount_policy": 3,
+        "web_search": 46,
+        "query_transaction_price": 2,
+        "competitor_compare": 1,
+        "book_test_drive": 22,
+        "follow_up_query": 17,
+        "calculate_finance": 4
+      },
+      "facts_miss_rate": 0.905,
+      "broken_rate": 0.198,
+      "avg_calls": 1.04
+    },
+    "新工具": {
+      "n_traj": 400,
+      "pass_rate": 0.505,
+      "gate_hits": {
+        "(无拦截)": 398,
+        "wrong_tool:Question": 3,
+        "wrong_tool:FollowUp": 1
+      },
+      "tool_miss": {
+        "web_search": 152,
+        "follow_up_query": 31
+      },
+      "facts_miss_rate": 0.495,
+      "broken_rate": 0.3,
+      "avg_calls": 0.77
+    }
+  },
+  "tool": {
+    "text_search": {
+      "n_calls": 535,
+      "n_fab_params": 0,
+      "after_fail": {
+        "switch": 63,
+        "stop": 108,
+        "retry": 16
+      },
+      "n_traj": 512,
+      "fab_traj_ratio": 0.0
+    },
+    "web_search": {
+      "n_calls": 167,
+      "n_fab_params": 0,
+      "after_fail": {
+        "switch": 1,
+        "stop": 24,
+        "retry": 5
+      },
+      "n_traj": 162,
+      "fab_traj_ratio": 0.0
+    },
+    "query_discount_policy": {
+      "n_calls": 676,
+      "n_fab_params": 0,
+      "after_fail": {
+        "stop": 31,
+        "retry": 6,
+        "switch": 21
+      },
+      "n_traj": 665,
+      "fab_traj_ratio": 0.0
+    },
+    "calculate_finance": {
+      "n_calls": 744,
+      "n_fab_params": 14,
+      "after_fail": {
+        "stop": 72,
+        "retry": 12,
+        "switch": 4
+      },
+      "n_traj": 713,
+      "fab_traj_ratio": 0.02
+    },
+    "query_transaction_price": {
+      "n_calls": 459,
+      "n_fab_params": 0,
+      "after_fail": {
+        "stop": 34,
+        "switch": 6,
+        "retry": 6
+      },
+      "n_traj": 450,
+      "fab_traj_ratio": 0.0
+    },
+    "competitor_compare": {
+      "n_calls": 317,
+      "n_fab_params": 0,
+      "after_fail": {
+        "stop": 31,
+        "switch": 4,
+        "retry": 8
+      },
+      "n_traj": 309,
+      "fab_traj_ratio": 0.0
+    },
+    "book_test_drive": {
+      "n_calls": 499,
+      "n_fab_params": 1,
+      "after_fail": {
+        "stop": 52,
+        "retry": 8,
+        "switch": 2
+      },
+      "n_traj": 489,
+      "fab_traj_ratio": 0.002
+    },
+    "follow_up_query": {
+      "n_calls": 200,
+      "n_fab_params": 0,
+      "after_fail": {
+        "stop": 54
+      },
+      "n_traj": 199,
+      "fab_traj_ratio": 0.0
+    }
+  },
+  "multihop": {
+    "n_traj": 800,
+    "calls_hist": {
+      "0": 6,
+      "1": 65,
+      "2": 48,
+      "3": 455,
+      "4": 194,
+      "5": 31,
+      "6": 1
+    },
+    "first_mismatch": {
+      "0": 773,
+      "1": 19,
+      "2": 3,
+      "3": 4,
+      "4": 1
+    },
+    "mismatch_total": 27,
+    "expected_len_hist": {
+      "3": 536,
+      "4": 224,
+      "5": 40
+    }
+  }
+}
