@@ -35,6 +35,20 @@ def test_yuan_to_wan():
     assert _fact_in_text("21.99", "指导价219900元")
 
 
+def test_yuan_to_wan_with_wan_char():
+    # 元→万换算："3万元/3.0万" 是 30000 元的合法万元表达
+    assert _fact_in_text("30000", "优惠总共3万元")
+    assert _fact_in_text("30000", "合计优惠3.0万")
+
+
+def test_yuan_to_wan_requires_wan_char():
+    # 元→万换算须有"万"字语境："贷款3年"的"3"不得误命中 30000 元
+    # （D2 勘察实证：50 条优惠组合样本列明细不报总，被"3年"误判为已报总额）
+    assert not _fact_in_text("30000", "贷款3年、年利率4.5%")
+    assert not _fact_in_text("35000", "首付30%，贷款3年")
+    assert not _fact_in_text("30000", "限时优惠20000元，置换补贴10000元")
+
+
 def test_thousands_separator():
     assert _fact_in_text("269900", "指导价269,900元")
 

@@ -335,6 +335,10 @@ def _fact_in_text(value: str, text: str) -> bool:
             for scale in (1.0, 10000.0, 0.0001):
                 target = x * scale
                 if abs(y - target) <= _FACT_REL_TOL * target:
+                    # 元→万换算须有"万"字语境：防"贷款3年"的"3"误命中 30000 元
+                    # （2026-11-21 D2 勘察实证：50 条优惠组合样本"列明细不报总"被此误判为已报）
+                    if scale == 0.0001 and not re.match(r"\s*万", text[m.end():]):
+                        continue
                     return True
     if v == "预约成功":
         syns = _BOOKING_OK_SYNS
