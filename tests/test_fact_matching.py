@@ -44,6 +44,21 @@ def test_booking_ok_synonym():
     assert _fact_in_text("预约成功", "已经约好了，周一到店")
 
 
+def test_booking_ok_completed_forms():
+    # 2026-11-22 真漏报细化诊断补全：probe 实测完成态话术
+    assert _fact_in_text("预约成功", "【试驾】已帮您预约11月27日（周五）15:00")
+    assert _fact_in_text("预约成功", "试驾预约：已为您预约2026-11-24（周二）10:00")
+    assert _fact_in_text("预约成功", "已经帮您预约了11月28日上午的试驾")
+    assert _fact_in_text("预约成功", "试驾预约已安排：2026-11-30 15:00")
+
+
+def test_booking_question_not_success():
+    # 疑问式/意向式不是完成态，不得豁免
+    assert not _fact_in_text("预约成功", "需要帮您预约吗？")
+    assert not _fact_in_text("预约成功", "您想预约11月22日上午的试驾吗")
+    assert not _fact_in_text("预约成功", "我可以帮您预约，请确认时间")
+
+
 def test_booking_fail_synonym():
     assert _fact_in_text("预约失败", "抱歉，未能预约成功")
 
