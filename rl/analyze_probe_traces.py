@@ -30,6 +30,16 @@ BUSINESS_TOOLS = {
     "web_search", "follow_up_query",
 }
 
+# 事实型参数白名单（与 eval/verifier/rules.py TRACE_ARGS 保持一致，单一来源）：
+# fabricated 只统计白名单内参数。白名单外参数（如 book_test_drive.appointment_time——
+# 相对时间换算必然溯源失败，规则层问题 16 已裁定豁免；web_search.query 等自由组织参数）
+# 不计入编造，否则会把豁免字段误判为编造（2026-11-21 14B probe 即因此得出
+# "预约编造 100%"假结论，实为 appointment_time 429 次溯源失败所致）。
+TRACE_ARGS = {
+    "calculate_finance": {"car_model"},
+    "book_test_drive": {"car_series", "dealer", "customer_name", "customer_phone"},
+}
+
 
 def _clean_steps(steps: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return [s for s in steps if (s.get("tool_name") or "") in BUSINESS_TOOLS]
@@ -119,8 +129,9 @@ def matrix_tool(recs: List[Dict[str, Any]]) -> Dict[str, Any]:
             st = stats[t]
             st["n_calls"] += 1
             src = s.get("args_source") or {}
-            for v in src.values():
-                if v == "fabricated":
+            traceable = TRACE_ARGS.get(t, set())
+            for k, v in src.items():
+                if v == "fabricated" and k in traceable:
                     st["n_fab_params"] += 1
                     st["fab_traj"].add(r["prompt_id"] + "#" + str(r.get("sample_idx", "")))
             if (s.get("tool_status") or "") != "success":
