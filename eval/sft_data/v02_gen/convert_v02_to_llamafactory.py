@@ -15,6 +15,7 @@
   python3 eval/sft_data/v02_gen/convert_v02_to_llamafactory.py
 """
 
+import argparse
 import json
 from collections import defaultdict
 from pathlib import Path
@@ -93,13 +94,24 @@ def validate_semantic(convs: List[Dict[str, str]]) -> Optional[str]:
 
 
 def main():
+    ap = argparse.ArgumentParser(description="v02 轨迹 → llamafactory（语义配对扩展点）")
+    ap.add_argument("--in", dest="inp", default=str(SRC), help="rich 轨迹 jsonl（默认 v02_full_1000.jsonl）")
+    ap.add_argument("--outdir", default=str(OUTDIR), help="输出目录（默认 llamafactory_v02）")
+    ap.add_argument("--tag", default="v02", help="dataset_info 注册名后缀 sales_agent_{tag}_train/val")
+    args = ap.parse_args()
+    src = Path(args.inp)
+    outdir = Path(args.outdir)
+    tag = args.tag
+
     records = {r["id"]: r for r in
-               (json.loads(l) for l in SRC.read_text(encoding="utf-8").splitlines() if l.strip())}
+               (json.loads(l) for l in src.read_text(encoding="utf-8").splitlines() if l.strip())}
     train_ids = [json.loads(l)["id"] for l in TRAIN_IDS.read_text(encoding="utf-8").splitlines() if l.strip()]
     val_ids = [json.loads(l)["id"] for l in VAL_IDS.read_text(encoding="utf-8").splitlines() if l.strip()]
     assert len(train_ids) == 960 and len(val_ids) == 40
+    missing = [sid for sid in train_ids + val_ids if sid not in records]
+    assert not missing, f"划分清单 id 在输入中缺失（须同源 id）：{missing[:5]}"
 
-    OUTDIR.mkdir(parents=True, exist_ok=True)
+    outdir.mkdir(parents=True, exist_ok=True)
     tools_str = load_tools_str()
 
     def build(id_list: List[str]):
@@ -124,24 +136,25 @@ def main():
     val, bad_v, masked_v = build(val_ids)
     assert not bad_t and not bad_v, f"位置校验失败：{bad_t[:3]} {bad_v[:3]}"
 
-    (OUTDIR / "sft_train.json").write_text(json.dumps(train, ensure_ascii=False, indent=2), encoding="utf-8")
-    (OUTDIR / "sft_val.json").write_text(json.dumps(val, ensure_ascii=False, indent=2), encoding="utf-8")
+    (outdir / "sft_train.json").write_text(json.dumps(train, ensure_ascii=False, indent=2), encoding="utf-8")
+    (outdir / "sft_val.json").write_text(json.dumps(val, ensure_ascii=False, indent=2), encoding="utf-8")
 
     dataset_info = {
-        "sales_agent_v02_train": {
+        f"sales_agent_{tag}_train": {
             "file_name": "sft_train.json",
             "formatting": "v02_react",
         },
-        "sales_agent_v02_val": {
+        f"sales_agent_{tag}_val": {
             "file_name": "sft_val.json",
             "formatting": "v02_react",
         },
     }
-    (OUTDIR / "dataset_info.json").write_text(
+    (outdir / "dataset_info.json").write_text(
         json.dumps(dataset_info, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    print(f"[out] train={len(train)} → {OUTDIR/'sft_train.json'}")
-    print(f"[out] val  ={len(val)} → {OUTDIR/'sft_val.json'}")
+    print(f"[in] {src.name}（tag={tag}）")
+    print(f"[out] train={len(train)} → {outdir/'sft_train.json'}")
+    print(f"[out] val  ={len(val)} → {outdir/'sft_val.json'}")
     print(f"[mask] train 含 loss=false 段的样本按桶分布：{dict(sorted(masked_t.items()))}")
     print(f"[mask] val   含 loss=false 段的样本按桶分布：{dict(sorted(masked_v.items()))}")
     # 抽样展示一条桶2样本的角色序列 + loss 标记
@@ -151,7 +164,7 @@ def main():
             print("\n[样例] 桶2样本 conversations：")
             print("   " + " → ".join(seq))
             break
-    print("\n[完成] 上传 llamafactory_v02/ 三文件至 AutoDL LLaMA-Factory/data/ 并合并 dataset_info.json；")
+    print(f"\n[完成] 上传 {outdir.name}/ 三文件至 AutoDL LLaMA-Factory/data/ 并合并 dataset_info.json；")
     print("[完成] 同时将 lf_extensions.py 放至 src/llamafactory/data/ 并按模块 docstring 应用 tuner import + processor patch")
 
 
