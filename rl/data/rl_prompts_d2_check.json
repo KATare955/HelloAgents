@@ -1,0 +1,188 @@
+[
+  {
+    "question": "帮我对比E5 Sportback 2025款 旗舰quattro型跟帕萨特2024款 330TSI 精英版，看看帕萨特2024款 330TSI 精英版最近成交价，现在买帕萨特2024款的话有什么优惠？算下帕萨特2024款 330TSI 精英版首付30%贷3年月供",
+    "expected_tools": [
+      "competitor_compare",
+      "query_transaction_price",
+      "query_discount_policy",
+      "calculate_finance"
+    ],
+    "gt_facts": {
+      "对比价A": 319900,
+      "对比价B": 205900,
+      "成交均价": 195000,
+      "优惠总额": 23000,
+      "指导价": 205900,
+      "月供": 4287.42
+    },
+    "accept_clarification": false,
+    "fail_inject": null,
+    "dep_edges": [],
+    "difficulty": "multi_hop_4",
+    "id": "rl_mh_026",
+    "bucket": "多跳"
+  },
+  {
+    "question": "帮我对比E5 Sportback 2025款 旗舰quattro型跟小米SU7 2025款 四驱Max版，看看小米SU7 2025款 四驱Max版最近成交价，现在买小米SU7 2025款的话有什么优惠？算下小米SU7 2025款 四驱Max版首付30%贷5年月供",
+    "expected_tools": [
+      "competitor_compare",
+      "query_transaction_price",
+      "query_discount_policy",
+      "calculate_finance"
+    ],
+    "gt_facts": {
+      "对比价A": 319900,
+      "对比价B": 303900,
+      "成交均价": 303900,
+      "优惠总额": 10000,
+      "指导价": 303900,
+      "月供": 3965.93
+    },
+    "accept_clarification": false,
+    "fail_inject": null,
+    "dep_edges": [],
+    "difficulty": "multi_hop_4",
+    "id": "rl_mh_029",
+    "bucket": "多跳"
+  },
+  {
+    "question": "先对比下E5 Sportback 2025款 旗舰quattro型跟小米SU7 2025款 四驱Max版，再查小米SU7 2025款 四驱Max版的近期成交价和小米SU7 2025款的优惠，最后算算小米SU7 2025款 四驱Max版首付30%贷5年的月供",
+    "expected_tools": [
+      "competitor_compare",
+      "query_transaction_price",
+      "query_discount_policy",
+      "calculate_finance"
+    ],
+    "gt_facts": {
+      "对比价A": 319900,
+      "对比价B": 303900,
+      "成交均价": 303900,
+      "优惠总额": 10000,
+      "指导价": 303900,
+      "月供": 3965.93
+    },
+    "accept_clarification": false,
+    "fail_inject": null,
+    "dep_edges": [],
+    "difficulty": "multi_hop_4",
+    "id": "rl_mh_030",
+    "bucket": "多跳"
+  },
+  {
+    "question": "我想买E5 Sportback，帮我看看有哪些配置和价格？算下顶配首付20%贷5年的月供，合适的话帮我约11月24日下午3点上汽奥迪上海郑隆奥翟的试驾，我叫刘敏，电话13212340002",
+    "expected_tools": [
+      "text_search",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "gt_facts": {
+      "指导价": 319900,
+      "月供": 4771.12,
+      "试驾预约": "预约成功"
+    },
+    "accept_clarification": false,
+    "fail_inject": null,
+    "dep_edges": [
+      [
+        "text_search",
+        "calculate_finance"
+      ]
+    ],
+    "difficulty": "multi_hop_3",
+    "id": "rl_mh_003",
+    "bucket": "多跳"
+  },
+  {
+    "question": "现在买E5 Sportback有什么优惠？E5 Sportback 2025款 旗舰quattro型首付30%贷5年月供多少？合适的话帮我约11月30日下午3点上汽奥迪上海郑隆奥翟试驾，韩雪，13812340008",
+    "expected_tools": [
+      "query_discount_policy",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "gt_facts": {
+      "优惠总额": 30000,
+      "指导价": 319900,
+      "月供": 4174.73,
+      "试驾预约": "预约成功"
+    },
+    "accept_clarification": false,
+    "fail_inject": null,
+    "dep_edges": [
+      [
+        "query_discount_policy",
+        "calculate_finance"
+      ]
+    ],
+    "difficulty": "multi_hop_3",
+    "id": "rl_mh_013",
+    "bucket": "多跳"
+  },
+  {
+    "question": "帮我查下E5 Sportback的配置表，用最贵的那款算算首付50%贷3年月供多少？可以的话约11月23日下午3点上汽奥迪上海大宁音乐广场试驾，李娜，13112340001",
+    "expected_tools": [
+      "text_search",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "gt_facts": {
+      "指导价": 319900,
+      "月供": 4758.02,
+      "试驾预约": "预约成功"
+    },
+    "accept_clarification": false,
+    "fail_inject": null,
+    "dep_edges": [
+      [
+        "text_search",
+        "calculate_finance"
+      ]
+    ],
+    "difficulty": "multi_hop_3",
+    "id": "rl_mh_002",
+    "bucket": "多跳"
+  },
+  {
+    "question": "我想买E5 Sportback，帮我看看有哪些配置和价格？算下顶配首付30%贷5年的月供，合适的话帮我约11月22日下午3点上汽奥迪上海郑隆奥翟的试驾，我叫张伟，电话13012340000",
+    "expected_tools": [
+      "text_search",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "gt_facts": {
+      "指导价": 319900,
+      "月供": 4174.73,
+      "试驾预约": "预约成功"
+    },
+    "accept_clarification": false,
+    "fail_inject": null,
+    "dep_edges": [
+      [
+        "text_search",
+        "calculate_finance"
+      ]
+    ],
+    "difficulty": "multi_hop_3",
+    "id": "rl_mh_001",
+    "bucket": "多跳"
+  },
+  {
+    "question": "E5 Sportback 2025款 旗舰quattro型跟小米SU7 2025款 四驱Max版哪个更值得买？顺便看看小米SU7 2025款 四驱Max版最近成交价和小米SU7 2025款目前的优惠",
+    "expected_tools": [
+      "competitor_compare",
+      "query_transaction_price",
+      "query_discount_policy"
+    ],
+    "gt_facts": {
+      "对比价A": 319900,
+      "对比价B": 303900,
+      "成交均价": 303900,
+      "优惠总额": 10000
+    },
+    "accept_clarification": false,
+    "fail_inject": null,
+    "dep_edges": [],
+    "difficulty": "multi_hop_3",
+    "id": "rl_mh_019",
+    "bucket": "多跳"
+  }
+]
