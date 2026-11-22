@@ -459,9 +459,12 @@ class GRPOTrainer:
 
         pos: 布尔张量 [seq-1]，只对 mask=1 位置切片 logits 再 softmax，
         避免全 [seq, vocab] logprobs 被计算图保留至 backward（14B 长轨迹 OOM 修复）。
+        注意：必须保持 train 模式——HF 的 gradient checkpointing 在 eval 模式
+        （training=False）下不生效，激活会全量保留（14B×长轨迹 OOM 根因）；
+        LoRA dropout=0.05 在训练前向开启也符合语义。
         """
         import torch
-        self.model.eval()
+        self.model.train()
         ids = torch.tensor([input_ids], device=self.model.device)
         logits = self.model(input_ids=ids).logits[0]
         logits = logits[:-1][pos]  # [n_pos, vocab]，切片后全量 logits 可释放
@@ -469,17 +472,24 @@ class GRPOTrainer:
         return logprobs.gather(1, ids[0, 1:][pos].unsqueeze(-1)).squeeze(-1)
 
     def logps_list(self, input_ids: List[int], pos) -> List[float]:
-        """ref 前向：关 LoRA adapter（= SFT 底座权重），无梯度，返回 Python 浮点。"""
+        """ref 前向：关 LoRA adapter（= SFT 底座权重），无梯度，返回 Python 浮点。
+
+        no_grad 下不保存激活（无 OOM 风险），eval + 关 adapter 保证 ref 分布
+        无 dropout、无 LoRA 扰动；结束后恢复 train 供策略前向/backward 使用。
+        """
         import torch
         self.model.eval()
-        with torch.no_grad():
-            ids = torch.tensor([input_ids], device=self.model.device)
-            with self.model.disable_adapter():
-                logits = self.model(input_ids=ids).logits[0]
-            logits = logits[:-1][pos]
-            logprobs = torch.log_softmax(logits, dim=-1)
-            gathered = logprobs.gather(1, ids[0, 1:][pos].unsqueeze(-1)).squeeze(-1)
-            return [float(v) for v in gathered.cpu().tolist()]
+        try:
+            with torch.no_grad():
+                ids = torch.tensor([input_ids], device=self.model.device)
+                with self.model.disable_adapter():
+                    logits = self.model(input_ids=ids).logits[0]
+                logits = logits[:-1][pos]
+                logprobs = torch.log_softmax(logits, dim=-1)
+                gathered = logprobs.gather(1, ids[0, 1:][pos].unsqueeze(-1)).squeeze(-1)
+                return [float(v) for v in gathered.cpu().tolist()]
+        finally:
+            self.model.train()
 
     def train_step(
         self, prompt_group: List[Dict[str, Any]],
