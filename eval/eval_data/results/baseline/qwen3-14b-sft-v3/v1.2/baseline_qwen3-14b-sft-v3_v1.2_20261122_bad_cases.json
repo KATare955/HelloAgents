@@ -1,0 +1,197 @@
+[
+  {
+    "id": "car_config_007",
+    "scenario": "车型参数查询",
+    "type": "单跳",
+    "question": "对比E5 Sportback和小米SU7的电池容量，哪个更大？",
+    "expected_tools": [
+      "text_search"
+    ],
+    "difficulty": "hard",
+    "response": "E5 Sportback 2025款的电池容量是100kWh，小米SU7的电池容量是101kWh，两者相当，小米SU7略高一些。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "text_search"
+    ],
+    "extra_tools": [
+      "competitor_compare"
+    ],
+    "trajectory_ref": "trajectories/car_config_007.jsonl"
+  },
+  {
+    "id": "compare_006",
+    "scenario": "竞品对比",
+    "type": "单跳",
+    "question": "如果预算30万，E5 Sportback和小米SU7应该选哪个？",
+    "expected_tools": [
+      "text_search"
+    ],
+    "difficulty": "hard",
+    "response": "E5 Sportback 2025款 四驱性能型 vs 小米SU7 2025款 四驱Max版：E5 Sportback 2025款 四驱性能型更胜一筹（4:1）。\n\n价格方面，E5 Sportback 2025款 四驱性能型指导价31.99万元，小米SU7 2025款 四驱Max版指导价30.39万元，E5 Sportback 2025款 四驱性能型便宜16000元。\n\n综合来看，E5 Sportback在价格、配置、动力方面更有优势，小米SU7在空间、续航方面领先（800km vs 623km）。综合考虑性价比，建议优先选择E5 Sportback。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "text_search"
+    ],
+    "extra_tools": [
+      "competitor_compare"
+    ],
+    "trajectory_ref": "trajectories/compare_006.jsonl"
+  },
+  {
+    "id": "compare_008",
+    "scenario": "竞品对比",
+    "type": "单跳",
+    "question": "E5 Sportback 2025款先锋型和小米SU7 2025款Pro版哪个更便宜？",
+    "expected_tools": [
+      "competitor_compare"
+    ],
+    "difficulty": "easy",
+    "response": "E5 Sportback 2025款先锋型的指导价是235900元，小米SU7 2025款Pro版的指导价是245900元。两者对比来看，E5 Sportback 2025款先锋型更便宜，指导价低10000元。",
+    "status": "success",
+    "actual_tools": [
+      "text_search",
+      "text_search"
+    ],
+    "tool_calls_count": 2,
+    "tool_correct": false,
+    "missing_tools": [
+      "competitor_compare"
+    ],
+    "extra_tools": [
+      "text_search"
+    ],
+    "trajectory_ref": "trajectories/compare_008.jsonl"
+  },
+  {
+    "id": "test_drive_004",
+    "scenario": "试驾预约",
+    "type": "单跳",
+    "question": "我想试驾E5 Sportback，我叫李四，电话13900139000，周末在上汽奥迪上海冠松用户中心，有什么时间可选？",
+    "expected_tools": [
+      "book_test_drive"
+    ],
+    "difficulty": "medium",
+    "response": "李四您好！您想预约的周末试驾时间有两个选择：\n1. 2026-11-21（周六）09:00-18:00\n2. 2026-11-22（周日）09:00-18:00\n\n您看哪个时间段方便？确认后我马上帮您预约上汽奥迪上海冠松用户中心的试驾。",
+    "status": "success",
+    "actual_tools": [],
+    "tool_calls_count": 0,
+    "tool_correct": false,
+    "missing_tools": [
+      "book_test_drive"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/test_drive_004.jsonl"
+  },
+  {
+    "id": "test_drive_006",
+    "scenario": "试驾预约",
+    "type": "双跳",
+    "question": "对比E5 Sportback和小米SU7后，预约试驾E5 Sportback",
+    "expected_tools": [
+      "competitor_compare",
+      "book_test_drive"
+    ],
+    "difficulty": "hard",
+    "response": "E5 Sportback vs 小米SU7的对比结果如下：E5 Sportback整体更占优势（优势项4:1，相当项1）。\n\n价格方面，E5 Sportback指导价31.99万元，小米SU7指导价30.39万元，E5 Sportback便宜1.6万元。\n配置上，E5 Sportback标配全景天窗、电动座椅按摩通风加热、27英寸中控屏、循迹倒车，配置略高，多循迹倒车功能。\n动力方面，E5 Sportback电机最大功率579kW，小米SU7电机最大功率495kW，E5 Sportback功率更大。\n\n综合来看，E5 Sportback在价格、配置、动力方面更有优势，小米SU7在空间、续航方面领先（800km vs 623km）。综合考虑性价比，建议优先选择E5 Sportback。\n\n您想预约E5 Sportback的试驾吗？",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "book_test_drive"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/test_drive_006.jsonl"
+  },
+  {
+    "id": "multi_hop_002",
+    "scenario": "竞品对比",
+    "type": "多跳",
+    "question": "对比E5 Sportback和小米SU7的价格、续航、优惠政策，哪个更值得买？",
+    "expected_tools": [
+      "competitor_compare",
+      "query_discount_policy"
+    ],
+    "difficulty": "hard",
+    "response": "指导价上，E5 Sportback 2025款 先锋型为319,900元，小米SU7 2025款 四驱Max版为303,900元，E5 Sportback 2025款 先锋型便宜16,000元。\n\nE5 Sportback在价格、配置、动力这几个维度上都更有优势，不过小米SU7在空间和续航方面领先一些（800km vs 623km）。综合来看性价比还是E5 Sportback更划算，建议优先考虑。",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare"
+    ],
+    "tool_calls_count": 1,
+    "tool_correct": false,
+    "missing_tools": [
+      "query_discount_policy"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/multi_hop_002.jsonl"
+  },
+  {
+    "id": "multi_hop_006",
+    "scenario": "竞品对比",
+    "type": "多跳",
+    "question": "对比E5 Sportback和小米SU7的价格、续航、优惠政策、金融方案，然后帮我预约试驾E5 Sportback",
+    "expected_tools": [
+      "competitor_compare",
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance",
+      "book_test_drive"
+    ],
+    "difficulty": "hard",
+    "response": "E5 Sportback有好几个配置版本，麻烦您确认一下具体想看哪款，我再帮您算：E5 Sportback 2025款 先锋型 235900 元；E5 Sportback 2025款 先锋quattro型 269900 元；E5 Sportback 2025款 先锋Plus型 269900 元；E5 Sportback 2025款 旗舰quattro型 319900 元。您倾向于哪个配置呢？",
+    "status": "success",
+    "actual_tools": [
+      "competitor_compare",
+      "calculate_finance"
+    ],
+    "tool_calls_count": 2,
+    "tool_correct": false,
+    "missing_tools": [
+      "book_test_drive",
+      "query_discount_policy",
+      "text_search"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/multi_hop_006.jsonl"
+  },
+  {
+    "id": "multi_hop_007",
+    "scenario": "金融方案测算",
+    "type": "多跳",
+    "question": "E5 Sportback 2025款旗舰quattro型的配置是什么？现在有什么优惠？首付30%，5年贷款月供多少？近90天的平均成交价是多少？",
+    "expected_tools": [
+      "text_search",
+      "query_discount_policy",
+      "calculate_finance",
+      "query_transaction_price"
+    ],
+    "difficulty": "hard",
+    "response": "E5 Sportback 2025款 旗舰quattro型的核心参数如下：单电机配置，电机最大功率579kW，电池容量100kWh，CLTC续航647km。\n\n月供这边也给您算了一下（按默认方案）：指导价319900元，首付30%（约95970元），贷款3年、年利率4.5%，月供大约6661元。",
+    "status": "success",
+    "actual_tools": [
+      "text_search",
+      "calculate_finance"
+    ],
+    "tool_calls_count": 2,
+    "tool_correct": false,
+    "missing_tools": [
+      "query_discount_policy",
+      "query_transaction_price"
+    ],
+    "extra_tools": [],
+    "trajectory_ref": "trajectories/multi_hop_007.jsonl"
+  }
+]
