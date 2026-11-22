@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import random
 import sys
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
@@ -46,28 +47,50 @@ def select_frontier(
     min_rate: float = 0.2,
     max_rate: float = 0.8,
     min_keep: int = 150,
+    anchor_ratio: float = 0.0,
+    anchor_seed: int = 42,
 ) -> Dict[str, Any]:
-    """纯函数：按通过率区间筛选。rows 每项需含 id/rate。"""
+    """纯函数：按通过率区间筛选 + 可选防退化锚点。rows 每项需含 id/rate。
+
+    锚点机制（2026-11-22 v3 过滤裁定）：起点模型变强后大量题被完全掌握（rate==1.0），
+    学习区 [min_rate, max_rate] 保留数可能不足 min_keep。从 rate==1.0 全对题中按
+    anchor_ratio（裁定 10~15%）随机抽样留作防遗忘锚点：GRPO 组内零方差零梯度不占
+    有效算力，价值在偶发翻车时负优势纠偏 + 防共享权重洗掉已会能力。
+    固定 seed 抽样保证可复现；anchor_ratio=0 关闭（历史行为不变）。
+    """
     kept, dropped = [], []
     for row in rows:
         rate = row["rate"]
         row["keep"] = min_rate <= rate <= max_rate
+        row["anchor"] = False
         (kept if row["keep"] else dropped).append(row)
+    anchors = []
+    if anchor_ratio > 0:
+        pool = [r for r in rows if r["rate"] == 1.0]
+        n_anchor = round(len(pool) * anchor_ratio)
+        anchors = random.Random(anchor_seed).sample(pool, n_anchor)
+        for r in anchors:
+            r["anchor"] = True
+    n_out = len(kept) + len(anchors)
     summary = {
         "n_total": len(rows),
         "n_keep": len(kept),
-        "n_drop": len(dropped),
+        "n_anchor": len(anchors),
+        "n_drop": len(dropped) - len(anchors),
         "min_rate": min_rate,
         "max_rate": max_rate,
         "min_keep": min_keep,
-        "ok": len(kept) >= min_keep,
+        "anchor_ratio": anchor_ratio,
+        "anchor_seed": anchor_seed,
+        "ok": n_out >= min_keep,
         "kept_ids": [r["id"] for r in kept],
-        "dropped_ids": [r["id"] for r in dropped],
+        "anchor_ids": [r["id"] for r in anchors],
+        "dropped_ids": [r["id"] for r in dropped if not r["anchor"]],
     }
     if not summary["ok"]:
         summary["hint"] = (
-            f"保留 {len(kept)} 条 < {min_keep}：先核 SFT4B 训练质量，"
-            "仍不足则报告后放宽 max_rate（DoD 要求 ≥150）"
+            f"学习区 {len(kept)} 条 + 锚点 {len(anchors)} 条 = {n_out} 条 < {min_keep}："
+            "先核训练质量，仍不足则报告后放宽 max_rate / 调 anchor_ratio"
         )
     return summary
 
@@ -88,6 +111,9 @@ def main(argv: List[str] | None = None) -> int:
     ap.add_argument("--min-rate", type=float, default=0.2)
     ap.add_argument("--max-rate", type=float, default=0.8)
     ap.add_argument("--min-keep", type=int, default=150)
+    ap.add_argument("--anchor-ratio", type=float, default=0.0,
+                    help="全对题(rate==1.0)防退化锚点抽样比例，裁定 10~15%%（0 关闭，2026-11-22 v3 裁定）")
+    ap.add_argument("--anchor-seed", type=int, default=42, help="锚点抽样固定种子")
     ap.add_argument("--workers", type=int, default=8, help="每 prompt 采样并发数（run_rollout 每样本独立实例无共享状态，线程安全）")
     ap.add_argument("--save-traces", default=None, help="轨迹明细落盘目录（可选）：每 prompt 一个 {id}.jsonl，含 steps/reward 分解，供失败模式拆解")
     ap.add_argument("--out-filtered", required=True)
@@ -146,7 +172,10 @@ def main(argv: List[str] | None = None) -> int:
         print(f"[filter] {i}/{len(prompts)} {rows[-1]['id']} "
               f"pass={n_pass}/{args.n_samples} rate={rows[-1]['rate']}")
 
-    summary = select_frontier(rows, args.min_rate, args.max_rate, args.min_keep)
+    summary = select_frontier(
+        rows, args.min_rate, args.max_rate, args.min_keep,
+        args.anchor_ratio, args.anchor_seed,
+    )
     kk = args.n_samples
     summary["pass_at_k_mean"] = {
         str(k): round(sum(r["pass_at_k"][str(k)] for r in rows) / len(rows), 4)
@@ -163,12 +192,13 @@ def main(argv: List[str] | None = None) -> int:
         json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8"
     )
 
-    kept_prompts = [p for r, p in zip(rows, prompts) if r["keep"]]
+    kept_prompts = [p for r, p in zip(rows, prompts) if r["keep"] or r["anchor"]]
     with Path(args.out_filtered).open("w", encoding="utf-8") as f:
         for p in kept_prompts:
             f.write(json.dumps(p, ensure_ascii=False) + "\n")
 
-    print(f"[filter] 保留 {summary['n_keep']}/{summary['n_total']} 条 → {args.out_filtered}")
+    print(f"[filter] 学习区 {summary['n_keep']} + 锚点 {summary['n_anchor']} "
+          f"= {summary['n_keep'] + summary['n_anchor']}/{summary['n_total']} 条 → {args.out_filtered}")
     print(f"[filter] pass@1..{kk} 均值: {summary['pass_at_k_mean']}")
     if not summary["ok"]:
         print(f"[filter] FAIL: {summary['hint']}")
