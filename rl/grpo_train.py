@@ -454,25 +454,31 @@ class GRPOTrainer:
         self.eval_year = eval_year
         self.tools_schema = tools_schema
 
-    def logps_tensor(self, input_ids: List[int]):
-        """策略前向：逐 token log p(t_i|t_<i)（保留计算图，供 backward）。"""
+    def logps_tensor(self, input_ids: List[int], pos):
+        """策略前向：逐 token log p(t_i|t_<i)（保留计算图，供 backward）。
+
+        pos: 布尔张量 [seq-1]，只对 mask=1 位置切片 logits 再 softmax，
+        避免全 [seq, vocab] logprobs 被计算图保留至 backward（14B 长轨迹 OOM 修复）。
+        """
         import torch
         self.model.eval()
         ids = torch.tensor([input_ids], device=self.model.device)
         logits = self.model(input_ids=ids).logits[0]
-        logprobs = torch.log_softmax(logits[:-1], dim=-1)
-        return logprobs.gather(1, ids[0, 1:].unsqueeze(-1)).squeeze(-1)
+        logits = logits[:-1][pos]  # [n_pos, vocab]，切片后全量 logits 可释放
+        logprobs = torch.log_softmax(logits, dim=-1)
+        return logprobs.gather(1, ids[0, 1:][pos].unsqueeze(-1)).squeeze(-1)
 
-    def logps_list(self, input_ids: List[int]) -> List[float]:
-        """ref 前向：关 LoRA adapter（= SFT4B 权重），无梯度，返回 Python 浮点。"""
+    def logps_list(self, input_ids: List[int], pos) -> List[float]:
+        """ref 前向：关 LoRA adapter（= SFT 底座权重），无梯度，返回 Python 浮点。"""
         import torch
         self.model.eval()
         with torch.no_grad():
             ids = torch.tensor([input_ids], device=self.model.device)
             with self.model.disable_adapter():
                 logits = self.model(input_ids=ids).logits[0]
-            logprobs = torch.log_softmax(logits[:-1], dim=-1)
-            gathered = logprobs.gather(1, ids[0, 1:].unsqueeze(-1)).squeeze(-1)
+            logits = logits[:-1][pos]
+            logprobs = torch.log_softmax(logits, dim=-1)
+            gathered = logprobs.gather(1, ids[0, 1:][pos].unsqueeze(-1)).squeeze(-1)
             return [float(v) for v in gathered.cpu().tolist()]
 
     def train_step(
@@ -499,18 +505,19 @@ class GRPOTrainer:
             pos = torch.tensor(mask[1:], device=self.model.device) == 1
             if not bool(pos.any()):
                 continue
-            lp_theta = self.logps_tensor(ids)
+            lp_theta = self.logps_tensor(ids, pos)
             lp_ref = torch.tensor(
-                self.logps_list(ids), device=lp_theta.device, dtype=lp_theta.dtype
+                self.logps_list(ids, pos), device=lp_theta.device, dtype=lp_theta.dtype
             )
-            per_pos = -adv * lp_theta[pos] - self.beta * (lp_theta[pos] - lp_ref[pos])
+            # lp_theta/lp_ref 已在 logps_* 内按 pos 切片（长度 n_pos），无需再索引
+            per_pos = -adv * lp_theta - self.beta * (lp_theta - lp_ref)
             # 逐条立即 backward（梯度累积，图随条释放）：
             # 32 条轨迹若统一 backward，前向激活全量累积（4B×长轨迹 OOM）；
             # 除以 n_recs 等价于原 sum(losses)/seq_count 的平均口径（pos 全空的罕见条忽略）。
             per_pos.mean().div(n_recs).backward()
             losses.append(float(per_pos.mean().detach().cpu()))
             n_tokens_total += int(pos.sum())
-            kl_accum += float((lp_theta[pos] - lp_ref[pos]).mean().detach().cpu())
+            kl_accum += float((lp_theta - lp_ref).mean().detach().cpu())
             seq_count += 1
 
         if seq_count == 0:
@@ -625,6 +632,8 @@ def main(argv: Optional[List[str]] = None):
         task_type="CAUSAL_LM",
     )
     model = get_peft_model(model, lora_config)
+    # 14B 长轨迹前向激活过大致 OOM：开启梯度检查点（激活 40GB→~8GB，速度代价可接受）
+    model.gradient_checkpointing_enable()
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr)
 
     tools_schema = [inst.to_openai_schema() for inst in tool_instances()]
