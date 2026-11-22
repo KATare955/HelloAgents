@@ -1,0 +1,9 @@
+{
+  "n": 15,
+  "n_pass": 8,
+  "pass_rate": 0.5333,
+  "mean_r": 0.5067,
+  "mean_r_acc": 0.6333,
+  "gate_zero_rate": 0.0,
+  "truncated_rate": 0.0
+}
