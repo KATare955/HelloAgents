@@ -301,3 +301,13 @@ AutoDL 重跑结果逐题对比后暴露的 4 个规则层缺陷修复（全部�
 - **模型**: qwen3-14b-sft-v3
 - **阶段**: baseline
 - **结果文件**: `results/baseline/qwen3-14b-sft-v3/v1.2/baseline_qwen3-14b-sft-v3_v1.2_20261122.json`
+
+## 2026-11-22 18:19:04 - baseline (qwen3-14b-rl, v1.2)
+
+- **准确率**: 89.7%
+- **总问题数**: 68
+- **Bad case数量**: 7
+- **评测集版本**: v1.2
+- **模型**: qwen3-14b-rl
+- **阶段**: baseline
+- **结果文件**: `results/baseline/qwen3-14b-rl/v1.2/baseline_qwen3-14b-rl_v1.2_20261122.json`

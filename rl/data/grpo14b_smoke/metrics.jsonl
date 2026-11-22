@@ -1,0 +1,2 @@
+{"step": 1, "ts": "2026-11-22T15:22:22", "mean_r": 0.5385, "gate_rate": 0.0, "truncated_rate": 0.0, "mean_n_calls": 2.59, "step_sec": 167.3, "loss": -0.1183013916015625, "n_seqs": 32, "n_tokens": 15146, "kl_mean": 0.0, "adv_mean": -0.0816184667107088}
+{"step": 2, "ts": "2026-11-22T15:25:34", "mean_r": 0.6792, "gate_rate": 0.0, "truncated_rate": 0.0, "mean_n_calls": 3.75, "step_sec": 191.6, "loss": -0.05134359002113342, "n_seqs": 32, "n_tokens": 17366, "kl_mean": -0.0002143383026123047, "adv_mean": -2.824685472503641e-17}
